@@ -158,8 +158,7 @@ export default class login extends React.Component {
                         <TouchableHighlight style={[
                             styles.buttonContainer,
                             styles.loginButton]}
-                                            onPress={() => this.LogInUser(this.state.email,
-                                                                          this.state.password)
+                                            onPress={() => this.LogInUser(this.state.email,this.state.password)
                                             }
                         >
                             <Text style={styles.loginText}>Login</Text>
@@ -231,4 +230,5 @@ const styles = StyleSheet.create({
         height: 180,
         width: 180,
     }
-});
+}
+ );
