@@ -37,6 +37,7 @@ class Following extends React.Component {
         super(props)
         this.state = {following: 100}
     }
+
     render() {
         return (
             <View style={styles.headerFollowing}>
@@ -51,6 +52,7 @@ class Following extends React.Component {
         )
     }
 }
+
 class Preview extends React.Component {
     constructor(props) {
         super(props)
@@ -58,11 +60,13 @@ class Preview extends React.Component {
             activeIndex: 0
         }
     }
+
     segrantClicked = (index) => {
         this.setState({
             activeIndex: index
         })
     }
+
     renderSection = () => {
         if (this.state.activeIndex == 0) {
             return (
@@ -86,6 +90,7 @@ class Preview extends React.Component {
             )
         }
     }
+
     render() {
         return (
             <View style={styles.previewContainer}>
@@ -105,12 +110,12 @@ class Preview extends React.Component {
                                source={require('../assets/save.png')}/>
                     </TouchableOpacity>
                 </View>
-
                 {this.renderSection()}
             </View>
         )
     }
 }
+
 export default class ProfileScreen extends React.Component {
     render() {
         return (
@@ -122,6 +127,7 @@ export default class ProfileScreen extends React.Component {
         );
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         paddingTop: 7,
