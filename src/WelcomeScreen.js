@@ -24,7 +24,6 @@ export default class Welcome extends React.Component {
 
                 <Image style={styles.avatar}
                        source={require('../assets/user.png')}/>
-
                 <View style={styles.body}>
                     <View style={styles.bodyContent}>
                         <Text style={styles.info}>email{'\n'}</Text>
