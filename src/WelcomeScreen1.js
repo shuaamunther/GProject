@@ -35,19 +35,15 @@ export default class Welcome extends React.Component {
                                 <Text>Yes</Text>
                             </View>
 
-                            <Text> {'\n'}</Text>
-                            <Text> {'\n'}</Text>
-                            <Text> {'\n'}</Text>
-
                             <View style={styles.box}>
                                 <CheckBox title="No"
                                           checked={this.state.checked}
                                           onPress={() => this.setState({checked: !this.state.checked})}/>
                                 <Text>No</Text>
-                                <Text> {'\n'}</Text>
                             </View>
                         </View>
-                        <Text>{'\n'} {'\n'} {'\n'}</Text>
+                        
+                        <Text style={{marginTop:52}}></Text>
                         <TouchableHighlight style={[styles.buttonContainer,styles.NextButton, styles.description,]}
                                             onPress={() => this.props.navigation.navigate('Welcome2')}>
                             <Text style={styles.loginText}>Next</Text>
@@ -112,12 +108,16 @@ const styles = StyleSheet.create({
         width: 250,
         borderRadius: 30,
         backgroundColor: '#00BFFF',
+        marginTop: 10,
+        marginBottom: 10,
     },
     NextButton: {
         backgroundColor: "#00b5ec",
         marginBottom: 40,
         width: 100,
         borderRadius: 30,
+        marginTop: 50,
+        marginBottom: 10,
     },
     loginText: {
         color: 'white',
