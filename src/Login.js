@@ -35,10 +35,12 @@ export default class login extends React.Component {
         currentUser: '',
         users: []
     }
+
     handleLogin = () => {
         // TODO: Firebase stuff...
         console.log('handleLogin')
     }
+
     PhotoGrid() {
         firebase.auth().signOut().then(function () {
             //alert('SignOut is succedded')
@@ -46,6 +48,7 @@ export default class login extends React.Component {
             // An error happened.
         });
     }
+
     componentWillMount() {
         const firebaseConfig = {
             apiKey: "AIzaSyAbdvpkiwh1E19r39slZ5Ixyrm6JgUEMgY",
@@ -69,9 +72,11 @@ export default class login extends React.Component {
     SignUpuser() {
         this.props.navigation.navigate('SignUp')
     }
+
     ForgotPassword() {
         this.props.navigation.navigate('ForgetPassword')
     }
+
     validate = (email) => {
         // console.log(email);
         let reg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -83,6 +88,7 @@ export default class login extends React.Component {
         this.setState({email})
         this.setState({emailvalid: true})
     }
+
     validatepass = (password) => {
         //let reg =6;
         if (this.state.password.lentgh < 6) {
@@ -93,11 +99,13 @@ export default class login extends React.Component {
         this.setState({password})
         this.setState({passwordvalid: true})
     }
+
     setCurrentUser() {
         const {Profile} = firebase.auth()
         alert('login succsess');
         this.props.navigation.navigate('Profile');
     }
+
     LogInUser = (email, password) => {
         if (this.state.emailvalid == true) {
             if (this.state.passwordvalid == true) {
@@ -115,6 +123,7 @@ export default class login extends React.Component {
             return false;
         }
     }
+
     render() {
         return (
             <View style={styles.container}>
@@ -149,13 +158,13 @@ export default class login extends React.Component {
                         <TouchableHighlight style={[
                             styles.buttonContainer,
                             styles.loginButton]}
-                                            onPress={() => this.LogInUser(this.state.email, this.state.password)
+                                            onPress={() => this.LogInUser(this.state.email,
+                                                                          this.state.password)
                                             }
                         >
                             <Text style={styles.loginText}>Login</Text>
                         </TouchableHighlight>
-                        <TouchableHighlight style=
-                                                {styles.buttonContainer}
+                        <TouchableHighlight style={styles.buttonContainer}
                                             onPress={this.ForgotPassword.bind(this)}>
                             <Text>{'\n'}Forgot your password?</Text>
                         </TouchableHighlight>
