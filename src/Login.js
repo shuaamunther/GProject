@@ -13,9 +13,6 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 
-
-value: 1;
-
 export default class login extends React.Component {
     onClickListener = (viewId) => {
         Alert.alert("Alert", "Button pressed " + viewId);
@@ -228,6 +225,6 @@ const styles = StyleSheet.create({
         height: 180,
         width: 180,
     }
+    
 });
-
 

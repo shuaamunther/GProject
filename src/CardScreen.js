@@ -9,7 +9,6 @@ const DATA = [
       Rate: '5',
       type :'lunch',
       img:'https://modo3.com/thumbs/fit630x300/90616/1456142390/%D8%B7%D8%B1%D9%8A%D9%82%D8%A9_%D8%B9%D9%85%D9%84_%D9%85%D9%84%D9%88%D8%AE%D9%8A%D8%A9.jpg'
-      
     },
     {
       id: '2',
@@ -42,8 +41,7 @@ const DATA = [
     },
   
   ];
-  
-  function Item({ title }) {
+    function Item({ title }) {
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
@@ -51,7 +49,6 @@ const DATA = [
     );
   }
 class HeaderImageView extends React.Component {
-
     render() {
         return(
             <View>
@@ -85,7 +82,6 @@ class HeaderTextView extends React.Component {
                         type
                     </Text>
                 </View>
-                
                 <View style = {styles.ViewButton} >
                     <Button title="Show" />
                 </View>
@@ -97,10 +93,8 @@ class HeaderTextView extends React.Component {
 class CardScreen extends React.Component {
     constructor(props){
         super(props)
-
     }
     render() {
-
         return (
             <View style={styles.container}>
                 <Card containerStyle={{padding: 0, borderRadius: 10}}>
@@ -168,5 +162,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
   });
-
 export default CardScreen;

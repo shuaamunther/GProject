@@ -42,7 +42,6 @@ const DATA = [
   },
 
 ];
-
 function Item({ title }) {
   return (
     <View style={styles.item}>
@@ -50,17 +49,14 @@ function Item({ title }) {
     </View>
   );
 }
-
 export default class DataScreen extends React.Component {
   render(){
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={item => item.id}
-      />
-     
+            data={DATA}
+            renderItem={({ item }) => <Item title={item.title} />}
+             keyExtractor={item => item.id}/>
     </SafeAreaView>
     
   );

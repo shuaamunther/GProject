@@ -11,20 +11,10 @@ export default class UsersScreen extends React.Component {
     static navigationOptions = {
         title: 'Home',
     };
-
-   
-
-   
-   
-        
-
-    render() {
-       
-        return (
-            <Text></Text>
-        );
+        render() {
+            return (
+     <Text></Text>
+                    );
     }
-          
-        
     
 }

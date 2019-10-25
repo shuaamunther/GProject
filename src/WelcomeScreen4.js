@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        marginLeft: -13,
+
     },
     titleText: {
         fontSize: 30,
@@ -188,3 +188,4 @@ const styles = StyleSheet.create({
         height: 100,
     },
 });
+

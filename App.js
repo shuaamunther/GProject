@@ -6,7 +6,7 @@ import { StyleSheet, Text, View ,Platform} from 'react-native';
 
 import Login from './src/Login';
 import ProfileScreen from './src/ProfileScreen';
-import SignUpScreen from './src/SignUpScreenshuaa';
+import SignUpScreen from './src/SignUpScreen';
 import ForgotPasswordScreen from './src/ForgotPasswordScreen';
 import FeedScreen from './src/FeedScreen';
 
@@ -76,7 +76,7 @@ const AppNavigator = createStackNavigator({
  },
 },
 {
-  initialRouteName: "Login"
+  initialRouteName: "Welcome"
 })
 const AppContainer = createAppContainer(AppNavigator);
 const styles = StyleSheet.create({
