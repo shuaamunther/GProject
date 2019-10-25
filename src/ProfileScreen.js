@@ -24,14 +24,14 @@ class HeaderImageView extends React.Component {
                 <View style={styles.headerEdit}>
                     <TouchableOpacity>
                         <Image style={styles.editButton}
-                               source={require('../assets/edit.png')}
-                        />
+                               source={require('../assets/edit.png')} />
                     </TouchableOpacity>
                 </View>
             </View>
         )
     }
 }
+
 class Following extends React.Component {
     constructor(props) {
         super(props)
