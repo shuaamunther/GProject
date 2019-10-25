@@ -26,10 +26,10 @@ export default class Welcome extends React.Component {
                        source={require('../assets/user.png')}/>
                 <View style={styles.body}>
                     <View style={styles.bodyContent}>
-                        <Text style={styles.info}>email{'\n'}</Text>
-                        <Text style={styles.name}>Welcome to Bon Appetit{'\n'}</Text>
-                        <Text style={styles.description}>Your answers to the next few questions will {'\n'}
-                            help us find the right ideas for you{'\n'}{'\n'}
+                        <Text style={styles.info}>email</Text>
+                        <Text style={styles.name}>Welcome to Bon Appetit</Text>
+                        <Text style={styles.description}>Your answers to the next few questions will 
+                            help us find the right ideas for you
                         </Text>
 
                         <TouchableHighlight style={[styles.buttonContainer,styles.NextButton]}
@@ -37,7 +37,7 @@ export default class Welcome extends React.Component {
                             <Text style={styles.loginText}>Next</Text>
                         </TouchableHighlight>
 
-                        <Text style={styles.description}>Already have a Pinterest account? for you{'\n'}Log in instead
+                        <Text style={styles.description2}>Already have a Pinterest account? for you{'\n'}Log in instead
                         </Text>
                     </View>
                 </View>
@@ -79,13 +79,26 @@ const styles = StyleSheet.create({
     info: {
         fontSize: 16,
         color: '#00BFFF',
-        marginTop: 10,
+        marginTop: 12,
+        marginBottom:15,
     },
     description: {
         fontSize: 16,
         color: '#696969',
         marginTop: 10,
         textAlign: 'center',
+        alignItems: 'center',
+        marginBottom:30,
+        marginTop: 12,
+    },
+    description2: {
+        fontSize: 16,
+        color: '#696969',
+        marginTop: 10,
+        textAlign: 'center',
+        alignItems: 'center',
+        marginBottom:50,
+        marginTop: 50,
     },
     buttonContainer: {
         marginTop: 10,
