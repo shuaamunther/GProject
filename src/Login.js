@@ -12,9 +12,7 @@ import { StyleSheet, Text, View,TextInput,
             import { createStackNavigator } from 'react-navigation-stack';                     
    import * as firebase from 'firebase';           
        
-//import ProfileScreen from './ProfileScreen';
-//import SignUpScreen from './SignUpScreenshuaa';
-//import ForgotPasswordScreen from './ForgotPasswordScreen';
+
 value: 1;
 
 export default class login extends React.Component{
@@ -42,7 +40,7 @@ export default class login extends React.Component{
                 // TODO: Firebase stuff...
                 console.log('handleLogin')
               }
-              componentDidMount(){
+              PhotoGrid(){
                 firebase.auth().signOut().then(function () {
                   //alert('SignOut is succedded')
                 }, function (error) {

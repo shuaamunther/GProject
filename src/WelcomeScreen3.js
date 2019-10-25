@@ -28,14 +28,12 @@ import { StyleSheet, Text, View,TextInput,
          <Image
           style={styles.botto}
           source={require('../assets/tap4.png')} />
-          <Text
-              style={styles.name} >
-                  {'\n'}{'\n'}  {'\r'} {'\r'}  {'\r'} {'\r'} Do you have any food{'\r'}
-                  {'\r'}{'\r'}{'\r'}{'\r'}{'\r'} {'\r'} {'\r'}  {'\r'} {'\r'}
-                  {'\r'}{'\r'}{'\r'}{'\r'}{'\r'} {'\r'}{'\r'}{'\r'}{'\r'}{'\r'} 
-                  {'\r'}{'\r'}{'\r'}{'\r'}{'\r'} 
-                  {'\r'}{'\r'}{'\r'}{'\r'}{'\r'} allergies
-                         </Text>
+          <Text  
+              style={styles.name}  >
+                   Do you have any food allergies?
+                         </Text >
+                    <Text style={{alignSelf: 'center',}}>Choose as many as you like (or none at all) and tap 'Next'</Text>     
+                      <Text style={{alignSelf: 'center',}}> You can change these any tiome in your Preference.</Text>
         </View>
        
       
@@ -47,18 +45,20 @@ import { StyleSheet, Text, View,TextInput,
          <View style={styles.bodyContent}>
             <View style={styles.row}>
                  <View style={styles.box}>
-                     <CheckBox  title="Yes"
-                         checked={this.state.checked}
-                           onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Dairy</Text>
-                                 </View>
+                    <Image  style={styles.PreviewIcon}
+                        source={require('../assets/Dairy.png')} />  
+                           <CheckBox 
+                             checked={this.state.checked }
+                               onPress={() => this.setState({ checked: !this.state.checked })}  />    
+                                     </View>
          
 
                  <View style={styles.box}>
                      <CheckBox  title="Yes"
                          checked={this.state.checked}
                            onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Semsame</Text>
+                               <Image  style={styles.PreviewIcon}
+                                  source={require('../assets/Egg.png')} />
                                  </View>
                                     </View> 
                                       <Text> {'\n'}</Text>
@@ -66,10 +66,10 @@ import { StyleSheet, Text, View,TextInput,
                  
               <View style={styles.row}>
                  <View style={styles.box}>
-                     <CheckBox  title="Yes"
-                         checked={this.state.checked}
+                     <Image  style={styles.PreviewIcon}
+                         source={require('../assets/Gluten.png')} />
+                             <CheckBox  title="Yes"   checked={this.state.checked}
                            onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Egg </Text>
                                  </View>
          
 
@@ -77,7 +77,8 @@ import { StyleSheet, Text, View,TextInput,
                      <CheckBox  title="Yes"
                          checked={this.state.checked}
                            onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Soy</Text>
+                                <Image  style={styles.PreviewIcon}
+                                  source={require('../assets/Peanut.png')} />
                                  </View>
                                     </View>   
                                        <Text> {'\n'}</Text>
@@ -85,10 +86,10 @@ import { StyleSheet, Text, View,TextInput,
                 
                <View style={styles.row}>
                  <View style={styles.box}>
-                     <CheckBox  title="Yes"
-                         checked={this.state.checked}
-                           onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Gluten</Text>
+                     <Image  style={styles.PreviewIcon}
+                         source={require('../assets/SeaFood.png')} />
+                              <CheckBox  title="Yes"       checked={this.state.checked}
+                                  onPress={() => this.setState({ checked: !this.state.checked })}  />
                                  </View>
          
 
@@ -96,17 +97,20 @@ import { StyleSheet, Text, View,TextInput,
                      <CheckBox  title="Yes"
                          checked={this.state.checked}
                            onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Sulfite</Text>
+                               <Image  style={styles.PreviewIcon}
+                                  source={require('../assets/Sesame.png')} />
                                  </View>
                                     </View> 
                                         <Text> {'\n'}</Text>
               
               <View style={styles.row}>
                  <View style={styles.box}>
-                     <CheckBox  title="Yes"
+                  <Image  style={styles.PreviewIcon}
+                       source={require('../assets/Soy.png')} />
+                        <CheckBox  title="Yes"
                          checked={this.state.checked}
                            onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Peanut</Text>
+ 
                                  </View>
          
 
@@ -114,7 +118,8 @@ import { StyleSheet, Text, View,TextInput,
                      <CheckBox  title="Yes"
                          checked={this.state.checked}
                            onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>Tree nut</Text>
+                                <Image  style={styles.PreviewIcon}
+                                  source={require('../assets/Sulfite.png')} />
                                  </View>
                                     </View> 
                                         <Text> {'\n'}</Text>
@@ -122,18 +127,20 @@ import { StyleSheet, Text, View,TextInput,
                  
              <View style={styles.row}>
                  <View style={styles.box}>
-                     <CheckBox  title="Yes"
-                         checked={this.state.checked}
-                           onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>SeaFood</Text>
-                                 </View>
+                      <Image  style={styles.PreviewIcon}
+                        source={require('../assets/Tree.png')} />
+                             <CheckBox  title="Yes"
+                                checked={this.state.checked}
+                                      onPress={() => this.setState({ checked: !this.state.checked })}  />
+                                                           </View>
          
 
                  <View style={styles.box}>
                      <CheckBox  title="Yes"
                          checked={this.state.checked}
                            onPress={() => this.setState({ checked: !this.state.checked })}  />
-                               <Text>White</Text>
+                                <Image  style={styles.PreviewIcon}
+                                  source={require('../assets/White.png')} />
                                  </View>
                                     </View> 
                                         <Text> {'\n'}</Text>
@@ -157,7 +164,7 @@ import { StyleSheet, Text, View,TextInput,
       const styles = StyleSheet.create({
         header: {
           backgroundColor: 'white',
-          height: 200,
+          height: 170,
           alignSelf: 'center',
         },
         avatar: {
@@ -178,7 +185,7 @@ import { StyleSheet, Text, View,TextInput,
           alignSelf: 'center',
         },
         body: {
-          marginTop: 20,
+          marginTop: 0,
         },
         bodyContent: {
           flex: 1,
@@ -190,6 +197,8 @@ import { StyleSheet, Text, View,TextInput,
           fontSize: 26,
           color: '#696969',
           fontWeight: '600',
+          alignSelf: 'center',
+          marginTop: 50,
         },
         info: {
           fontSize: 16,
@@ -222,8 +231,18 @@ import { StyleSheet, Text, View,TextInput,
        loginText: {
        color: 'white',
        },
+       headerStarText: {
+        fontSize: 18,
+        top: '40%',
+        position: 'absolute',
+        textAlign: 'center',
+        width: '100%',
+        
+    },
        row:{
         flexDirection: 'row', 
+        
+       
        },
         titleText: {
         fontSize: 30,
@@ -235,7 +254,18 @@ import { StyleSheet, Text, View,TextInput,
          alignItems: 'center',
         justifyContent: 'center',     
           backgroundColor: '#ecf0f1',
+          backgroundColor:'white',
+          
         },
+        PreviewIcon:{
+          width: 100,
+          height:100,
+          marginLeft: 15,
+          marginRight: 15,
+          justifyContent: 'center',
+          fontWeight: 'bold',
+          fontSize:22
+      },
       });
       
       

@@ -27,7 +27,7 @@ import { StyleSheet, Text, View,TextInput,
           source={require('../assets/tap2.png')} />
           <Text
               style={styles.name} >
-                  {'\n'}{'\n'} {'\r'}  {'\r'}  {'\r'}{'\r'} {'\r'} {'\r'} {'\r'}   Are you in diet?
+                  Are you in a diet?
                          </Text>
         </View>
        
@@ -64,7 +64,7 @@ import { StyleSheet, Text, View,TextInput,
 
                     <Text></Text>
              <TouchableHighlight style={[ styles.buttonContainer,
-                                           styles.loginButton,styles.description]} 
+                                           styles.NextButton,styles.description,]} 
                                             onPress={() => this.props.navigation.navigate('Welcome2')} >   
                                               <Text style={styles.loginText}>Next</Text> 
                                                 </TouchableHighlight>
@@ -114,6 +114,8 @@ import { StyleSheet, Text, View,TextInput,
           fontSize: 26,
           color: '#696969',
           fontWeight: '600',
+          marginLeft: 88,
+          marginTop: 50,
         },
         info: {
           fontSize: 16,
@@ -136,12 +138,15 @@ import { StyleSheet, Text, View,TextInput,
           width: 250,
           borderRadius: 30,
           backgroundColor: '#00BFFF',
+          
         },
-       loginButton: {
+       NextButton: {
        backgroundColor: "#00b5ec",
-        marginBottom:20,
+        marginBottom:40,
         width:100,
         borderRadius:30,
+        
+        
        },
        loginText: {
        color: 'white',

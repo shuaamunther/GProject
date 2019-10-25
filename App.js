@@ -27,8 +27,6 @@ export default class App extends React.Component {
      
       <AppContainer />
     
-      
-
     
   );
 }
@@ -78,7 +76,7 @@ const AppNavigator = createStackNavigator({
  },
 },
 {
-  initialRouteName: "Test"
+  initialRouteName: "Login"
 })
 const AppContainer = createAppContainer(AppNavigator);
 const styles = StyleSheet.create({

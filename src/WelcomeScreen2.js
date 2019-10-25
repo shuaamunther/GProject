@@ -27,13 +27,14 @@ import { StyleSheet, Text, View,TextInput,
           source={require('../assets/tap3.png')} />
           <Text
               style={styles.name} >
-                  {'\n'}{'\n'} {'\r'}  {'\r'}  {'\r'}{'\r'} {'\r'} {'\r'} {'\r'}  Are you vegetarian?
+                  Are you vegetarian?
                          </Text>
         </View>
         <View style={styles.body}>           
            <View style={styles.bodyContent}>
               <View style={styles.row}>
                 <View style={styles.box}>
+                
                      <CheckBox  title="Yes"
                                 checked={this.state.checked}
                                  onPress={() => this.setState({ checked: !this.state.checked })}
@@ -60,7 +61,7 @@ import { StyleSheet, Text, View,TextInput,
                     <Text></Text>
              <TouchableHighlight style={[ styles.buttonContainer,
                                            styles.loginButton,styles.description]} 
-                                            onPress={() => this.props.navigation.navigate('Welcome2')} >   
+                                            onPress={() => this.props.navigation.navigate('Welcome3')} >   
                                               <Text style={styles.loginText}>Next</Text> 
                                                 </TouchableHighlight>
                              
@@ -108,6 +109,8 @@ import { StyleSheet, Text, View,TextInput,
           fontSize: 26,
           color: '#696969',
           fontWeight: '600',
+          marginLeft: 77,
+          marginTop: 50,
         },
         info: {
           fontSize: 16,
@@ -154,6 +157,18 @@ import { StyleSheet, Text, View,TextInput,
         justifyContent: 'center',     
           backgroundColor: '#ecf0f1',
         },
+        botto:{
+          marginBottom: 20,
+        },
+        PreviewIcon:{
+          width: 50,
+          height:50,
+          marginLeft: 15,
+          marginRight: 15,
+          justifyContent: 'center',
+          fontWeight: 'bold',
+          fontSize:22
+      },
       });
       
       

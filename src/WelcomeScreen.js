@@ -48,6 +48,7 @@ import { StyleSheet, Text, View,TextInput,
               <Text style={styles.description}>Already have a Pinterest account? for you{'\n'}
                        Log in instead
                     </Text>
+                    
                    </View>
                 </View>
             </SafeAreaView>

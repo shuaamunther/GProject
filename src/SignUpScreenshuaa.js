@@ -51,9 +51,7 @@ export default class SignUpScreen extends React.Component {
     let email = this.state.email
     let password = this.state.password
     let age=this.state.age
-   // let password2=this.state.password2
-
-   // let description = this.state.description
+   
    if(fullname == '' ||  email === '' || age === null || password === ''  )
    {
      alert('please fill all fields')
@@ -70,7 +68,7 @@ export default class SignUpScreen extends React.Component {
                      email: email,
                         age:age,
 
-               // description: description,
+              
               },
               
               
@@ -79,9 +77,7 @@ export default class SignUpScreen extends React.Component {
                     Alert.alert("Failed signup user: Message: " + error)
                 } else {
                     Alert.alert("Success signup: Message: " + res.user.uid)
-                    //this.props.navigation.navigate('Profile')
-                   // this.props.navigation.navigate('Profile')
-                   //WelcomeScreen();
+                    
                 }
             })
         }).then(()=> {this.props.navigation.navigate('Welcome')}).catch(function (error) {
@@ -201,13 +197,6 @@ validate = (email) => {
                          };
 
 
-  /*_handleHelpPress = () => { 
-    AppNavigator.LinksScreen
-      navi(<LinksScreen />);
-      WebBrowser.openBrowserAsync
-        'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-     
-    };*/
   }
   
   
