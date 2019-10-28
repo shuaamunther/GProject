@@ -116,7 +116,7 @@ export default class SignUpScreen extends React.Component {
               let value = await AsyncStorage.getItem(ACCESS_TOKEN);
               //if(value){
               //const item = JSON.parse(value);
-              //console.log('this token',value);
+              console.log('this token',value);
                 return value
             //}
             } catch (error) {
