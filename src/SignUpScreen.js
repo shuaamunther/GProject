@@ -119,8 +119,9 @@ export default class SignUpScreen extends React.Component {
               this.setState({myKey: value});
               if(value){
               //const item = JSON.parse(value);
-              this.props.navigation.navigate('Welcome',{UserId:value});
               console.log('this token',value);
+              this.props.navigation.navigate('Welcome',{userId:value,});
+              
               }
             } catch (error) {
               console.log("Error retrieving data" + error);
