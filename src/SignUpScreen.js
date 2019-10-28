@@ -129,7 +129,7 @@ export default class SignUpScreen extends React.Component {
             try {
              let value= await AsyncStorage.setItem('ACCESS_TOKEN', aceesstoken);
              this.getToken();
-             console.log('acees',aceesstoken)
+             console.log('accees token is :',aceesstoken)
              return value
             } catch (error) {
               console.log("Error saving data" + error);
