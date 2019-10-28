@@ -65,7 +65,7 @@ export default class SignUpScreen extends React.Component {
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((res) => {
                     let aceesstoken =res.user.uid; 
-                    this.state(aceesstoken);
+                    this.savetoken(aceesstoken);
                     firebase.database().ref('users/' + res.user.uid).set({
                             fullname: fullname,
                             email: email,
@@ -116,8 +116,7 @@ export default class SignUpScreen extends React.Component {
               let value = await AsyncStorage.getItem(ACCESS_TOKEN);
               //if(value){
               //const item = JSON.parse(value);
-                this.setState({value});
-                //console.log('this token',value);
+              //console.log('this token',value);
                 return value
             //}
             } catch (error) {
@@ -127,9 +126,9 @@ export default class SignUpScreen extends React.Component {
         
         async savetoken(aceesstoken) {
             try {
-             let value= await AsyncStorage.setItem('ACCESS_TOKEN', aceesstoken);
-             this.getToken();
-             console.log('accees token is :',aceesstoken)
+             let value= await AsyncStorage.setItem(ACCESS_TOKEN, aceesstoken);
+             let y=this.getToken();
+             console.log('accees token is :',y)
              return value
             } catch (error) {
               console.log("Error saving data" + error);
