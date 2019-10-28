@@ -27,10 +27,11 @@ export default class Welcome extends React.Component {
 
     getData=()=>{
         try{
-            const value= this.props.navigation.getParam('UserId','')
+            const value= this.props.navigation.getParam('userId','')
+            console.log('this token',value);
                 if(value!==null)
                 {
-                    alert("value:"+value)    
+                    alert("value:",value)    
                 }
         }catch(error){
             alert("Error"+error)
