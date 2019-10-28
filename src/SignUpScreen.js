@@ -82,7 +82,7 @@ export default class SignUpScreen extends React.Component {
                             }
                         })
                 }).then(() => {
-              //  this.props.navigation.navigate('Welcome')
+                this.props.navigation.navigate('Welcome')
             }).catch(function (error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -190,9 +190,6 @@ export default class SignUpScreen extends React.Component {
                                             onPress={() => this.signup() }>
                             <Text style={styles.loginText}>Sign Up</Text>
                         </TouchableHighlight>
-                        <Text style={styles.instructions}>
-                          Stored key is = {this.state.myKey}
-                        </Text>
                     </KeyboardAvoidingView>
                 </ScrollView>
             </View>
