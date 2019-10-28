@@ -82,7 +82,7 @@ export default class SignUpScreen extends React.Component {
                             }
                         })
                 }).then(() => {
-                this.props.navigation.navigate('Welcome')
+                this.props.getToken()
             }).catch(function (error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -119,6 +119,7 @@ export default class SignUpScreen extends React.Component {
               this.setState({myKey: value});
               if(value){
               //const item = JSON.parse(value);
+              this.props.navigation.navigate('Welcome',{UserId:value});
               console.log('this token',value);
               }
             } catch (error) {
