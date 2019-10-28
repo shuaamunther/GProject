@@ -6,16 +6,37 @@ import {
     Image,
     CheckBox,
     SafeAreaView,
-    Alert
-}
-    from 'react-native';
+    Alert,
+    AsyncStorage,
+}from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
+//import SignUpScreen from 'SignUpScreen.js';
 
 export default class Welcome extends React.Component {
-    state = {checked: false}
     handleCheckboxChange = event => this.setState({checked: event.target.checked})
+    constructor(props) {
+        super(props);
+        this.state = {
+            yes:false,
+            No:false,
+            checked: false
+        };  
+    }
+
+    getData=()=>{
+        try{
+            const value= this.props.navigation.getParam('UserId','')
+                if(value!==null)
+                {
+                    alert("value:"+value)    
+                }
+        }catch(error){
+            alert("Error"+error)
+        }
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -30,15 +51,14 @@ export default class Welcome extends React.Component {
                     <View style={styles.bodyContent}>
                         <View style={styles.row}>
                             <View style={styles.box}>
-                                <CheckBox checked={this.state.checked}
-                                          onPress={() => this.setState({checked: !this.state.checked})}/>
+                                <CheckBox value={this.state.yes}
+                                          onValueChange={() => this.setState({yes: !this.state.yes})}/>
                                 <Text>Yes</Text>
                             </View>
 
                             <View style={styles.box}>
-                                <CheckBox title="No"
-                                          checked={this.state.checked}
-                                          onPress={() => this.setState({checked: !this.state.checked})}/>
+                                <CheckBox value={this.state.no}
+                                          onValueChange={() => this.setState({no: !this.state.no})}/>
                                 <Text>No</Text>
                             </View>
                         </View>
@@ -46,6 +66,10 @@ export default class Welcome extends React.Component {
                         <Text style={{marginTop:52}}></Text>
                         <TouchableHighlight style={[styles.buttonContainer,styles.NextButton, styles.description,]}
                                             onPress={() => this.props.navigation.navigate('Welcome2')}>
+                            <Text style={styles.loginText}>Next</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight style={[styles.buttonContainer,styles.NextButton, styles.description,]}
+                                            onPress={() => this.getData()}>
                             <Text style={styles.loginText}>Next</Text>
                         </TouchableHighlight>
                     </View>
