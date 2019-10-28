@@ -11,11 +11,14 @@ import {
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
+import {AsyncStorage} from 'react-native';
 
+const ACCESS_TOKEN ='aceesstoken';
 export default class SignUpScreen extends React.Component {
     static navigationOptions = {
         title: 'Sign Up',
     };
+
 
     constructor(props) {
         super(props);
@@ -24,6 +27,7 @@ export default class SignUpScreen extends React.Component {
             email: '',
             password: '',
             age: '',
+            userId:'',
         };
     }
 
@@ -53,19 +57,21 @@ export default class SignUpScreen extends React.Component {
         let email = this.state.email
         let password = this.state.password
         let age = this.state.age
-
+        let userId = this.state.userId
         if (fullname == '' || email === '' || age === null || password === '') {
             alert('please fill all fields')
             return null
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((res) => {
+                    let aceesstoken =res.user.uid; 
+                    this.savetoken(aceesstoken);
                     firebase.database().ref('users/' + res.user.uid).set({
                             fullname: fullname,
                             email: email,
                             age: age,
                         },
-
+                    
                         function (error) {
                             if (error) {
                                 Alert.alert("Failed signup user: Message: " + error)
@@ -104,7 +110,32 @@ export default class SignUpScreen extends React.Component {
         this.setState({password})
         this.setState({passwordvalid: true})
         }
-
+        
+        async getToken() {
+            try {
+              let value = await AsyncStorage.getItem(ACCESS_TOKEN);
+              //if(value){
+              //const item = JSON.parse(value);
+                this.setState({value});
+                //console.log('this token',value);
+                return value
+            //}
+            } catch (error) {
+              console.log("Error retrieving data" + error);
+            }
+          }
+        
+        async savetoken(aceesstoken) {
+            try {
+             let value= await AsyncStorage.setItem('ACCESS_TOKEN', aceesstoken);
+             this.getToken();
+             console.log('acees',aceesstoken)
+             return value
+            } catch (error) {
+              console.log("Error saving data" + error);
+            }
+          }
+            
     render() {
         return (
             <View style={styles.container}>
@@ -154,9 +185,8 @@ export default class SignUpScreen extends React.Component {
                                        onChangeText={(password) => this.validatepass(password)}
                                        value={this.state.password}/>
                         </View>
-
                         <TouchableHighlight style={[styles.buttonContainer,styles.SignUpButton]}
-                                            onPress={() => this.signup()}>
+                                            onPress={() => this.signup() }>
                             <Text style={styles.loginText}>Sign Up</Text>
                         </TouchableHighlight>
                     </KeyboardAvoidingView>
