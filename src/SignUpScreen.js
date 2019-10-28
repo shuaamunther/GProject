@@ -28,6 +28,7 @@ export default class SignUpScreen extends React.Component {
             password: '',
             age: '',
             userId:'',
+            myKey: null,
         };
     }
 
@@ -66,6 +67,7 @@ export default class SignUpScreen extends React.Component {
                 .then((res) => {
                     let aceesstoken =res.user.uid; 
                     this.savetoken(aceesstoken);
+                    //console.log('yhis',aceesstoken)
                     firebase.database().ref('users/' + res.user.uid).set({
                             fullname: fullname,
                             email: email,
@@ -80,7 +82,7 @@ export default class SignUpScreen extends React.Component {
                             }
                         })
                 }).then(() => {
-                this.props.navigation.navigate('Welcome')
+              //  this.props.navigation.navigate('Welcome')
             }).catch(function (error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -113,11 +115,12 @@ export default class SignUpScreen extends React.Component {
         
         async getToken() {
             try {
-              let value = await AsyncStorage.getItem(ACCESS_TOKEN);
+              const value =await AsyncStorage.getItem(ACCESS_TOKEN);
+              this.setState({myKey: value});
               //if(value){
               //const item = JSON.parse(value);
               console.log('this token',value);
-                return value
+               
             //}
             } catch (error) {
               console.log("Error retrieving data" + error);
@@ -126,10 +129,10 @@ export default class SignUpScreen extends React.Component {
         
         async savetoken(aceesstoken) {
             try {
-             let value= await AsyncStorage.setItem(ACCESS_TOKEN, aceesstoken);
-             let y=this.getToken();
-             console.log('accees token is :',y)
-             return value
+             await AsyncStorage.setItem(ACCESS_TOKEN, aceesstoken);
+             this.getToken();
+             //console.log('accees token is :',y)
+             //return value
             } catch (error) {
               console.log("Error saving data" + error);
             }
@@ -188,6 +191,9 @@ export default class SignUpScreen extends React.Component {
                                             onPress={() => this.signup() }>
                             <Text style={styles.loginText}>Sign Up</Text>
                         </TouchableHighlight>
+                        <Text style={styles.instructions}>
+                          Stored key is = {this.state.myKey}
+                        </Text>
                     </KeyboardAvoidingView>
                 </ScrollView>
             </View>
