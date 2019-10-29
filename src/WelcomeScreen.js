@@ -12,6 +12,21 @@ import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 
 export default class Welcome extends React.Component {
+   
+    getData=()=>{
+        try{
+            const value= this.props.navigation.getParam('userId','')
+            console.log('this token',value);
+                if(value!==null)
+                {
+                    alert("value:"+value)    
+                    this.props.navigation.navigate('Welcome1',{userId:value,})
+                }
+        }catch(error){
+            alert("Error"+error)
+        }
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -33,7 +48,7 @@ export default class Welcome extends React.Component {
                         </Text>
 
                         <TouchableHighlight style={[styles.buttonContainer,styles.NextButton]}
-                                            onPress={() => this.props.navigation.navigate('Welcome1')}>
+                                            onPress={() => this.getData()}>
                             <Text style={styles.loginText}>Next</Text>
                         </TouchableHighlight>
 

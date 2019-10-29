@@ -31,7 +31,8 @@ export default class Welcome extends React.Component {
             console.log('this token',value);
                 if(value!==null)
                 {
-                    alert("value:",value)    
+                    alert("value:"+value)    
+                    this.props.navigation.navigate('Welcome2',{userId:value,})
                 }
         }catch(error){
             alert("Error"+error)
@@ -65,10 +66,6 @@ export default class Welcome extends React.Component {
                         </View>
                         
                         <Text style={{marginTop:52}}></Text>
-                        <TouchableHighlight style={[styles.buttonContainer,styles.NextButton, styles.description,]}
-                                            onPress={() => this.props.navigation.navigate('Welcome2')}>
-                            <Text style={styles.loginText}>Next</Text>
-                        </TouchableHighlight>
                         <TouchableHighlight style={[styles.buttonContainer,styles.NextButton, styles.description,]}
                                             onPress={() => this.getData()}>
                             <Text style={styles.loginText}>Next</Text>

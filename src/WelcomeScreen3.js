@@ -17,6 +17,37 @@ export default class Welcome extends React.Component {
     state = {checked: false}
     handleCheckboxChange = event => this.setState({checked: event.target.checked})
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            checked: false,
+            dairy: false,
+            egg: false,
+            gluten:false,
+            paenut:false,
+            seafood:false,
+            seasame:false,
+            soy:false,
+            sulfite:false,
+            treenut:false,
+            white:false,
+        };
+    }
+
+    getData=()=>{
+        try{
+            const value= this.props.navigation.getParam('userId','')
+            console.log('this token',value);
+                if(value!==null)
+                {
+                    alert("value:"+value)    
+                    this.props.navigation.navigate('Welcome4',{userId:value,})
+                }
+        }catch(error){
+            alert("Error"+error)
+        }
+    }
+    
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -33,43 +64,41 @@ export default class Welcome extends React.Component {
                             <View style={styles.row}>
                                 <View style={styles.box}>
                                     <Image style={styles.PreviewIcon} source={require('../assets/Dairy.png')}/>
-                                    <CheckBox checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <CheckBox value={this.state.dairy}
+                                              onValueChange={() => this.setState({dairy: !this.state.dairy})}/>
                                 </View>
 
                                 <View style={styles.box}>
-                                    <CheckBox  checked={this.state.checked}
-                                               onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <CheckBox  value={this.state.egg}
+                                               onValueChange={() => this.setState({egg: !this.state.egg})}/>
                                     <Image style={styles.PreviewIcon} source={require('../assets/Egg.png')}/>
                                 </View>
                             </View>
 
                             <View style={styles.row}>
                                 <View style={styles.box}>
-                                    <Image style={styles.PreviewIcon}
-                                           source={require('../assets/Gluten.png')}/>
-                                    <CheckBox title="Yes" checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <Image style={styles.PreviewIcon} source={require('../assets/Gluten.png')}/>
+                                    <CheckBox value={this.state.gluten}
+                                              onValueChange={() => this.setState({gluten: !this.state.gluten})}/>
                                 </View>
 
                                 <View style={styles.box}>
-                                    <CheckBox  checked={this.state.checked}
-                                               onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <CheckBox  value={this.state.paenut}
+                                               onValueChange={() => this.setState({paenut: !this.state.paenut})}/>
                                     <Image style={styles.PreviewIcon} source={require('../assets/Peanut.png')}/>
                                 </View>
                             </View>
 
                             <View style={styles.row}>
                                 <View style={styles.box}>
-                                    <Image style={styles.PreviewIcon}
-                                           source={require('../assets/SeaFood.png')}/>
-                                    <CheckBox title="Yes" checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <Image style={styles.PreviewIcon} source={require('../assets/SeaFood.png')}/>
+                                    <CheckBox value={this.state.seafood}
+                                               onValueChange={() => this.setState({seafood: !this.state.seafood})}/>
                                 </View>
 
                                 <View style={styles.box}>
-                                    <CheckBox checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <CheckBox value={this.state.seasame}
+                                              onValueChange={() => this.setState({seasame: !this.state.seasame})}/>
                                     <Image style={styles.PreviewIcon}source={require('../assets/Sesame.png')}/>
                                 </View>
                             </View>
@@ -77,13 +106,13 @@ export default class Welcome extends React.Component {
                             <View style={styles.row}>
                                 <View style={styles.box}>
                                     <Image style={styles.PreviewIcon}  source={require('../assets/Soy.png')}/>
-                                    <CheckBox  checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <CheckBox  value={this.state.soy}
+                                               onValueChange={() => this.setState({soy: !this.state.soy})}/>
                                 </View>
 
                                 <View style={styles.box}>
-                                    <CheckBox checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <CheckBox value={this.state.sulfite}
+                                              onValueChange={() => this.setState({sulfite: !this.state.sulfite})}/>
                                     <Image style={styles.PreviewIcon}
                                            source={require('../assets/Sulfite.png')}/>
                                 </View>
@@ -91,21 +120,20 @@ export default class Welcome extends React.Component {
 
                             <View style={styles.row}>
                                 <View style={styles.box}>
-                                    <Image style={styles.PreviewIcon}
-                                           source={require('../assets/Tree.png')}/>
-                                    <CheckBox checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <Image style={styles.PreviewIcon} source={require('../assets/Tree.png')}/>
+                                    <CheckBox value={this.state.treenut}
+                                              onValueChange={() => this.setState({treenut: !this.state.treenut})}/>
                                 </View>
 
                                 <View style={styles.box}>
-                                    <CheckBox checked={this.state.checked}
-                                              onPress={() => this.setState({checked: !this.state.checked})}/>
+                                    <CheckBox value={this.state.white}
+                                              onValueChange={() => this.setState({white: !this.state.white})}/>
                                     <Image style={styles.PreviewIcon} source={require('../assets/White.png')}/>
                                 </View>
                             </View>
 
                             <TouchableHighlight style={[styles.buttonContainer, styles.NextButton, styles.description]}
-                                                onPress={() => this.props.navigation.navigate('Welcome4')}>
+                                                onPress={() => this.getData()}>
                                 <Text style={styles.loginText}>Next</Text>
                             </TouchableHighlight>
                         </View>

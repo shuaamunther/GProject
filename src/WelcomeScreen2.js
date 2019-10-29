@@ -16,6 +16,20 @@ export default class Welcome extends React.Component {
     state = {checked: false}
     handleCheckboxChange = event => this.setState({checked: event.target.checked})
 
+    getData=()=>{
+        try{
+            const value= this.props.navigation.getParam('userId','')
+            console.log('this token',value);
+                if(value!==null)
+                {
+                    alert("value:"+value)    
+                    this.props.navigation.navigate('Welcome3',{userId:value,})
+                }
+        }catch(error){
+            alert("Error"+error)
+        }
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -48,7 +62,7 @@ export default class Welcome extends React.Component {
 
                         <Text style={{marginTop:52}}/>
                         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton, styles.description]}
-                                            onPress={() => this.props.navigation.navigate('Welcome3')}>
+                                            onPress={() => this.getData()}>
                             <Text style={styles.loginText}>Next</Text>
                         </TouchableHighlight>
                     </View>
