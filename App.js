@@ -37,7 +37,9 @@ export default class App extends React.Component {
     };
 
     firebase.initializeApp(firebaseConfig);
-    const rootRef = firebase.database().ref();
+    if (firebase.auth().currentUser) {
+      var user = firebase.auth().currentUser.uid;
+  }
 }
 
   render() {
@@ -101,7 +103,7 @@ const AppNavigator = createStackNavigator({
   },
 },
 {
-  initialRouteName: "AddRe"
+  initialRouteName: "Test"
 })
 const AppContainer = createAppContainer(AppNavigator);
 const styles = StyleSheet.create({

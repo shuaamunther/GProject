@@ -45,6 +45,14 @@ export default class login extends React.Component {
         });
     }
 
+    componentWillMount() {
+        const rootRef = firebase.database().ref();
+        const usersRef = rootRef.child('users');
+        //const user = firebase.auth().currentUser.uid;
+        if (firebase.auth().currentUser) {
+            var user = firebase.auth().currentUser.uid;
+        }
+    }
     SignUpuser() {
         this.props.navigation.navigate('SignUp')
     }
