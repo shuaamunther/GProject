@@ -37,8 +37,9 @@ export default class App extends React.Component {
     };
 
     firebase.initializeApp(firebaseConfig);
-    if (firebase.auth().currentUser) {
-      var user = firebase.auth().currentUser.uid;
+       if (!firebase.app.length) {
+           firebase.initializeApp({});
+        }
   }
 }
 
