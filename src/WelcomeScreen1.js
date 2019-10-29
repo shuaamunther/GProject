@@ -8,120 +8,90 @@ import {
     SafeAreaView,
     Alert,
     AsyncStorage,
-}from 'react-native';
+} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
-//import SignUpScreen from 'SignUpScreen.js';
+import * as Constants from './Constants'
+import { ButtonGroup } from 'react-native-elements';
+import WelcomeHeader from './WelcomeHeader'
+
 
 export default class Welcome extends React.Component {
-    handleCheckboxChange = event => this.setState({checked: event.target.checked})
     constructor(props) {
         super(props);
         this.state = {
-            yes:false,
-            No:false,
-            checked: false
+            selectedIndex: -1
         };  
     }
 
-    getData=()=>{
-        try{
-            const value= this.props.navigation.getParam('userId','')
-            console.log('this token',value);
-                if(value!==null)
-                {
-                    alert("value:"+value)    
-                    this.props.navigation.navigate('Welcome2',{userId:value,})
-                }
-        }catch(error){
-            alert("Error"+error)
+    getToken = async () =>{
+        try {
+            const value =await AsyncStorage.getItem(Constants.ACCESS_TOKEN);
+            if(value!==null) {
+                this.setState({userId: value})
+            }
+        } catch (error) {
+            console.log("Error retrieving data" + error);
         }
     }
 
+    updateIndex = (selectedIndex) => {
+        this.setState({selectedIndex})
+    }
+
     render() {
+        const buttons = ['YES', 'NO']
+        const { selectedIndex } = this.state
+
         return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.header}>
-                    <Image style={styles.botto} source={require('../assets/tap2.png')}/>
+            <View style={styles.header}>
+                <View style={styles.WelcomeHeader}>
+                    <WelcomeHeader pageIndex="2"/>
+                </View>
+
+                <View style={styles.headerView}>
                     <Text style={styles.name}>
                         Are you in a diet?
                     </Text>
-                </View>
 
-                <View style={styles.body}>
-                    <View style={styles.bodyContent}>
-                        <View style={styles.row}>
-                            <View style={styles.box}>
-                                <CheckBox value={this.state.yes}
-                                          onValueChange={() => this.setState({yes: !this.state.yes})}/>
-                                <Text>Yes</Text>
-                            </View>
+                    <ButtonGroup
+                        onPress={this.updateIndex}
+                        selectedIndex={selectedIndex}
+                        buttons={buttons}
+                        style={{flex: 1}}
+                    />
 
-                            <View style={styles.box}>
-                                <CheckBox value={this.state.no}
-                                          onValueChange={() => this.setState({no: !this.state.no})}/>
-                                <Text>No</Text>
-                            </View>
-                        </View>
-                        
-                        <Text style={{marginTop:52}}></Text>
-                        <TouchableHighlight style={[styles.buttonContainer,styles.NextButton, styles.description,]}
-                                            onPress={() => this.getData()}>
+                    <TouchableHighlight style={[styles.buttonContainer,styles.NextButton,]}
+                                        onPress={() => this.props.navigation.navigate('Welcome2')}>
                             <Text style={styles.loginText}>Next</Text>
-                        </TouchableHighlight>
-                    </View>
+                    </TouchableHighlight>
                 </View>
-            </SafeAreaView>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    header: {
+    WelcomeHeader: {
         backgroundColor: 'white',
-        height: 200,
-        alignSelf: 'center',
-    },
-    avatar: {
-        width: 130,
-        height: 130,
-        borderRadius: 63,
-        borderWidth: 4,
-        borderColor: 'white',
-        marginBottom: 10,
-        alignSelf: 'center',
-        position: 'absolute',
-        marginTop: 80,
-    },
-    body: {
+        alignItems: 'center',
         marginTop: 20,
     },
-    bodyContent: {
+    header: {
         flex: 1,
-        alignItems: 'center',
-        padding: 2,
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        paddingLeft: 20,
+        paddingRight: 20,
     },
-    name: {
-        fontSize: 26,
-        color: '#696969',
-        fontWeight: '600',
-        marginLeft: 88,
-        marginTop: 50,
-    },
-    info: {
-        fontSize: 16,
-        color: '#00BFFF',
-        marginTop: 10,
-    },
-    description: {
-        fontSize: 16,
-        color: '#696969',
-        marginTop: 10,
-        textAlign: 'center',
+    headerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems : 'center',
     },
     buttonContainer: {
-        marginTop: 10,
+        marginTop: 30,
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -144,20 +114,10 @@ const styles = StyleSheet.create({
     loginText: {
         color: 'white',
     },
-    row: {
-        flexDirection: 'row',
-    },
-    titleText: {
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    box: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ecf0f1',
+    name: {
+        fontSize: 18,
+        color: '#696969',
+        fontWeight: '600',
+        marginBottom: 10,
     },
 });
-
-      

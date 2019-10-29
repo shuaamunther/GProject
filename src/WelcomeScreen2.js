@@ -6,117 +6,92 @@ import {
     Image,
     CheckBox,
     SafeAreaView,
-    Alert
-}  from 'react-native';
+    Alert,
+    AsyncStorage,
+} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
+import * as Constants from './Constants'
+import { ButtonGroup } from 'react-native-elements';
+import WelcomeHeader from './WelcomeHeader'
+
 
 export default class Welcome extends React.Component {
-    state = {checked: false}
-    handleCheckboxChange = event => this.setState({checked: event.target.checked})
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedIndex: -1
+        };
+    }
 
-    getData=()=>{
-        try{
-            const value= this.props.navigation.getParam('userId','')
-            console.log('this token',value);
-                if(value!==null)
-                {
-                    alert("value:"+value)    
-                    this.props.navigation.navigate('Welcome3',{userId:value,})
-                }
-        }catch(error){
-            alert("Error"+error)
+    getToken = async () =>{
+        try {
+            const value =await AsyncStorage.getItem(Constants.ACCESS_TOKEN);
+            if(value!==null) {
+                this.setState({userId: value})
+            }
+        } catch (error) {
+            console.log("Error retrieving data" + error);
         }
     }
 
+    updateIndex = (selectedIndex) => {
+        this.setState({selectedIndex})
+    }
+
     render() {
+        const buttons = ['YES', 'NO']
+        const { selectedIndex } = this.state
+
         return (
-            <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.WelcomeHeader}>
+                    <WelcomeHeader pageIndex="3"/>
+                </View>
 
-                <View style={styles.header}>
-                    <Image style={styles.botto}
-                           source={require('../assets/tap3.png')}/>
-                    <Text  style={styles.name}>
-                           Are you vegetarian?
+                <View style={styles.headerView}>
+                    <Text style={styles.name}>
+                        Are you vegetarian?
                     </Text>
+
+                    <ButtonGroup
+                        onPress={this.updateIndex}
+                        selectedIndex={selectedIndex}
+                        buttons={buttons}
+                        style={{flex: 1}}
+                    />
+
+                    <TouchableHighlight style={[styles.buttonContainer,styles.NextButton,]}
+                                        onPress={() => this.props.navigation.navigate('Welcome3')}>
+                        <Text style={styles.loginText}>Next</Text>
+                    </TouchableHighlight>
                 </View>
-                <View style={styles.body}>
-                    <View style={styles.bodyContent}>
-                        <View style={styles.row}>
-                            <View style={styles.box}>
-
-                                <CheckBox title="Yes"
-                                          checked={this.state.checked}
-                                          onPress={() => this.setState({checked: !this.state.checked})}/>
-                                <Text>Yes</Text>
-                            </View>
-
-                            <View style={styles.box}>
-                                <CheckBox title="No"
-                                          checked={this.state.checked}
-                                          onPress={() => this.setState({checked: !this.state.checked})}/>
-                                <Text>No</Text>
-                            </View>
-                        </View>
-
-                        <Text style={{marginTop:52}}/>
-                        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton, styles.description]}
-                                            onPress={() => this.getData()}>
-                            <Text style={styles.loginText}>Next</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            </SafeAreaView>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    header: {
+    WelcomeHeader: {
         backgroundColor: 'white',
-        height: 200,
-        alignSelf: 'center',
-    },
-    avatar: {
-        width: 130,
-        height: 130,
-        borderRadius: 63,
-        borderWidth: 4,
-        borderColor: 'white',
-        marginBottom: 10,
-        alignSelf: 'center',
-        position: 'absolute',
-        marginTop: 80,
-    },
-    body: {
+        alignItems: 'center',
         marginTop: 20,
     },
-    bodyContent: {
+    header: {
         flex: 1,
-        alignItems: 'center',
-        padding: 2,
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        paddingLeft: 20,
+        paddingRight: 20,
     },
-    name: {
-        fontSize: 26,
-        color: '#696969',
-        fontWeight: '600',
-        marginLeft: 77,
-        marginTop: 50,
-    },
-    info: {
-        fontSize: 16,
-        color: '#00BFFF',
-        marginTop: 10,
-    },
-    description: {
-        fontSize: 16,
-        color: '#696969',
-        marginTop: 10,
-        textAlign: 'center',
+    headerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems : 'center',
     },
     buttonContainer: {
-        marginTop: 10,
+        marginTop: 30,
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -125,43 +100,24 @@ const styles = StyleSheet.create({
         width: 250,
         borderRadius: 30,
         backgroundColor: '#00BFFF',
+        marginTop: 10,
+        marginBottom: 10,
     },
-    loginButton: {
+    NextButton: {
         backgroundColor: "#00b5ec",
-        marginBottom: 20,
+        marginBottom: 40,
         width: 100,
         borderRadius: 30,
+        marginTop: 50,
+        marginBottom: 10,
     },
     loginText: {
         color: 'white',
     },
-    row: {
-        flexDirection: 'row',
-    },
-    titleText: {
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    box: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ecf0f1',
-    },
-    botto: {
-        marginBottom: 20,
-    },
-    PreviewIcon: {
-        width: 50,
-        height: 50,
-        marginLeft: 15,
-        marginRight: 15,
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        fontSize: 22
+    name: {
+        fontSize: 18,
+        color: '#696969',
+        fontWeight: '600',
+        marginBottom: 10,
     },
 });
-
-      
-      

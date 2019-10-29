@@ -10,62 +10,61 @@ import {
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
+import WelcomeHeader from './WelcomeHeader'
 
 export default class Welcome extends React.Component {
-   
-    getData=()=>{
-        try{
-            const value= this.props.navigation.getParam('userId','')
-            console.log('this token',value);
-                if(value!==null)
-                {
-                    alert("value:"+value)    
-                    this.props.navigation.navigate('Welcome1',{userId:value,})
-                }
-        }catch(error){
-            alert("Error"+error)
-        }
-    }
+    static navigationOptions = {
+        title: 'Welcome',
+    };
 
     render() {
         return (
-            <SafeAreaView style={styles.container}>
-
-                <View style={styles.header}>
-                    <Image
-                        style={styles.botto}
-                        source={require('../assets/tap1.png')}/>
+            <View style={styles.header}>
+                <View style={styles.WelcomeHeader}>
+                    <WelcomeHeader pageIndex="1"/>
                 </View>
+                <View style={styles.headerView}>
+                    <Image style={styles.avatar}
+                           source={require('../assets/user.png')}/>
+                    <Text style={styles.info}>email</Text>
+                    <Text style={styles.name}>Welcome to Bon Appetit</Text>
+                    <Text style={styles.description}>Your answers to the next few questions will
+                                    help us find the right ideas for you
+                    </Text>
 
-                <Image style={styles.avatar}
-                       source={require('../assets/user.png')}/>
-                <View style={styles.body}>
-                    <View style={styles.bodyContent}>
-                        <Text style={styles.info}>email</Text>
-                        <Text style={styles.name}>Welcome to Bon Appetit</Text>
-                        <Text style={styles.description}>Your answers to the next few questions will 
-                            help us find the right ideas for you
-                        </Text>
+                    <TouchableHighlight style={[styles.buttonContainer,styles.NextButton]}
+                                                onPress={() => this.props.navigation.navigate('Welcome1')}>
+                        <Text style={styles.loginText}>Next</Text>
+                    </TouchableHighlight>
 
-                        <TouchableHighlight style={[styles.buttonContainer,styles.NextButton]}
-                                            onPress={() => this.getData()}>
-                            <Text style={styles.loginText}>Next</Text>
-                        </TouchableHighlight>
-
-                        <Text style={styles.description2}>Already have a Pinterest account? for you{'\n'}Log in instead
-                        </Text>
-                    </View>
+                    <Text style={styles.description2}>
+                        Already have a Pinterest account? for you
+                        {'\n'}
+                        Log in instead
+                    </Text>
                 </View>
-            </SafeAreaView>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    header: {
+    WelcomeHeader: {
         backgroundColor: 'white',
-        height: 200,
-        alignSelf: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    header: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    headerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems : 'center',
     },
     avatar: {
         width: 130,
@@ -74,17 +73,6 @@ const styles = StyleSheet.create({
         borderWidth: 4,
         borderColor: 'white',
         marginBottom: 10,
-        alignSelf: 'center',
-        position: 'absolute',
-        marginTop: 80,
-    },
-    body: {
-        marginTop: 20,
-    },
-    bodyContent: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 2,
     },
     name: {
         fontSize: 26,
@@ -131,7 +119,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         width: 100,
         borderRadius: 30,
-    }, loginText: {
+    },
+    loginText: {
         color: 'white',
     },
     titleText: {
@@ -139,5 +128,3 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
-
-      

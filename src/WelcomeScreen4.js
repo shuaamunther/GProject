@@ -37,7 +37,6 @@ class Header extends React.Component {
         );
     }
 }
-
 export default class Grid extends React.Component {
     constructor() {
         super();
@@ -45,7 +44,6 @@ export default class Grid extends React.Component {
             dataSource: {},
         };
     }
-
     componentDidMount() {
         var that = this;
         let items = Array.apply(null, Array(60)).map((v, i) => {
@@ -188,4 +186,3 @@ const styles = StyleSheet.create({
         height: 100,
     },
 });
-
