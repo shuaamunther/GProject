@@ -7,8 +7,7 @@ import {
     Alert,
     KeyboardAvoidingView,
     ScrollView,
-}
-    from 'react-native';
+}from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
@@ -46,26 +45,6 @@ export default class login extends React.Component {
         });
     }
 
-    componentWillMount() {
-        const firebaseConfig = {
-            apiKey: "AIzaSyAbdvpkiwh1E19r39slZ5Ixyrm6JgUEMgY",
-            authDomain: "gradproject-408c0.firebaseapp.com",
-            databaseURL: "https://gradproject-408c0.firebaseio.com",
-            projectId: "gradproject-408c0",
-            storageBucket: "gradproject-408c0.appspot.com",
-            messagingSenderId: "1071288752672",
-            appId: "1:1071288752672:web:4459fbec630c9219e3fa45",
-            measurementId: "G-Y004ZTSSHX"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const rootRef = firebase.database().ref();
-        const usersRef = rootRef.child('users');
-        //const user = firebase.auth().currentUser.uid;
-        if (firebase.auth().currentUser) {
-            var user = firebase.auth().currentUser.uid;
-        }
-    }
     SignUpuser() {
         this.props.navigation.navigate('SignUp')
     }

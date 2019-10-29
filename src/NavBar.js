@@ -25,8 +25,8 @@ export default class login extends React.Component {
 
     render() {
         return (
-            <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
-                <Text>Home Screen</Text>
+            <View >
+                
             </View>
         );
     }

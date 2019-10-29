@@ -7,18 +7,18 @@ import {
     Alert,
     KeyboardAvoidingView,
     ScrollView,
-}from 'react-native';
-import {createAppContainer} from 'react-navigation';
+    ActivityIndicator
+} from 'react-native';
+import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import {AsyncStorage} from 'react-native';
+import * as Constants from './Constants'
 
-const ACCESS_TOKEN ='aceesstoken';
 export default class SignUpScreen extends React.Component {
     static navigationOptions = {
         title: 'Sign Up',
     };
-
 
     constructor(props) {
         super(props);
@@ -29,6 +29,7 @@ export default class SignUpScreen extends React.Component {
             age: '',
             userId:'',
             myKey: null,
+            isLoading: false
         };
     }
 
@@ -37,7 +38,6 @@ export default class SignUpScreen extends React.Component {
     }
 
     handleLogin = () => {
-        // TODO: Firebase stuff...
         console.log('handleLogin')
     }
 
@@ -53,42 +53,54 @@ export default class SignUpScreen extends React.Component {
         this.props.navigation.navigate('Main');
     }
 
-    signup() {
+    signup = () => {
         let fullname = this.state.fullname
         let email = this.state.email
         let password = this.state.password
         let age = this.state.age
         let userId = this.state.userId
+
+        this.setState({isLoading: true})
         if (fullname == '' || email === '' || age === null || password === '') {
             alert('please fill all fields')
             return null
-        } else {
-            firebase.auth().createUserWithEmailAndPassword(email, password)
+        }
+        else {
+            firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
                 .then((res) => {
-                    let aceesstoken =res.user.uid; 
-                    this.savetoken(aceesstoken);
-                    //console.log('yhis',aceesstoken)
+                    let accessToken = res.user.uid;
+                    this.saveToken(accessToken);
                     firebase.database().ref('users/' + res.user.uid).set({
                             fullname: fullname,
                             email: email,
                             age: age,
                         },
-                    
                         function (error) {
                             if (error) {
                                 Alert.alert("Failed signup user: Message: " + error)
-                            } else {
-                                Alert.alert("Success signup: Message: " + res.user.uid)
                             }
                         })
-                }).then(() => {
-                this.props.getToken()
-            }).catch(function (error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                Alert.alert("Failed signup: Message: " + errorMessage)
-            })
+
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Welcome' })],
+                    });
+                    this.props.navigation.dispatch(resetAction);
+
+                })
+                .catch((error) => {
+                    this.errorSignUp(error)
+                })
         }
+    }
+
+    errorSignUp = (error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        Alert.alert("Failed signup: Message: " + errorMessage)
+        this.setState({isLoading: false})
     }
 
     validate = (email) => {
@@ -111,34 +123,17 @@ export default class SignUpScreen extends React.Component {
         }
         this.setState({password})
         this.setState({passwordvalid: true})
+    }
+
+
+    saveToken = async (accessToken) => {
+        try {
+            await AsyncStorage.setItem(Constants.ACCESS_TOKEN, accessToken);
+        } catch (error) {
+            console.log("Error saving data" + error);
         }
-        
-        async getToken() {
-            try {
-              const value =await AsyncStorage.getItem(ACCESS_TOKEN);
-              this.setState({myKey: value});
-              if(value){
-              //const item = JSON.parse(value);
-              console.log('this token',value);
-              this.props.navigation.navigate('Welcome',{userId:value,});
-              
-              }
-            } catch (error) {
-              console.log("Error retrieving data" + error);
-            }
-          }
-        
-        async savetoken(aceesstoken) {
-            try {
-             await AsyncStorage.setItem(ACCESS_TOKEN, aceesstoken);
-             this.getToken();
-             //console.log('accees token is :',y)
-             //return value
-            } catch (error) {
-              console.log("Error saving data" + error);
-            }
-          }
-            
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -153,7 +148,6 @@ export default class SignUpScreen extends React.Component {
                             <Image style={styles.inputIcon} source={require('../assets/person.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Full Name"
-                                       keyboardType="Full-Name"
                                        underlineColorAndroid='transparent'
                                        onChangeText={(fullname) => this.setState({fullname})}/>
                         </View>
@@ -173,7 +167,6 @@ export default class SignUpScreen extends React.Component {
                             <Image style={styles.inputIcon} source={require('../assets/person.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Age"
-                                       keyboardType="Age"
                                        underlineColorAndroid='transparent'
                                        onChangeText={(age) => this.setState({age})}/>
                         </View>
@@ -188,10 +181,14 @@ export default class SignUpScreen extends React.Component {
                                        onChangeText={(password) => this.validatepass(password)}
                                        value={this.state.password}/>
                         </View>
-                        <TouchableHighlight style={[styles.buttonContainer,styles.SignUpButton]}
-                                            onPress={() => this.signup() }>
+                        <TouchableHighlight style={[styles.buttonContainer, styles.SignUpButton, this.state.isLoading ? styles.SignUpButtonColorLoading : styles.SignUpButtonColor]}
+                                            disabled={this.state.isLoading}
+                                            onPress={() => this.signup()}>
                             <Text style={styles.loginText}>Sign Up</Text>
                         </TouchableHighlight>
+
+                        <ActivityIndicator size="large" color="#00b5ec" style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
+
                     </KeyboardAvoidingView>
                 </ScrollView>
             </View>
@@ -239,10 +236,15 @@ const styles = StyleSheet.create({
         borderRadius: 30,
     },
     SignUpButton: {
-        backgroundColor: "#00b5ec",
         marginBottom: 20,
         width: 100,
         borderRadius: 30,
+    },
+    SignUpButtonColor: {
+        backgroundColor: "#00b5ec",
+    },
+    SignUpButtonColorLoading: {
+        backgroundColor: "#4dd5ff",
     },
     loginText: {
         color: 'white',

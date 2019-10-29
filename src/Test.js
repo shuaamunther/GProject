@@ -1,107 +1,76 @@
-import React, { Component } from 'react';
-//import rect in our project
+import React, {Component} from 'react';
 import {
-  StyleSheet,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-  Text,
-  TouchableHighlight,
+    StyleSheet, Text, View, TextInput,
+    Button,
+    TouchableHighlight,
+    Image,
+    ScrollView,
+    CheckBox,
+    SafeAreaView,
+    Alert
 } from 'react-native';
-//import all the components we will need
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import * as firebase from 'firebase';
+//import SignUpScreen from 'SignUpScreen.js';
 
-
-class Header extends React.Component {
-
-    state = { checked: false }
-    renderItem = ({ item, index }) => {
-      if (item.empty === true) {
-        return <View style={[styles.item, styles.itemInvisible]} />;
-      }
-      return (
-        <View
-          style={styles.item}
-        >
-          <Text style={styles.itemText}>{item.key}</Text>
-        </View>
-      );
-    };
-      render()
-       {
-        return (  <SafeAreaView style={styles.container}>
-          <View style={styles.header} >
-          <Image style={{ marginLeft: 17, marginTop: 3,}}
-             source={require('../assets/tap5.png')} />
-               <Text style={styles.name} >Last step! Tell us what you're interested in</Text>
-                  </View>
-         
-              
-        
-                  
-               
-                <View style={styles.body}>
-                  <View style={styles.bodyContent}>
-                     <TouchableHighlight style={[ styles.buttonContainer,
-                         styles.loginButton,styles.description]} 
-                            onPress={() => this.props.navigation.navigate('Profile')} >   
-                              <Text style={styles.loginText}>Next</Text> 
-                                </TouchableHighlight>       
-                                 </View>
-                                  </View>
-                                    </SafeAreaView>);}
-  }
-  
-
-    export default class Grid extends  React.Component {
-      constructor() {
-       super();
+export default class Welcome extends React.Component {
+    handleCheckboxChange = event => this.setState({checked: event.target.checked})
+    constructor(props) {
+        super(props);
         this.state = {
-         dataSource: {},
-          };
-       }
+            yes:false,
+            No:false,
+            checked: false
+        };  
+    }
 
-  componentDidMount() {
-    var that = this;
-    let items = Array.apply(null, Array(60)).map((v, i) => {
-      return { id: i, src: 'http://placehold.it/200x200?text=' + (i + 1) };
-    });
-    that.setState({
-      //Setting the data source
-      dataSource: items,
-    });
-  }
-  render() {
-    return (
-       
-            
-      <View style={styles.MainContainer}><Header />
-        <FlatList
-          data={this.state.dataSource}
-          renderItem={({ item }) => (
-            <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-              <Image style={styles.imageThumbnail} source={{ uri: item.src }} />
-            </View>
-          )}
-          //Setting the number of column
-          numColumns={3}
-          keyExtractor={(item, index) => index}
-        />
-       
-      </View>
-    );
-  }
+    render() {
+        return (
+          <SafeAreaView style={styles.container}>
+          <ScrollView style={styles.scrollView}>
+              <View style={styles.header}>
+                  <Image style={styles.botto} source={require('../assets/tap4.png')}/>
+                  <Text  style={styles.name}> Do you have any food allergies? </Text>
+                  <Text style={{alignSelf: 'center',}}>Choose as many as you like (or none at all) and tap 'Next'</Text>
+                  <Text style={{alignSelf: 'center',}}> You can change these any tiome in your Preference.</Text>
+              </View>
+
+              <View style={styles.body}>
+                  <View style={styles.bodyContent}>
+                      <View style={styles.row}>
+                          <View style={styles.box}>
+                              <CheckBox value={this.state.yes}
+                                        onValueChange={() => this.setState({yes: !this.state.yes})}/>
+                               <Text>Yes</Text>        
+                          </View>
+
+                          <View style={styles.box}>
+                              <CheckBox  value={this.state.no}
+                                         onValueChange={() => this.setState({no: !this.state.no})}/>
+                              <Text>No</Text>
+                          </View>
+                      </View>
+
+                      <TouchableHighlight style={[styles.buttonContainer, styles.NextButton, styles.description]}
+                                          onPress={() => this.props.navigation.navigate('Welcome4')}>
+                          <Text style={styles.loginText}>Next</Text>
+                      </TouchableHighlight>
+                  </View>
+              </View>
+          </ScrollView>
+      </SafeAreaView>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
     header: {
         backgroundColor: 'white',
-        height: 170,
+        height: 200,
         alignSelf: 'center',
-      },
-      avatar: {
+    },
+    avatar: {
         width: 130,
         height: 130,
         borderRadius: 63,
@@ -111,41 +80,34 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         position: 'absolute',
         marginTop: 80,
-      },
-      name: {
-        fontSize: 22,
-        color: '#FFFFFF',
-        fontWeight: '600',
-        alignSelf: 'center',
-      },
-      body: {
-        marginTop: 0,
-      },
-      bodyContent: {
+    },
+    body: {
+        marginTop: 20,
+    },
+    bodyContent: {
         flex: 1,
-        
         alignItems: 'center',
         padding: 2,
-      },
-      name: {
+    },
+    name: {
         fontSize: 26,
         color: '#696969',
         fontWeight: '600',
-        alignSelf: 'center',
+        marginLeft: 88,
         marginTop: 50,
-      },
-      info: {
+    },
+    info: {
         fontSize: 16,
         color: '#00BFFF',
         marginTop: 10,
-      },
-      description: {
+    },
+    description: {
         fontSize: 16,
         color: '#696969',
         marginTop: 10,
         textAlign: 'center',
-      },
-      buttonContainer: {
+    },
+    buttonContainer: {
         marginTop: 10,
         height: 45,
         flexDirection: 'row',
@@ -155,64 +117,34 @@ const styles = StyleSheet.create({
         width: 250,
         borderRadius: 30,
         backgroundColor: '#00BFFF',
-      },
-     loginButton: {
-     backgroundColor: "#00b5ec",
-      marginBottom:20,
-      width:100,
-      borderRadius:30,
-     },
-     loginText: {
-     color: 'white',
-     },
-     headerStarText: {
-      fontSize: 18,
-      top: '40%',
-      position: 'absolute',
-      textAlign: 'center',
-      width: '100%',
-      
-  },
-     row:{
-      flexDirection: 'row', 
-      marginLeft: -13,
-      
-     
-     },
-      titleText: {
-      fontSize: 30,
-       fontWeight: 'bold',
-      },
-      box: {
-      flex: 1,
-      flexDirection: 'row', 
-       
-         
-        backgroundColor: '#ecf0f1',
-        backgroundColor:'white',
-        justifyContent:'space-between',
-        
-      },
-      PreviewIcon:{
-        width: 150,
-        height:100,
-        marginLeft: 15,
-        marginRight: 15,
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        fontSize:22
+        marginTop: 10,
+        marginBottom: 10,
     },
- 
- 
-    MainContainer: {
-    justifyContent: 'center',
-    flex: 1,
-    paddingTop: 30,
-  },
-
-  imageThumbnail: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 100,
-  },
+    NextButton: {
+        backgroundColor: "#00b5ec",
+        marginBottom: 40,
+        width: 100,
+        borderRadius: 30,
+        marginTop: 50,
+        marginBottom: 10,
+    },
+    loginText: {
+        color: 'white',
+    },
+    row: {
+        flexDirection: 'row',
+    },
+    titleText: {
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
+    box: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+    },
 });
+
+      

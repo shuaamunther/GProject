@@ -1,80 +1,127 @@
 import React, {Component} from 'react';
-//import rect in our project
 import {
-    StyleSheet,
-    View,
-    FlatList,
-    ActivityIndicator,
-    Image,
-    TouchableOpacity,
-    SafeAreaView,
-    Text,
+    StyleSheet, Text, View, TextInput,
+    Button,
     TouchableHighlight,
+    TouchableOpacity,
+    Image,
+    ScrollView,
+    CheckBox,
+    FlatList,
+    Alert
 } from 'react-native';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import * as firebase from 'firebase';
+import { ButtonGroup } from 'react-native-elements';
+import WelcomeHeader from './WelcomeHeader'
 
-class Header extends React.Component {
-    state = {checked: false}
-    renderItem = ({item, index}) => {
-        if (item.empty === true) {
-            return <View style={[styles.item, styles.itemInvisible]}/>;
-        }
+
+const ITEMS_KEY = [
+    'item1',
+    'item2',
+    'item3',
+    'item4',
+    'item5',
+    'item6',
+    'item7',
+    'item8',
+    'item9',
+    'item10',
+    'item11',
+    'item12',
+    'item13',
+    'item14',
+    'item15',
+    'item16',
+]
+const IMAGES_CHECKED = [
+    require('../assets/welcome3/Dairy.png'),
+    require('../assets/welcome3/Egg.png'),
+    require('../assets/welcome3/Gluten.png'),
+    require('../assets/welcome3/Peanut.png'),
+    require('../assets/welcome3/SeaFood.png'),
+    require('../assets/welcome3/Sesame.png'),
+    require('../assets/welcome3/Soy.png'),
+    require('../assets/welcome3/Sulfite.png'),
+    require('../assets/welcome3/treenut.png'),
+    require('../assets/welcome3/wheat.png'),
+]
+const IMAGES_UNCHECKED = [
+    require('../assets/welcome3/Dairy1.png'),
+    require('../assets/welcome3/egg1.png'),
+    require('../assets/welcome3/gluten1.png'),
+    require('../assets/welcome3/panut1.png'),
+    require('../assets/welcome3/seafood1.png'),
+    require('../assets/welcome3/sesame1.png'),
+    require('../assets/welcome3/soy1.png'),
+    require('../assets/welcome3/sulfite1.png'),
+    require('../assets/welcome3/treenut1.png'),
+    require('../assets/welcome3/wheat1.png'),
+]
+
+export default class Welcome extends React.Component {
+
+    constructor(props) {
+        super(props);
+        ITEMS_KEY.forEach((key)=>{
+            this.state = {[key]: false}
+        })
+    }
+
+    renderImage = (index) => {
+        const itemKey = ITEMS_KEY[index]
+        let output = this.state[itemKey] ? IMAGES_CHECKED[index] : IMAGES_UNCHECKED[index];
+
+        return  <Image style={{width: 92, height:92 }} source={output} />
+    }
+
+    _renderItem = (item) => {
+        console.log('_renderItem: ')
+        console.log(item);
+        let itemKey = item.item
+
         return (
-            <View style={styles.item}>
-                <Text style={styles.itemText}>{item.key}</Text>
-            </View>
-        );
-    };
+            <TouchableOpacity
+                style={styles.checkboxButton}
+                onPress={ () => this.setState({ [itemKey]: !this.state[itemKey] }) }>
+                {this.renderImage(item.index)}
+            </TouchableOpacity>
+
+        )
+    }
 
     render() {
         return (
             <View style={styles.header}>
-                <Image style={{marginLeft: 17, marginTop: -18,}}
-                       source={require('../assets/tap5.png')}/>
-                <Text style={styles.name}>Last step!
-                                            {'\n'}
-                        Tell us what you're interested in</Text>
-            </View>
-        );
-    }
-}
-export default class Grid extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            dataSource: {},
-        };
-    }
-    componentDidMount() {
-        var that = this;
-        let items = Array.apply(null, Array(60)).map((v, i) => {
-            return {id: i, src: 'http://placehold.it/200x200?text=' + (i + 1)};
-        });
-        that.setState({
-            //Setting the data source
-            dataSource: items,
-        });
-    }
-
-    render() {
-        return (
-            <View style={styles.MainContainer}>
-                <Header/>
-                <FlatList  data={this.state.dataSource}
-                           renderItem={({item}) => (
-                        <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
-                            <Image style={styles.imageThumbnail} source={{uri: item.src}}/>
-                        </View>
-                    )}
-                    numColumns={3}
-                    keyExtractor={(item, index) => index} />
-                <View style={styles.body}>
-                    <View style={styles.bodyContent}>
-                        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton, styles.description]}
-                                            onPress={() => this.props.navigation.navigate('Profile')}>
-                            <Text style={styles.loginText}>Next</Text>
-                        </TouchableHighlight>
-                    </View>
+                <View style={styles.WelcomeHeader}>
+                    <WelcomeHeader pageIndex="5"/>
                 </View>
+                    <View style={styles.headerView}>
+
+                        <View style={{height: 75}}>
+                            <Text  style={styles.name}> Last step! </Text>
+                            <Text style={{alignSelf: 'center', textAlign: 'center'}}>
+                              Recommend recipes
+                               </Text>
+                        </View>
+
+                        <View style={{flex: 5}}>
+                            <FlatList
+                                data={ITEMS_KEY}
+                                renderItem={this._renderItem}
+                                keyExtractor={item => item}
+                                numColumns={2}
+                            />
+                        </View>
+
+                        <View style={{height: 75}}>
+                            <TouchableHighlight style={[styles.buttonContainer,styles.NextButton,]}
+                                                onPress={() => this.props.navigation.navigate('Profile')}>
+                                <Text style={styles.loginText}>Next</Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
             </View>
 
         );
@@ -82,107 +129,51 @@ export default class Grid extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    header: {
+    WelcomeHeader: {
         backgroundColor: 'white',
-        height: 140,
-        alignSelf: 'center',
-    },
-    avatar: {
-        width: 130,
-        height: 130,
-        borderRadius: 63,
-        borderWidth: 4,
-        borderColor: 'white',
-        marginBottom: 10,
-        alignSelf: 'center',
-        position: 'absolute',
-        marginTop: 80,
-    },
-    body: {
-        marginTop: 0,
-    },
-    bodyContent: {
-        flex: 1,
         alignItems: 'center',
-        padding: 2,
+        marginTop: 20,
     },
-    name: {
-        fontSize: 26,
-        color: '#696969',
-        fontWeight: '600',
-        alignSelf: 'center',
-        marginTop: 50,
+    header: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        paddingLeft: 20,
+        paddingRight: 20,
     },
-    info: {
-        fontSize: 16,
-        color: '#00BFFF',
-        marginTop: 10,
-    },
-    description: {
-        fontSize: 16,
-        color: '#696969',
-        marginTop: 10,
-        textAlign: 'center',
+    headerView: {
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems : 'center',
+        marginTop: 30
     },
     buttonContainer: {
-        marginTop: 10,
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
         width: 250,
         borderRadius: 30,
         backgroundColor: '#00BFFF',
+        marginTop: 10,
     },
-    loginButton: {
+    NextButton: {
         backgroundColor: "#00b5ec",
-        marginBottom: 20,
         width: 100,
         borderRadius: 30,
     },
     loginText: {
         color: 'white',
     },
-    headerStarText: {
+    name: {
         fontSize: 18,
-        top: '40%',
-        position: 'absolute',
-        textAlign: 'center',
-        width: '100%',
+        color: '#696969',
+        fontWeight: '600',
+        marginBottom: 10,
     },
-    row: {
-        flexDirection: 'row',
-
-    },
-    titleText: {
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    box: {
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: '#ecf0f1',
-        backgroundColor: 'white',
-        justifyContent: 'space-between',
-    },
-    PreviewIcon: {
-        width: 150,
-        height: 100,
-        marginLeft: 15,
-        marginRight: 15,
-        justifyContent: 'center',
-        fontWeight: 'bold',
-        fontSize: 22
-    },
-    MainContainer: {
-        justifyContent: 'center',
-        flex: 1,
-        paddingTop: 30,
-    },
-    imageThumbnail: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 100,
+    checkboxButton: {
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20,
     },
 });

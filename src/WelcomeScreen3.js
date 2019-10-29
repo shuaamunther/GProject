@@ -22,6 +22,18 @@ const ITEMS_KEY = [
     'item2',
     'item3',
     'item4',
+    'item5',
+    'item6',
+    'item7',
+    'item8',
+    'item9',
+    'item10',
+    'item11',
+    'item12',
+    'item13',
+    'item14',
+    'item15',
+    'item16',
 ]
 const IMAGES_CHECKED = [
     require('../assets/welcome3/Dairy.png'),
@@ -85,28 +97,32 @@ export default class Welcome extends React.Component {
                 <View style={styles.WelcomeHeader}>
                     <WelcomeHeader pageIndex="4"/>
                 </View>
-                <ScrollView>
                     <View style={styles.headerView}>
-                        <Text  style={styles.name}> Do you have any food allergies? </Text>
-                        <Text style={{alignSelf: 'center', textAlign: 'center'}}>
+
+                        <View style={{height: 75}}>
+                            <Text  style={styles.name}> Do you have any food allergies? </Text>
+                            <Text style={{alignSelf: 'center', textAlign: 'center'}}>
                                 Choose as many as you like (or none at all) and tap 'Next'
                                 {'\n'}
-                                You can change these any tiome in your Preference.</Text>
+                                You can change these any time in your Preference.</Text>
+                        </View>
 
-                        <View>
-                            <FlatList style={{height:350}}
+                        <View style={{flex: 5}}>
+                            <FlatList
                                 data={ITEMS_KEY}
                                 renderItem={this._renderItem}
                                 keyExtractor={item => item}
-                                numColumns={2}/>
+                                numColumns={2}
+                            />
                         </View>
 
-                        <TouchableHighlight style={[styles.buttonContainer,styles.NextButton,]}
-                                            onPress={() => this.props.navigation.navigate('Welcome4')}>
-                            <Text style={styles.loginText}>Next</Text>
-                        </TouchableHighlight>
+                        <View style={{height: 75}}>
+                            <TouchableHighlight style={[styles.buttonContainer,styles.NextButton,]}
+                                                onPress={() => this.props.navigation.navigate('Welcome4')}>
+                                <Text style={styles.loginText}>Next</Text>
+                            </TouchableHighlight>
+                        </View>
                     </View>
-                </ScrollView>
             </View>
 
         );
@@ -128,7 +144,7 @@ const styles = StyleSheet.create({
     },
     headerView: {
         flex: 1,
-        justifyContent: 'flex-start',
+        justifyContent: 'space-around',
         alignItems : 'center',
         marginTop: 30
     },
@@ -137,8 +153,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        width: 250,
         borderRadius: 30,
         backgroundColor: '#00BFFF',
+        marginTop: 10,
     },
     NextButton: {
         backgroundColor: "#00b5ec",

@@ -10,6 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "github:react-native-community/async-storage",
+    "async-storage": "0.1.0",
     "firebase": "^7.2.1",
     "import": "0.0.6",
     "react": "16.9.0",

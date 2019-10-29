@@ -7,8 +7,7 @@ import {
     Alert,
     KeyboardAvoidingView,
     ScrollView,
-}
-    from 'react-native';
+} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 

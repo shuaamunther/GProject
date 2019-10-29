@@ -9,7 +9,6 @@ import ProfileScreen from './src/ProfileScreen';
 import SignUpScreen from './src/SignUpScreen';
 import ForgotPasswordScreen from './src/ForgotPasswordScreen';
 import FeedScreen from './src/FeedScreen';
-
 import WelcomeScreen from './src/WelcomeScreen';
 import WelcomeScreen1 from './src/WelcomeScreen1';
 import WelcomeScreen2 from './src/WelcomeScreen2';
@@ -17,10 +16,30 @@ import WelcomeScreen3 from './src/WelcomeScreen3';
 import WelcomeScreen4 from './src/WelcomeScreen4';
 import CardScreen from './src/CardScreen';
 import SearchScreen from './src/SearchScreen';
-
 import DataScreen from './src/DataScreen';
 import TestScreen from './src/Test';
+import NavBar from './src/NavBar';
+import AddRecipes from './src/AddRecipes';
+import * as firebase from 'firebase';
+
 export default class App extends React.Component {
+
+  componentWillMount() {
+    const firebaseConfig = {
+        apiKey: "AIzaSyAbdvpkiwh1E19r39slZ5Ixyrm6JgUEMgY",
+        authDomain: "gradproject-408c0.firebaseapp.com",
+        databaseURL: "https://gradproject-408c0.firebaseio.com",
+        projectId: "gradproject-408c0",
+        storageBucket: "gradproject-408c0.appspot.com",
+        messagingSenderId: "1071288752672",
+        appId: "1:1071288752672:web:4459fbec630c9219e3fa45",
+        measurementId: "G-Y004ZTSSHX"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const rootRef = firebase.database().ref();
+}
+
   render() {
    
   return (
@@ -74,9 +93,15 @@ const AppNavigator = createStackNavigator({
  Test:{
  screen:TestScreen
  },
+ NavBars:{
+ screen:NavBar
+ },
+ AddRe:{
+ screen:AddRecipes
+  },
 },
 {
-  initialRouteName: "Welcome"
+  initialRouteName: "AddRe"
 })
 const AppContainer = createAppContainer(AppNavigator);
 const styles = StyleSheet.create({
