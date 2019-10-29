@@ -36,12 +36,10 @@ export default class App extends React.Component {
         measurementId: "G-Y004ZTSSHX"
     };
 
-    firebase.initializeApp(firebaseConfig);
        if (!firebase.app.length) {
-           firebase.initializeApp({});
+           firebase.initializeApp({firebaseConfig});
         }
   }
-
 
   render() {
    
