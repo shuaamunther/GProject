@@ -37,7 +37,7 @@ export default class App extends React.Component {
     };
 
        if (!firebase.app.length) {
-           firebase.initializeApp({firebaseConfig});
+           firebase.initializeApp(firebaseConfig);
         }
   }
 
