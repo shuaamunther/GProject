@@ -3,7 +3,6 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { StyleSheet, Text, View ,Platform} from 'react-native';
 
-
 import Login from './src/Login';
 import ProfileScreen from './src/ProfileScreen';
 import SignUpScreen from './src/SignUpScreen';
@@ -102,7 +101,7 @@ const AppNavigator = createStackNavigator({
   },
 },
 {
-  initialRouteName: "Test"
+  initialRouteName: "AddRe"
 })
 const AppContainer = createAppContainer(AppNavigator);
 const styles = StyleSheet.create({
