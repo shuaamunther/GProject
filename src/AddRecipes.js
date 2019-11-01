@@ -8,11 +8,13 @@ import {
     CheckBox,
     SafeAreaView,
     Alert,
+    PixelRatio,
     TouchableOpacity,
     ActivityIndicator,
     FlatList,
 } from 'react-native';
 import {createAppContainer} from 'react-navigation';
+import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import NavBar from './NavBar';
@@ -46,6 +48,7 @@ class LogoTitle extends React.Component {
 }
 
 export default class Welcome extends React.Component {
+
     static navigationOptions = {
         headerTitle: 'Add Recipes',
         headerRight: () => (
@@ -60,9 +63,11 @@ export default class Welcome extends React.Component {
 
     constructor(props) {
         super(props);
+        this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
         ITEMS_KEY.forEach((key) => {
             this.state = {[key]: false}
         })
+        
         this.state = {
             yes: false,
             No: false,
@@ -77,9 +82,43 @@ export default class Welcome extends React.Component {
                 {Nutration: [{Calories: '', Fiber: '', Fat: '', Protin: '', Carbs: ''}]},
                 {Intgrediens: ''}],
             isLoading: false,
+            avatarSource: null,
+            videoSource: null,
         };
     }
 
+    selectPhotoTapped() {
+        const options = {
+          quality: 1.0,
+          maxWidth: 500,
+          maxHeight: 500,
+          storageOptions: {
+          skipBackup: true,
+          },
+        };
+    
+        ImagePicker.showImagePicker(options, response => {
+          console.log('Response = ', response);
+    
+          if (response.didCancel) {
+            console.log('User cancelled photo picker');
+          } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+          } else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+          } else {
+            let source = {uri: response.uri};
+             console.log(response.uri)
+            // You can also display the image using data:
+            // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+    
+            this.setState({
+              avatarSource: source,
+            });
+          }
+        });
+      }
+    
     add = () => {
         let Title = this.state.Title
         let Time = this.state.Time
@@ -143,12 +182,14 @@ export default class Welcome extends React.Component {
     render() {
         return (
             <ScrollView style={styles.scrollView}>
-                <TouchableOpacity style={styles.touchable} onPress={this.props.onPress}>
-                    <View style={styles.view}>
-                        {this.makeImageIfAny(styles)}
-                        <Image style={styles.inputIcon} source={require('../assets/camera.png')}/>
-                        <Text style={styles.text}>{this.props.title}</Text>
-                    </View>
+                <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
+                   <View style={styles.view}>
+                      {this.state.avatarSource === null ? (
+                           <Image style={styles.inputIcon} source={require('../assets/camera.png')}/>
+                      ) : (
+                           <Image style={styles.avatar} source={this.state.avatarSource} />
+                      )}
+                     </View>
                 </TouchableOpacity>
 
                 <View style={styles.inputContainer}>
@@ -183,8 +224,8 @@ export default class Welcome extends React.Component {
                                   keyExtractor={item => item}
                                   numColumns={4}/>
                     </View>
-                </View>
 
+                </View>
                 <View style={{
                     paddingLeft: 14,
                     paddingTop: 14,
@@ -196,7 +237,7 @@ export default class Welcome extends React.Component {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Image style={{marginLeft: 15, width: 40, height: 40}} source={require('../assets/plus.png')}/>
+                    <Image style={{marginLeft: 15, width: 30, height: 30}} source={require('../assets/plus.png')}/>
                     <TextInput style={styles.inputs}
                                placeholder="Add ingrediants"
                                underlineColorAndroid='transparent'
@@ -240,6 +281,7 @@ export default class Welcome extends React.Component {
                     marginLeft: 10,
                     backgroundColor: '#E3F2FD'
                 }}>
+
                     <TextInput style={styles.inputs}
                                placeholder="steps"
                                underlineColorAndroid='transparent'
@@ -260,7 +302,7 @@ export default class Welcome extends React.Component {
 
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.inputs}
-                               placeholder="Calories kcal     'optinal'"
+                               placeholder="Calories kcal     optinal"
                                underlineColorAndroid='transparent'
                                onChangeText={(Calories) => this.setState({Calories})}
                     />
@@ -342,7 +384,7 @@ const styles = StyleSheet.create({
         marginRight: 4,
         marginBottom: 8
     },
-    SaveUpButtonColorLoading: {
+    SaveButtonColorLoading: {
         backgroundColor: "#4dd5ff",
     },
     image: {
@@ -351,12 +393,13 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 18,
         textAlign: 'center',
-        color: 'white'
+        color: 'white',
+        //fontSize: 16
     },
     inputContainer: {
         borderBottomColor: '#F5FCFF',
         backgroundColor: '#E3F2FD',
-        borderRadius: 30,
+        borderRadius: 23,
         borderBottomWidth: 1,
         width: 335,
         height: 45,
@@ -378,7 +421,7 @@ const styles = StyleSheet.create({
     SaveButtonColor: {
         backgroundColor: "#00b5ec",
     },
-    SaveButtonColorLoading: {
+    SaveUpButtonColorLoading: {
         backgroundColor: "#4dd5ff",
     },
     SearchText: {
@@ -404,6 +447,18 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
     },
+    avatarContainer: {
+        borderColor: '#9B9B9B',
+        borderWidth: 1 / PixelRatio.get(),
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      avatar: {
+        borderRadius: 23,
+        height: 146,
+        width: 349,
+        alignItems: 'center',
+      },
 
 });
      
