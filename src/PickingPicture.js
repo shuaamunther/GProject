@@ -81,16 +81,19 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
-      <View style={styles.view}>
-         {this.state.avatarSource === null ? (
-              <Image style={styles.inputIcon} source={require('../assets/camera.png')}/>
-         ) : (
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
+          <Image style={styles.inputIcon} source={require('../assets/camera.png')}/>
+          <View
+            style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
+            {this.state.avatarSource === null ? (
+              <Text>Select a Photo</Text>
+            ) : (
               <Image style={styles.avatar} source={this.state.avatarSource} />
-         )}
-        </View>
-   </TouchableOpacity>
-
+            )}
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
@@ -113,4 +116,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
   },
+  touchable: {
+    marginLeft: 4,
+    marginRight: 4,
+    marginBottom: 8
+},
 });
