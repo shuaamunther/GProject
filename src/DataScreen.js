@@ -56,14 +56,13 @@ export default class DataScreen extends React.Component {
     <SafeAreaView style={styles.container}>
       <FlatList
             data={DATA}
-            renderItem={({ item }) => <CardScreen title={item.title} />}
-             keyExtractor={item => item.id}/>
+            renderItem={({ item }) => <CardScreen cardIteam={item}/>}
+            keyExtractor={item => item.id}/>
     </SafeAreaView>
     
   );
 }
 }
-
 
 const styles = StyleSheet.create({
   container: {

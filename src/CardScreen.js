@@ -16,7 +16,7 @@ class HeaderImageView extends React.Component {
                 source={require('../assets/star.png')}
                 />
             <Text style={styles.headerStarText}>
-                5
+                {this.props.Rate}
             </Text>
             </View>                 
         </View>
@@ -30,10 +30,10 @@ class HeaderTextView extends React.Component {
             <View style= {styles.headerView} >
                 <View style = {styles.ViewText} >
                     <Text style={styles.titleText}>
-                        Title
+                        {this.props.title}
                     </Text>
                     <Text style={styles.DiscriptionnText}>
-                        type
+                        {this.props.type}
                     </Text>
                 </View>
                 <View style = {styles.ViewButton} >
@@ -52,8 +52,9 @@ class CardScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <Card containerStyle={{padding: 0, borderRadius: 10}}>
-                    <HeaderImageView /> 
-                    <HeaderTextView />                               
+                    <HeaderImageView Rate={this.props.cardIteam.Rate} /> 
+                    <HeaderTextView  title={this.props.cardIteam.title}
+                                     type={this.props.cardIteam.type} />                               
                     </Card>
           </View>
         );
