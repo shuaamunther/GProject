@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
 import CardScreen from '../src/CardScreen';
+import { Card, Button } from 'react-native-elements';
 
 const DATA = [
   {
@@ -55,7 +56,7 @@ export default class DataScreen extends React.Component {
     <SafeAreaView style={styles.container}>
       <FlatList
             data={DATA}
-            renderItem={({ item }) => <Item title={item.title} />}
+            renderItem={({ item }) => <CardScreen title={item.title} />}
              keyExtractor={item => item.id}/>
     </SafeAreaView>
     
