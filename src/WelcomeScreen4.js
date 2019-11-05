@@ -111,7 +111,7 @@ export default class Welcome extends React.Component {
 
                         <View style={{height: 75}}>
                             <TouchableHighlight style={[styles.buttonContainer,styles.NextButton,]}
-                                                onPress={() => this.props.navigation.navigate('Profile')}>
+                                               >
                                 <Text style={styles.loginText}>Next</Text>
                             </TouchableHighlight>
                         </View>

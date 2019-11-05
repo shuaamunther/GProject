@@ -12,7 +12,7 @@ class FirstScreen extends React.Component {
         super(props);
     }
    
-    componentWillMount(){
+    componentDidMount(){
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
               // User is signed in.
