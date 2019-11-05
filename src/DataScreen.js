@@ -64,6 +64,7 @@ export default class DataScreen extends React.Component {
         {title: ''},
         {type:''},
         {rate: ''},
+        {id:''}
      ],
     
   }
@@ -74,8 +75,8 @@ export default class DataScreen extends React.Component {
       firebase.database().ref('/recipes').on('value', function (snapshot) {
         snapshot.forEach(function (item) {
           
-            console.log('item: ', item.val())
-            recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate})
+            console.log('item: ', item.key)
+            recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate,id: item.key})
         })
        console.log('this',recipe)
         this.setState({
@@ -93,7 +94,7 @@ componentDidMount(){
    return (
     <SafeAreaView style={styles.container}>
       <FlatList
-            data={DATA}
+            data={this.state.recipe}
             renderItem={({ item }) => <CardScreen cardItem={item}/>}
             keyExtractor={item => item.id}/>
     </SafeAreaView>
