@@ -16,20 +16,22 @@ class FirstScreen extends React.Component {
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
               // User is signed in.
-              console.log('User is signed in')
+              console.log(this.props)
               const resetAction = StackActions.reset({
-                actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Main' })],
             });
             this.props.navigation.dispatch(resetAction);
             } else {
               // No user is signed in.
               console.log('No User is signed in')
               const resetAction = StackActions.reset({
+                index: 0,
                 actions: [NavigationActions.navigate({ routeName: 'Login' })],
             });
             this.props.navigation.dispatch(resetAction);
             }
-            });
+            }.bind(this));
     }
 
     render() {
