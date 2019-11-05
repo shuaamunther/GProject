@@ -73,19 +73,19 @@ export default class Welcome extends React.Component {
             yes: false,
             No: false,
             checked: false,
-            Recipe: [
-                {Title: ''},
-                // {Type:''},
-                {Time: ''},
-                {Difficality: ''},
-                {Steps: ''},
-                {Discreption: ''},
-                {Intgrediens: ''},
-                {Calories: ''},
-                {Fiber: ''},
-                {Protin: ''},
-                {Fat: ''},
-                {Carbs: ''},
+            recipe: [
+                {title: ''},
+                // {type:''},
+                {time: ''},
+                {difficality: ''},
+                {steps: ''},
+                {discreption: ''},
+                {intgrediens: ''},
+                {calories: ''},
+                {fiber: ''},
+                {protin: ''},
+                {fat: ''},
+                {carbs: ''},
             ],
             isLoading: false,
             avatarSource: null,
@@ -126,19 +126,19 @@ export default class Welcome extends React.Component {
       }
     
     add = () => {
-        let title = this.state.Title
-        let time = this.state.Time
-        // let Type = this.state.Type
-        let intgrediens = this.state.Intgrediens
-        let steps = this.state.Steps
-        let difficality = this.state.Difficality
-        let discreption = this.state.Discreption
-        let Nutration=this.state.Nutration
-        let calories = this.state.Calories
-        let fiber = this.state.Fiber
-        let fat = this.state.Fat
-        let protin = this.state.Protin
-        let carbs = this.state.Carbs
+        let title = this.state.title
+        let time = this.state.time
+        // let type = this.state.type
+        let intgrediens = this.state.intgrediens
+        let steps = this.state.steps
+        let difficality = this.state.difficality
+        let discreption = this.state.discreption
+        let Nutration=this.state.nutration
+        let calories = this.state.calories
+        let fiber = this.state.fiber
+        let fat = this.state.fat
+        let protin = this.state.protin
+        let carbs = this.state.carbs
         let avatarSource = this.state.avatarSource
         this.setState({isLoading: true})
 
@@ -147,16 +147,16 @@ export default class Welcome extends React.Component {
             return null
         } else {
             firebase.database().ref('recipes/').push({
-                    Title: title,
-                    Intgrediens: intgrediens,
-                    Steps: steps,
-                    Time: time,
-                    Difficality: difficality,
-                    Discreption: discreption,
-                    Calories: calories,
-                    Fiber: fiber,
-                    Fat: fat,
-                    Protin: protin,
+                    title: title,
+                    intgrediens: intgrediens,
+                    steps: steps,
+                    time: time,
+                    difficality: difficality,
+                    discreption: discreption,
+                    calories: calories,
+                    fiber: fiber,
+                    fat: fat,
+                    protin: protin,
                 },
                 function (error) {
                     if (error) {
@@ -211,14 +211,14 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Title.."
                                underlineColorAndroid='transparent'
-                               onChangeText={(Title) => this.setState({Title})}/>
+                               onChangeText={(title) => this.setState({ title})}/>
                 </View>
 
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.inputs}
                                placeholder="Discreption.."
                                underlineColorAndroid='transparent'
-                               onChangeText={(Discreption) => this.setState({Discreption})}
+                               onChangeText={(discreption) => this.setState({discreption})}
                     />
                 </View>
                 <View style={{
@@ -256,7 +256,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Add ingrediants"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Intgrediens) => this.setState({Intgrediens})}
+                               onChangeText={(intgrediens) => this.setState({intgrediens})}
                     />
                 </View>
 
@@ -274,7 +274,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Prep Time"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Time) => this.setState({Time})}
+                               onChangeText={(time) => this.setState({time})}
                     />
                 </View>
 
@@ -282,7 +282,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Difficality"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Difficality) => this.setState({Difficality})}
+                               onChangeText={(difficality) => this.setState({difficality})}
                     />
                 </View>
 
@@ -300,7 +300,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="steps"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Steps) => this.setState({Steps})}
+                               onChangeText={(steps) => this.setState({steps})}
                     />
                 </View>
 
@@ -319,7 +319,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Calories kcal     optinal"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Calories) => this.setState({Calories})}
+                               onChangeText={(calories) => this.setState({calories})}
                     />
                 </View>
 
@@ -327,7 +327,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Carbs g   'optinal'"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Carbs) => this.setState({Carbs})}
+                               onChangeText={(carbs) => this.setState({carbs})}
                     />
                 </View>
 
@@ -335,7 +335,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Fiber g      'optinal'"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Fiber) => this.setState({Fiber})}
+                               onChangeText={(fiber) => this.setState({fiber})}
                     />
                 </View>
 
@@ -343,7 +343,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Fat g        'optinal'"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Fat) => this.setState({Fat})}
+                               onChangeText={(fat) => this.setState({fat})}
                     />
                 </View>
 
@@ -351,7 +351,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Protin g    'optinal'"
                                underlineColorAndroid='transparent'
-                               onChangeText={(Protin) => this.setState({Protin})}
+                               onChangeText={(protin) => this.setState({protin})}
                     />
                 </View>
 
