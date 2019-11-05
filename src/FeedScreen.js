@@ -104,13 +104,24 @@ export default class UsersScreen extends React.Component {
         ),
     };
 
+    componentDidMount() {
+        //current user
+        if (firebase.auth().currentUser) {
+            firebase.database().ref().child('users').orderByChild('Id').equalTo(firebase.auth().currentUser.uid).on("value", function(snapshot) {
+                console.log('snapshot value :',snapshot.val());
+                snapshot.forEach(function(data) {
+                    console.log('the key is :',data.key);
+                });
+            }.bind(this));
+        }
+    }
+
         render() {
             return (
-                <View  >
-                    <DataScreen/>
-            </View>
-                
-           );
+                <DataScreen
+                />
+                    
+            );
    }
     
 }
