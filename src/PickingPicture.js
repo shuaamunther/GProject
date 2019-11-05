@@ -8,7 +8,9 @@ import {
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-
+import * as firebase from 'firebase';
+import {AsyncStorage} from 'react-native';
+//import {blob} from 'react-native-fetch-blob';
 export default class App extends React.Component {
   state = {
     avatarSource: null,
@@ -19,7 +21,7 @@ export default class App extends React.Component {
     super(props);
 
     this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
-    this.selectVideoTapped = this.selectVideoTapped.bind(this);
+    
   }
 
   selectPhotoTapped() {
@@ -34,7 +36,7 @@ export default class App extends React.Component {
 
     ImagePicker.showImagePicker(options, response => {
       console.log('Response = ', response);
-
+         
       if (response.didCancel) {
         console.log('User cancelled photo picker');
       } else if (response.error) {
@@ -43,7 +45,7 @@ export default class App extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         let source = {uri: response.uri};
-
+         this.uploading(response.uri,"test-img2")
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
@@ -54,29 +56,13 @@ export default class App extends React.Component {
     });
   }
 
-  selectVideoTapped() {
-    const options = {
-      title: 'Video Picker',
-      takePhotoButtonTitle: 'Take Video...',
-      mediaType: 'video',
-      videoQuality: 'medium',
-    };
+  uploading = async(uri,imgName) =>{
+    const response = await fetch(uri);
+    const blob =await response.blob();
+    var ref = firebase.storage().ref().child("images/"+imgName)
+    return ref.put(blob )
 
-    ImagePicker.showImagePicker(options, response => {
-      console.log('Response = ', response);
 
-      if (response.didCancel) {
-        console.log('User cancelled video picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        this.setState({
-          videoSource: response.uri,
-        });
-      }
-    });
   }
 
   render() {

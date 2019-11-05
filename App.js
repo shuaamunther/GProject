@@ -19,6 +19,7 @@ import DataScreen from './src/DataScreen';
 import TestScreen from './src/Test';
 import NavBar from './src/NavBar';
 import AddRecipes from './src/AddRecipes';
+import PickingPicture from './src/PickingPicture'
 import * as firebase from 'firebase';
 
 export default class App extends React.Component {
@@ -99,9 +100,11 @@ const AppNavigator = createStackNavigator({
  AddRe:{
  screen:AddRecipes
   },
+  Pic:
+  {screen:PickingPicture}
 },
 {
-  initialRouteName: "AddRe"
+  initialRouteName: "Main"
 })
 const AppContainer = createAppContainer(AppNavigator);
 const styles = StyleSheet.create({

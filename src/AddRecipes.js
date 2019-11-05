@@ -17,6 +17,7 @@ import {createAppContainer} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
+import 'firebase/storage';
 import NavBar from './NavBar';
 
 const ITEMS_KEY = [
@@ -79,8 +80,13 @@ export default class Welcome extends React.Component {
                 {Difficality: ''},
                 {Steps: ''},
                 {Discreption: ''},
-                {Nutration: [{Calories: '', Fiber: '', Fat: '', Protin: '', Carbs: ''}]},
-                {Intgrediens: ''}],
+                {Intgrediens: ''},
+                {Calories: ''},
+                {Fiber: ''},
+                {Protin: ''},
+                {Fat: ''},
+                {Carbs: ''},
+            ],
             isLoading: false,
             avatarSource: null,
             videoSource: null,
@@ -111,7 +117,7 @@ export default class Welcome extends React.Component {
              console.log(response.uri)
             // You can also display the image using data:
             // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-    
+                this.uploading(response.uri)
             this.setState({
               avatarSource: source,
             });
@@ -120,35 +126,37 @@ export default class Welcome extends React.Component {
       }
     
     add = () => {
-        let Title = this.state.Title
-        let Time = this.state.Time
+        let title = this.state.Title
+        let time = this.state.Time
         // let Type = this.state.Type
-        let Intgrediens = this.state.Intgrediens
-        let Steps = this.state.Steps
-        let Difficality = this.state.Difficality
-        let Discreption = this.state.Discreption
-        let Calories = this.state.Calories
-        let Fiber = this.state.Fiber
-        let Fat = this.state.Fat
-        let Protin = this.state.Protin
-        let Carbs = this.state.Carbs
-
+        let intgrediens = this.state.Intgrediens
+        let steps = this.state.Steps
+        let difficality = this.state.Difficality
+        let discreption = this.state.Discreption
+        let Nutration=this.state.Nutration
+        let calories = this.state.Calories
+        let fiber = this.state.Fiber
+        let fat = this.state.Fat
+        let protin = this.state.Protin
+        let carbs = this.state.Carbs
+        let avatarSource = this.state.avatarSource
         this.setState({isLoading: true})
-        if (Title == '' || Time === '' || Intgrediens === '' || Steps === '') {
+
+        if (title == '' || time === '' || intgrediens === '' || steps === '') {
             alert('please fill all fields')
             return null
         } else {
-            firebase.database().ref('recipees/').push({
-                    Title: Title,
-                    Intgrediens: Intgrediens,
-                    Steps: Steps,
-                    Time: Time,
-                    Difficality: Difficality,
-                    Discreption: Discreption,
-                    Calories: Calories,
-                    Fiber: Fiber,
-                    Fat: Fat,
-                    Protin: Protin,
+            firebase.database().ref('recipes/').push({
+                    Title: title,
+                    Intgrediens: intgrediens,
+                    Steps: steps,
+                    Time: time,
+                    Difficality: difficality,
+                    Discreption: discreption,
+                    Calories: calories,
+                    Fiber: fiber,
+                    Fat: fat,
+                    Protin: protin,
                 },
                 function (error) {
                     if (error) {
@@ -178,6 +186,13 @@ export default class Welcome extends React.Component {
             </TouchableOpacity>
         )
     }
+    
+    uploading = async(uri,imgName) =>{
+        const response = await fetch(uri);
+        const blob =await response.blob();
+        var ref = firebase.storage().ref().child("images/"+imgName)
+        return ref.put(blob )
+      }
 
     render() {
         return (

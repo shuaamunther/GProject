@@ -89,7 +89,7 @@ export default class App extends React.Component {
               <Image style={styles.avatar} source={this.state.avatarSource} />
          )}
         </View>
-   </TouchableOpacity>
+       </TouchableOpacity>
 
     );
   }

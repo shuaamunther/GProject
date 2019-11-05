@@ -10,14 +10,40 @@ import {
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
-import WelcomeHeader from './WelcomeHeader'
+import WelcomeHeader from './WelcomeHeader';
+import * as Constants from './Constants'
+import {AsyncStorage} from 'react-native';
 
 export default class Welcome extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
     };
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            fullname: '',
+            email: '',
+            password: '',
+            age: '',
+            myKey: null,
+            isLoading: false,
+            userId:null,
+        };
+    }
     render() {
+        getToken = async () =>{
+            try {
+                const value =await AsyncStorage.getItem(Constants.ACCESS_TOKEN);
+                if(value!==null) {
+                   // this.setState({userId: value})
+                    console.log('this',value)
+                }
+            } catch (error) {
+                console.log("Error retrieving data" + error);
+            }
+            return value
+        }
+     //   var value =  getToken()
         return (
             <View style={styles.header}>
                 <View style={styles.WelcomeHeader}>
@@ -26,7 +52,7 @@ export default class Welcome extends React.Component {
                 <View style={styles.headerView}>
                     <Image style={styles.avatar}
                            source={require('../assets/user.png')}/>
-                    <Text style={styles.info}>email</Text>
+                    <Text style={styles.info}></Text>
                     <Text style={styles.name}>Welcome to Bon Appetit</Text>
                     <Text style={styles.description}>Your answers to the next few questions will
                                     help us find the right ideas for you

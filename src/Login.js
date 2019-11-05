@@ -11,6 +11,8 @@ import {
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
+import * as Constants from './Constants';
+import {AsyncStorage} from 'react-native';
 
 export default class login extends React.Component {
     onClickListener = (viewId) => {
@@ -29,7 +31,9 @@ export default class login extends React.Component {
         emailvalid: true,
         passwordvalid: true,
         currentUser: '',
-        users: []
+        users: [],
+        userId:'',
+
     }
 
     handleLogin = () => {
@@ -85,16 +89,18 @@ export default class login extends React.Component {
     }
 
     setCurrentUser() {
-        const {Profile} = firebase.auth()
         alert('login succsess');
         this.props.navigation.navigate('Profile');
     }
 
     LogInUser = (email, password) => {
+      //  let accessToken
         if (this.state.emailvalid == true) {
             if (this.state.passwordvalid == true) {
-                firebase.auth().signInWithEmailAndPassword(email, password).then(() => this.setCurrentUser())
-                    .catch(function (error) {
+                firebase.auth().signInWithEmailAndPassword(email, password).then((res) =>
+                this.saveToken(res.user.uid),
+                //  this.setCurrentUser()
+                  ).catch(function (error) {
                         alert('The Password you have entered is incorrect please try again ')
                         console.log(error)
                     })
@@ -105,6 +111,17 @@ export default class login extends React.Component {
         } else {
             alert('This Email does not have an account');
             return false;
+        }
+    }
+    
+    saveToken = async (accessToken) => {
+        try {
+            await AsyncStorage.setItem(Constants.ACCESS_TOKEN, accessToken);
+            //userId:accessToken
+            console.log('acc',accessToken)
+            this.props.navigation.navigate('Main',accessToken);
+        } catch (error) {
+            console.log("Error saving data" + error);
         }
     }
 
