@@ -18,9 +18,10 @@ import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import 'firebase/storage';
-import CardScreen from './CardScreen';
+//import Datacreen from './DataScreen';
 //import { TabView, SceneMap } from 'react-native-tab-view';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import DataScreen from './DataScreen';
 
 class LogoTitle extends React.Component {
     render() {
@@ -108,7 +109,7 @@ export default class UsersScreen extends React.Component {
         render() {
             return (
                 <View style={styles.container} >
-                    <CardScreen/>
+                    <DataScreen/>
             </View>
                 
            );
