@@ -64,11 +64,9 @@ export default class DataScreen extends React.Component {
         {title: ''},
         {type:''},
         {rate: ''},
-        {id:''}
-     ],
-    
+        {id:''} ],
   }
-  }
+ }
      showData()
      {
       recipe = [] 
