@@ -60,26 +60,26 @@ export default class DataScreen extends React.Component {
   
     //firebase
     this.state = {
-      Recipe: [
-        {Title: ''},
-        {Type:''},
-        {Rate: ''},
+      recipe: [
+        {title: ''},
+        {type:''},
+        {rate: ''},
      ],
     
   }
   }
      showData()
      {
-      Recipe = [] 
+      recipe = [] 
       firebase.database().ref('/recipes').on('value', function (snapshot) {
         snapshot.forEach(function (item) {
           
             console.log('item: ', item.val())
-            Recipe.push({Title: item.val().Title, Type: item.val().Type, Rate: item.val().Rate})
+            recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate})
         })
-       console.log('this',Recipe)
+       console.log('this',recipe)
         this.setState({
-            Recipe: Recipe
+            recipe: recipe
         })
     }.bind(this));
   
@@ -89,7 +89,7 @@ componentDidMount(){
 }
 
   render(){
-   //console.log(item.Title)
+   //console.log(item.title)
    return (
     <SafeAreaView style={styles.container}>
       <FlatList
