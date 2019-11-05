@@ -3,6 +3,10 @@ import { Text, View, StyleSheet ,Image,FlatList} from 'react-native';
 import { Card, Button } from 'react-native-elements';
 
 class HeaderImageView extends React.Component {
+
+  
+    
+
     render() {
         return(
             <View>
@@ -16,7 +20,7 @@ class HeaderImageView extends React.Component {
                 source={require('../assets/star.png')}
                 />
             <Text style={styles.headerStarText}>
-                {this.props.Rate}
+                {this.props.rate}
             </Text>
             </View>                 
         </View>
@@ -52,9 +56,9 @@ class CardScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <Card containerStyle={{padding: 0, borderRadius: 10}}>
-                    <HeaderImageView Rate={this.props.cardIteam.Rate} /> 
-                    <HeaderTextView  title={this.props.cardIteam.title}
-                                     type={this.props.cardIteam.type} />                               
+                    <HeaderImageView rate={this.props.cardItem.rate} /> 
+                    <HeaderTextView  title={this.props.cardItem.title}
+                                     type={this.props.cardItem.type} />                               
                     </Card>
           </View>
         );
