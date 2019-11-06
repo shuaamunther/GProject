@@ -9,18 +9,20 @@ import * as Constants from './Constants'
 
 
 class FirstScreen extends React.Component {
-    constructor(props){
-        super(props);
-    }
-   
+   static navigationOptions ={
+    header:null
+   };
+
     componentDidMount(){
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
               // User is signed in.
-                firebase.database().ref().child('users').orderByChild('Id').equalTo(user.uid).on("value", function(snapshot) {
-                    let userData = snapshot.val()[user.uid]
-                    userData['id'] = user.uid
-                    this.storeUserData(userData)
+              firebase.database().ref().child('users').orderByKey().equalTo(user.uid).on("value", function(snapshot) {
+                    if(snapshot.val()) {
+                        let userData = snapshot.val()[user.uid]
+                        userData['id'] = user.uid
+                        this.storeUserData(userData)                   
+                    }
                 }.bind(this));
             } else {
               // No user is signed in.
@@ -43,7 +45,7 @@ class FirstScreen extends React.Component {
             });
             this.props.navigation.dispatch(resetAction);
         } catch (e) {
-            // saving error
+            console.log(e.message)
         }
     }
 

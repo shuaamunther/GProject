@@ -15,6 +15,10 @@ import * as Constants from './Constants';
 import {AsyncStorage} from 'react-native';
 
 export default class login extends React.Component {
+    static navigationOptions ={
+        header:null
+       };
+       
     onClickListener = (viewId) => {
         Alert.alert("Alert", "Button pressed " + viewId);
     }

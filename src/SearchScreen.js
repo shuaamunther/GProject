@@ -9,131 +9,64 @@ import {
     Dimensions,
     SearchBar,
     TextInput,
+    ScrollView,
     TouchableHighlight,
-    FlatList,
 } from 'react-native'
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {Card, Button} from 'react-native-elements';
-import { ButtonGroup } from 'react-native-elements';
+import CardListScreen from './CardListScreen';
 import * as firebase from 'firebase';
 
-class Search extends React.Component {
+
+export default class SearchScreen extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
+
         this.state = {
-            search: '',
+            Search: '',
+            recipe: [],
         }
     }
 
-    updateSearch = search => {
+    
+    updateSearch = (search) => {
+        console.log(search)
+
         this.setState({search});
+        console.log(this.state.recipe)         
+
+        let recipe = []
+        firebase.database().ref().child('recipes').orderByChild('title').startAt(search).on("value", function(snapshot) {
+            snapshot.forEach(function (item) { 
+                recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate,id: item.key})
+            })
+            this.setState({
+                recipe: recipe
+            })    
+        }.bind(this))
     };
 
+
     render() {
-        const {search} = this.state;
         return (
-            <View style={styles.row}>
-                <View style={styles.inputContainer}>
-                    <Image style={styles.inputIcon} source={require('../assets/search.png')}/>
-                    <TextInput style={styles.inputs}
-                               placeholder="Search..."
-                               autoCapitalize="none"
-                               underlineColorAndroid='transparent'
-                               onChangeText={(search) => this.updateSearch}
-                               value={this.state.search}/>
+            <ScrollView>
+                <View style={styles.row}>
+                    <View style={styles.inputContainer}>
+                        <Image style={styles.inputIcon} source={require('../assets/search.png')}/>
+                        <TextInput style={styles.inputs}
+                                placeholder="Search..."
+                                autoCapitalize="none"
+                                underlineColorAndroid='transparent'
+                                onChangeText={(search) => this.updateSearch(search)}
+                                value={this.state.search} />
+                    </View>
                 </View>
-            </View>
-        );
-    }
-}
-
-class ButtonFilter extends React.Component {
-
-    _onPressButton1() {
-    }
-
-    _onPressButton2() {
-    }
-
-    _onPressButton3() {
-    }
-    
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedIndex: -1
-        };  
-    }
-
-    updateIndex = (selectedIndex) => {
-        this.setState({selectedIndex})
-    }
-
-    render() {
-        const buttons = ['Lunch', 'Breakfast/Dinner','Sweets']
-        const { selectedIndex } = this.state
-
-        return (<View >
-                <ButtonGroup
-                        onPress={this.updateIndex}
-                        selectedIndex={selectedIndex}
-                        buttons={buttons}
-                        style={{flex: 1}}
-                    />
-            </View>
-        );
-    }
-}
-function Item({ Title }) {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.title}>{Title}</Text>
-      </View>
-    );
-  }
-export default class SearchScreen extends React.Component {
-    showData()
-     {
-      recipe = [] 
-      firebase.database().ref('/recipes').on('value', function (snapshot) {
-        snapshot.forEach(function (item) {
-            console.log('item: ', item.key)
-            recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate,id: item.key})
-        })
-       console.log('this',recipe)
-        this.setState({
-            recipe: recipe
-        })
-    }.bind(this));
-  
-}
-
-    componentDidMount(){
-       this.showData()
-    }
-    constructor(props) {
-        super(props);
-      
-        //firebase
-        this.state = {
-          recipe: [
-            {title: ''},
-            {type:''},
-            {rate: ''},
-            {id:''} ],
-      }
-     }
-    render() {
-        return (
-            <View>
-                <Search/>
-                <ButtonFilter/>
-                <FlatList
-                 data={this.state.recipe}
-                 renderItem={({ item }) => <Card cardItem={item}/>}
-                 keyExtractor={item => item.id}/>
-            </View>
+                
+                <ScrollView>
+                <CardListScreen recipe={this.state.recipe}/>
+                </ScrollView>
+            </ScrollView>
         );
     }
 }
@@ -141,24 +74,21 @@ export default class SearchScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         paddingTop: 7,
-        paddingLeft: 10,
-        paddingRight: 10
     },
     row: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         marginLeft: 11,
+        marginRight: 11,
         marginTop: 7,
         marginBottom: -5,
     },
     inputContainer: {
         borderBottomColor: '#F5FCFF',
         backgroundColor: '#E3F2FD',
-        borderRadius: 30,
+        borderRadius: 12,
         borderBottomWidth: 1,
         borderTopWidth: 0,
-        width: 340,
         height: 45,
-        marginBottom: 20,
         flexDirection: 'row',
         alignItems: 'center'
     },
@@ -178,13 +108,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 5,
         width: 250,
         borderRadius: 30,
     },
     SearchButton: {
         backgroundColor: 'white',
-        marginBottom: 20,
+        marginBottom: 5,
         width: 120,
         borderRadius: 0,
         paddingTop: 0,
@@ -221,10 +151,5 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderTopWidth: 1,
         borderTopColor: "#00b5ec",
-       // borderBottomWidth: 1,
-        //borderBottomColor: "#00b5ec",
-
     },
 });
-
-      

@@ -3,6 +3,8 @@ import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
 import CardScreen from '../src/CardScreen';
 import { Card, Button } from 'react-native-elements';
 import * as firebase from 'firebase';
+import CardListScreen from './CardListScreen';
+
 
 export default class DataScreen extends React.Component {
   constructor(props) {
@@ -35,13 +37,9 @@ componentDidMount(){
 }
 
   render(){
-   console.log(this.state.recipe)
    return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-            data={this.state.recipe}
-            renderItem={({ item }) => <CardScreen cardItem={item}/>}
-            keyExtractor={item => item.id}/>
+      <CardListScreen recipe={this.state.recipe}/>
     </SafeAreaView>
     
   );

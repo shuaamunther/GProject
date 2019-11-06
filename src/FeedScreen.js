@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     FlatList,
+   
 } from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
@@ -22,7 +23,6 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import DataScreen from './DataScreen';
 import * as Constants from './Constants'
 import AsyncStorage from '@react-native-community/async-storage';
-
 
 class LogoTitle extends React.Component {
     render() {
@@ -107,6 +107,7 @@ export default class UsersScreen extends React.Component {
                         source={require('../assets/user_logo.png')}
                         style={{width: 32, height: 32, borderRadius: 32 / 2}}
                     />
+                    
                 </TouchableHighlight>
             ),
         };
@@ -114,8 +115,8 @@ export default class UsersScreen extends React.Component {
 
     constructor(props) {
         super(props)
-
     }
+    
     componentDidMount() {
         this.getUserData()
     }
@@ -133,10 +134,16 @@ export default class UsersScreen extends React.Component {
 
     render() {
         return (
-            <DataScreen />
+            <View style={{flex:1, marginTop:10}}>
+                <Button title="Add Recipe"
+                 onPress={() => this.props.navigation.navigate('AddRe')} 
+                 style={{}}
+                 />
+              <DataScreen/>
+            </View>
         );
    }
-    
+
 }
 
 const styles = StyleSheet.create({

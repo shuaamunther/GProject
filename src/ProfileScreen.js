@@ -7,15 +7,42 @@ import {
     SceneRendererProps,
     Icon,
     Dimensions,
+    Picker
 } from 'react-native'
-import {createAppContainer} from 'react-navigation';
+import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {Card, Button} from 'react-native-elements';
 import AsyncStorage from "@react-native-community/async-storage";
 import * as Constants from "./Constants";
+import * as firebase from 'firebase';
+import Modal from "react-native-modal";
+
 
 class HeaderImageView extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {visibleModal: null}
+    }
 
+    openModal = () => {
+        this.setState({ visibleModal: 'bottom'});
+    };
+    
+    logout = () => {
+        firebase.auth().signOut()
+        .then(function() {
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Login' })],
+             });
+             this.props.navigation.dispatch(resetAction);
+        }.bind(this))
+        .catch(function(error) {
+            console.log("logout failed: ", error)
+        });
+
+
+    }
     render() {
         return (
             <View style={styles.row}>
@@ -25,11 +52,25 @@ class HeaderImageView extends React.Component {
                     <Text style={styles.userInfo}>Student </Text>
                 </View>
                 <View style={styles.headerEdit}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={this.openModal}>
                         <Image style={styles.editButton}
                                source={require('../assets/edit.png')} />
                     </TouchableOpacity>
                 </View>
+                <Modal
+                    isVisible={this.state.visibleModal === 'bottom'}
+                    onSwipeComplete={() => this.setState({visibleModal: null})}
+                    swipeDirection={['up', 'left', 'right', 'down']}
+                    style={styles.bottomModal}>
+                <View style={styles.modelContent}>                
+                        <Button title="Edit Profile" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                        <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                            onPress={() => {this.logout()}}/>
+                        <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                </View>
+                </Modal>
+
             </View>
         )
     }
@@ -127,32 +168,30 @@ export default class ProfileScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: ''
+            username: '',
         }
     }
 
     componentDidMount(){
-        this.getUserData()
-    }
-
-    getUserData = async () => {
-        try {
-            const value = await AsyncStorage.getItem(Constants.USER_DATA)
-            if(value !== null) {
-                let userData  = JSON.parse(value)
+        firebase.database().ref().child('users').orderByKey().equalTo(firebase.auth().currentUser.uid).on("value", function(snapshot) {
+            if(snapshot.val()) {
+                let userData = snapshot.val()[firebase.auth().currentUser.uid]
+                console.log(userData)
+                userData['id'] = firebase.auth().currentUser.uid
                 this.setState({username: userData['fullname']})
             }
-        } catch(e) {
-            console.error('getUserData : ', e.message)
-        }
+        }.bind(this));
     }
 
+
     render() {
+        const { navigation } = this.props
+
         return (
-            <View style={styles.container}>
-                <HeaderImageView username={this.state.username}/>
-                <Following/>
-                <Preview/>
+            <View style={styles.container}> 
+                <HeaderImageView navigation={navigation} username={this.state.username}/>
+                <Following />
+                <Preview />
             </View>
         );
     }
@@ -235,5 +274,41 @@ const styles = StyleSheet.create({
     },
     item: {
         flexDirection: 'row'
+    },
+    bottomModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    modelContent: {
+        backgroundColor: 'white',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+      },
+      buttonContainer: {
+        marginTop: 30,
+        height: 45,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+        width: 250,
+        borderRadius: 30,
+        backgroundColor: '#00BFFF',
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    NextButton: {
+        backgroundColor: "#00b5ec",
+        marginBottom: 40,
+        width: 100,
+        borderRadius: 30,
+        marginTop: 50,
+        marginBottom: 10,
+    },
+    loginText: {
+        color: 'white',
     },
 });
