@@ -10,16 +10,19 @@ import {
     SearchBar,
     TextInput,
     TouchableHighlight,
+    FlatList,
 } from 'react-native'
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {Card, Button} from 'react-native-elements';
+import { ButtonGroup } from 'react-native-elements';
+import * as firebase from 'firebase';
 
 class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            Search: ''
+            search: '',
         }
     }
 
@@ -46,6 +49,7 @@ class Search extends React.Component {
 }
 
 class ButtonFilter extends React.Component {
+
     _onPressButton1() {
     }
 
@@ -54,37 +58,81 @@ class ButtonFilter extends React.Component {
 
     _onPressButton3() {
     }
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedIndex: -1
+        };  
+    }
+
+    updateIndex = (selectedIndex) => {
+        this.setState({selectedIndex})
+    }
 
     render() {
-        return (<View style={styles.FilterButton}>
-                <TouchableHighlight style={[styles.buttonContainer,styles.SearchButton]}
-                                    onPress={this._onPressButton1}
-                                    underlayColor="#00b5ec">
-                    <Text style={styles.loginText}>Search</Text>
-                </TouchableHighlight>
+        const buttons = ['Lunch', 'Breakfast/Dinner','Sweets']
+        const { selectedIndex } = this.state
 
-                <TouchableHighlight style={[styles.buttonContainer,styles.SearchButton2]}
-                                    onPress={this._onPressButton2}
-                                    underlayColor="#00b5ec">
-                    <Text style={styles.loginText}>Search</Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight style={[styles.buttonContainer,styles.SearchButton3]}
-                                    onPress={this._onPressButton3}
-                                    underlayColor="#00b5ec">
-                    <Text style={styles.loginText}>Search</Text>
-                </TouchableHighlight>
+        return (<View >
+                <ButtonGroup
+                        onPress={this.updateIndex}
+                        selectedIndex={selectedIndex}
+                        buttons={buttons}
+                        style={{flex: 1}}
+                    />
             </View>
         );
     }
 }
-
+function Item({ Title }) {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.title}>{Title}</Text>
+      </View>
+    );
+  }
 export default class SearchScreen extends React.Component {
+    showData()
+     {
+      recipe = [] 
+      firebase.database().ref('/recipes').on('value', function (snapshot) {
+        snapshot.forEach(function (item) {
+            console.log('item: ', item.key)
+            recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate,id: item.key})
+        })
+       console.log('this',recipe)
+        this.setState({
+            recipe: recipe
+        })
+    }.bind(this));
+  
+}
+
+    componentDidMount(){
+       this.showData()
+    }
+    constructor(props) {
+        super(props);
+      
+        //firebase
+        this.state = {
+          recipe: [
+            {title: ''},
+            {type:''},
+            {rate: ''},
+            {id:''} ],
+      }
+     }
     render() {
         return (
             <View>
                 <Search/>
                 <ButtonFilter/>
+                <FlatList
+                 data={this.state.recipe}
+                 renderItem={({ item }) => <Card cardItem={item}/>}
+                 keyExtractor={item => item.id}/>
             </View>
         );
     }
@@ -173,6 +221,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderTopWidth: 1,
         borderTopColor: "#00b5ec",
+       // borderBottomWidth: 1,
+        //borderBottomColor: "#00b5ec",
+
     },
 });
 

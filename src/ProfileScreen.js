@@ -11,14 +11,17 @@ import {
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {Card, Button} from 'react-native-elements';
+import AsyncStorage from "@react-native-community/async-storage";
+import * as Constants from "./Constants";
 
 class HeaderImageView extends React.Component {
+
     render() {
         return (
             <View style={styles.row}>
                 <View style={styles.headerUser}>
                     <Image style={styles.avatar} source={require('../assets/shuaa.png')}/>
-                    <Text style={styles.name}>UserName</Text>
+                    <Text style={styles.name}>{this.props.username}</Text>
                     <Text style={styles.userInfo}>Student </Text>
                 </View>
                 <View style={styles.headerEdit}>
@@ -117,10 +120,37 @@ class Preview extends React.Component {
 }
 
 export default class ProfileScreen extends React.Component {
+    static navigationOptions = {
+        title: 'Profile',
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: ''
+        }
+    }
+
+    componentDidMount(){
+        this.getUserData()
+    }
+
+    getUserData = async () => {
+        try {
+            const value = await AsyncStorage.getItem(Constants.USER_DATA)
+            if(value !== null) {
+                let userData  = JSON.parse(value)
+                this.setState({username: userData['fullname']})
+            }
+        } catch(e) {
+            console.error('getUserData : ', e.message)
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <HeaderImageView/>
+                <HeaderImageView username={this.state.username}/>
                 <Following/>
                 <Preview/>
             </View>

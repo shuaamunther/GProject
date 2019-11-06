@@ -20,6 +20,9 @@ import * as firebase from 'firebase';
 import 'firebase/storage';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import DataScreen from './DataScreen';
+import * as Constants from './Constants'
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 class LogoTitle extends React.Component {
     render() {
@@ -94,34 +97,44 @@ class Preview extends React.Component {
 }
 
 export default class UsersScreen extends React.Component {
-    static navigationOptions = {
-        headerTitle: () => <LogoTitle/>,
-        headerRight: () => (
-            <TouchableHighlight style={{paddingRight: 16}}
-                                onPress={() => alert('prssed')}>
-                <Text >User Name</Text>
-            </TouchableHighlight>
-        ),
-    };
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerTitle: () => <LogoTitle/>,
+            headerRight: () => (
+                <TouchableHighlight style={{paddingRight: 16}}
+                                    onPress={() => navigation.navigate('Profile')}>
+                    <Image
+                        source={require('../assets/user_logo.png')}
+                        style={{width: 32, height: 32, borderRadius: 32 / 2}}
+                    />
+                </TouchableHighlight>
+            ),
+        };
+    }
 
+    constructor(props) {
+        super(props)
+
+    }
     componentDidMount() {
-        //current user
-        if (firebase.auth().currentUser) {
-            firebase.database().ref().child('users').orderByChild('Id').equalTo(firebase.auth().currentUser.uid).on("value", function(snapshot) {
-                console.log('snapshot value :',snapshot.val());
-                snapshot.forEach(function(data) {
-                    console.log('the key is :',data.key);
-                });
-            }.bind(this));
+        this.getUserData()
+    }
+
+    getUserData = async () => {
+        try {
+            const value = await AsyncStorage.getItem(Constants.USER_DATA)
+            if(value !== null) {
+                console.log(JSON.parse(value))
+            }
+        } catch(e) {
+            // error reading value
         }
     }
 
-        render() {
-            return (
-                <DataScreen
-                />
-                    
-            );
+    render() {
+        return (
+            <DataScreen />
+        );
    }
     
 }

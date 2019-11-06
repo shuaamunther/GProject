@@ -167,6 +167,7 @@ export default class SignUpScreen extends React.Component {
                             <Image style={styles.inputIcon} source={require('../assets/person.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Age"
+                                       keyboardType="numeric"
                                        underlineColorAndroid='transparent'
                                        onChangeText={(age) => this.setState({age})}/>
                         </View>

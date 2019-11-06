@@ -4,7 +4,8 @@ import { Card, Button } from 'react-native-elements';
 import * as firebase from 'firebase';
 import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-
+import AsyncStorage from '@react-native-community/async-storage';
+import * as Constants from './Constants'
 
 
 class FirstScreen extends React.Component {
@@ -16,22 +17,34 @@ class FirstScreen extends React.Component {
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
               // User is signed in.
-              console.log(this.props)
-              const resetAction = StackActions.reset({
+                firebase.database().ref().child('users').orderByChild('Id').equalTo(user.uid).on("value", function(snapshot) {
+                    let userData = snapshot.val()[user.uid]
+                    userData['id'] = user.uid
+                    this.storeUserData(userData)
+                }.bind(this));
+            } else {
+              // No user is signed in.
+                console.log('No User is signed in')
+                const resetAction = StackActions.reset({
+                   index: 0,
+                   actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+            }
+        }.bind(this));
+    }
+
+    storeUserData = async (userData) => {
+        try {
+            await AsyncStorage.setItem(Constants.USER_DATA, JSON.stringify(userData))
+            const resetAction = StackActions.reset({
                 index: 0,
                 actions: [NavigationActions.navigate({ routeName: 'Main' })],
             });
             this.props.navigation.dispatch(resetAction);
-            } else {
-              // No user is signed in.
-              console.log('No User is signed in')
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Login' })],
-            });
-            this.props.navigation.dispatch(resetAction);
-            }
-            }.bind(this));
+        } catch (e) {
+            // saving error
+        }
     }
 
     render() {

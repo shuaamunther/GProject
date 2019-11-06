@@ -3,10 +3,6 @@ import { Text, View, StyleSheet ,Image,FlatList} from 'react-native';
 import { Card, Button } from 'react-native-elements';
 
 class HeaderImageView extends React.Component {
-
-  
-    
-
     render() {
         return(
             <View>
@@ -82,16 +78,17 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top:5,
         right:5,
-        height: 92,
-        width: 92,
+        height: 68,
+        width: 68,
     },
     headerStarIcon: {
         height: '100%',
         width: '100%',
     },
     headerStarText: {
-        fontSize: 18,
-        top: '40%',
+        fontSize: 16,
+        fontWeight: "bold",
+        top: '35%',
         position: 'absolute',
         textAlign: 'center',
         width: '100%',
