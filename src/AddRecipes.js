@@ -79,11 +79,11 @@ export default class Welcome extends React.Component {
                 {time: ''},
                 {difficality: ''},
                 {steps: ''},
-                {discreption: ''},
-                {intgrediens: ''},
+                {description: ''},
+                {ingredients: ''},
                 {calories: ''},
                 {fiber: ''},
-                {protin: ''},
+                {protein: ''},
                 {fat: ''},
                 {carbs: ''},
             ],
@@ -129,34 +129,34 @@ export default class Welcome extends React.Component {
         let title = this.state.title
         let time = this.state.time
         // let type = this.state.type
-        let intgrediens = this.state.intgrediens
+        let ingredients = this.state.ingredients
         let steps = this.state.steps
         let difficality = this.state.difficality
-        let discreption = this.state.discreption
+        let description= this.state.description
         let Nutration=this.state.nutration
         let calories = this.state.calories
         let fiber = this.state.fiber
         let fat = this.state.fat
-        let protin = this.state.protin
+        let protein = this.state.protein
         let carbs = this.state.carbs
         let avatarSource = this.state.avatarSource
         this.setState({isLoading: true})
 
-        if (title == '' || time === '' || intgrediens === '' || steps === '') {
+        if (title == '' || time === '' || ingredients === '' || steps === '') {
             alert('please fill all fields')
             return null
         } else {
             firebase.database().ref('recipes/').push({
                     title: title,
-                    intgrediens: intgrediens,
+                    ingredients: ingredients,
                     steps: steps,
                     time: time,
                     difficality: difficality,
-                    discreption: discreption,
+                    description: description,
                     calories: calories,
                     fiber: fiber,
                     fat: fat,
-                    protin: protin,
+                    protein: protein,
                 },
                 function (error) {
                     if (error) {
@@ -216,9 +216,9 @@ export default class Welcome extends React.Component {
 
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.inputs}
-                               placeholder="Discreption.."
+                               placeholder="description.."
                                underlineColorAndroid='transparent'
-                               onChangeText={(discreption) => this.setState({discreption})}
+                               onChangeText={(description) => this.setState({description})}
                     />
                 </View>
                 <View style={{
@@ -256,7 +256,7 @@ export default class Welcome extends React.Component {
                     <TextInput style={styles.inputs}
                                placeholder="Add ingrediants"
                                underlineColorAndroid='transparent'
-                               onChangeText={(intgrediens) => this.setState({intgrediens})}
+                               onChangeText={(ingredients) => this.setState({ingredients})}
                     />
                 </View>
 
@@ -349,9 +349,9 @@ export default class Welcome extends React.Component {
 
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.inputs}
-                               placeholder="Protin g    'optinal'"
+                               placeholder="protein g    'optinal'"
                                underlineColorAndroid='transparent'
-                               onChangeText={(protin) => this.setState({protin})}
+                               onChangeText={(protein) => this.setState({protein})}
                     />
                 </View>
 
@@ -359,7 +359,7 @@ export default class Welcome extends React.Component {
                     style={[styles.buttonContainer, styles.SignUpButton, this.state.isLoading ? styles.SaveButtonColorLoading : styles.SaveButtonColor]}
                     disabled={this.state.isLoading}
                     onPress={() => this.add()}>
-                    <Text style={styles.SearchText}>Add</Text>
+                    <Text style={{color:'white'}}>Add</Text>
                 </TouchableHighlight>
                 <ActivityIndicator size="large" color="#00b5ec"
                                    style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#4dd5ff",
     },
     SearchText: {
-        color: 'white',
+        color: "#00b5ec",
     },
     inputIcon: {
         width: 50,

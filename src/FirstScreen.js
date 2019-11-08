@@ -13,28 +13,24 @@ class FirstScreen extends React.Component {
     header:null
    };
 
-    componentDidMount(){
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-              // User is signed in.
-              firebase.database().ref().child('users').orderByKey().equalTo(user.uid).on("value", function(snapshot) {
-                    if(snapshot.val()) {
-                        let userData = snapshot.val()[user.uid]
-                        userData['id'] = user.uid
-                        this.storeUserData(userData)                   
-                    }
-                }.bind(this));
-            } else {
-              // No user is signed in.
-                console.log('No User is signed in')
-                const resetAction = StackActions.reset({
-                   index: 0,
-                   actions: [NavigationActions.navigate({ routeName: 'Login' })],
-                });
-                this.props.navigation.dispatch(resetAction);
+   componentDidMount(){
+    if (firebase.auth().currentUser) {
+        var user = firebase.auth().currentUser;
+        firebase.database().ref().child('users').orderByKey().equalTo(user.uid).on("value", function(snapshot) {
+            if(snapshot.val()) {
+                let userData = snapshot.val()[user.uid]
+                userData['id'] = user.uid
+                this.storeUserData(userData)  
             }
         }.bind(this));
+    } else {
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+         });
+         this.props.navigation.dispatch(resetAction);
     }
+}
 
     storeUserData = async (userData) => {
         try {

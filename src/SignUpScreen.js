@@ -49,10 +49,6 @@ export default class SignUpScreen extends React.Component {
         });
     }
 
-    WelcomeScreen() {
-        this.props.navigation.navigate('Main');
-    }
-
     signup = () => {
         let fullname = this.state.fullname
         let email = this.state.email
@@ -82,12 +78,11 @@ export default class SignUpScreen extends React.Component {
                                 Alert.alert("Failed signup user: Message: " + error)
                             }
                         })
-
                     const resetAction = StackActions.reset({
-                        index: 0,
+                      index: 0,
                         actions: [NavigationActions.navigate({ routeName: 'Welcome' })],
                     });
-                    this.props.navigation.dispatch(resetAction);
+                     this.props.navigation.dispatch(resetAction);
 
                 })
                 .catch((error) => {
