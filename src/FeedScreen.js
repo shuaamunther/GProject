@@ -23,6 +23,8 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import DataScreen from './DataScreen';
 import * as Constants from './Constants'
 import AsyncStorage from '@react-native-community/async-storage';
+import ProfileScreen from './ProfileScreen';
+import SearchScreen from "./SearchScreen";
 
 class LogoTitle extends React.Component {
     render() {
@@ -33,78 +35,15 @@ class LogoTitle extends React.Component {
     }
 }
 
-class Preview extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            activeIndex: 0
-        }
-    }
-
-    segrantClicked = (index) => {
-        this.setState({
-            activeIndex: index
-        })
-    }
-
-    renderSection = () => {
-        if (this.state.activeIndex == 0) {
-            return (
-                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                    <Text>first</Text>
-                </View>
-            )
-        }
-        if (this.state.activeIndex == 1) {
-            return (
-                <View >
-                    <Text>this is the 2 section</Text>
-                </View>
-            )
-        }
-        if (this.state.activeIndex == 2) {
-            return (
-                <View>
-                    <Text>hello 3</Text>
-                </View>
-            )
-        }
-    }
-
-    render() {
-        return (
-            <View style={styles.previewContainer}>
-                <View style={styles.Preview}>
-                    <TouchableOpacity onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}>
-                        <Image style={[this.state.activeIndex == 0 ? {} : {color: 'grey'}, styles.PreviewIcon]}
-                               source={require('../assets/feed.png')}/>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => this.segrantClicked(1)} active={this.state.activeIndex == 1}>
-                        <Image style={[this.state.activeIndex == 1 ? {} : {color: 'grey'}, styles.PreviewIcon]}
-                               source={require('../assets/rev.png')}/>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => this.segrantClicked(2)} active={this.state.activeIndex == 2}>
-                        <Image style={[this.state.activeIndex == 2 ? {} : {color: 'grey'}, styles.PreviewIcon]}
-                               source={require('../assets/save.png')}/>
-                    </TouchableOpacity>
-                </View>
-                {this.renderSection()}
-            </View>
-        )
-    }
-}
-
-export default class UsersScreen extends React.Component {
+export default class FeedScreen extends React.Component {
     static navigationOptions = ({navigation}) => {
         return {
             headerTitle: () => <LogoTitle/>,
             headerRight: () => (
                 <TouchableHighlight style={{paddingRight: 16}}
-                                    onPress={() => navigation.navigate('Profile')}>
+                                    onPress={() => navigation.navigate('Profile', {user_id: firebase.auth().currentUser.uid})}>
                     <Image
-                        source={require('../assets/user_logo.png')}
+                        source={require('../assets/deuser.png')}
                         style={{width: 32, height: 32, borderRadius: 32 / 2}}
                     />
                     
@@ -134,17 +73,24 @@ export default class UsersScreen extends React.Component {
 
     render() {
         return (
-            <View style={{flex:1, marginTop:10}}>
-                <Button title="Add Recipe"
-                 onPress={() => this.props.navigation.navigate('AddRe')} 
-                 style={{}}
-                 />
-              <DataScreen/>
+            <View style={{flex:1, marginTop:10, marginBottom: 20}}>
+                <DataScreen navigation={this.props.navigation}/>
+                <TouchableHighlight style={styles.buttonAdd}
+                    onPress={() => {this.props.navigation.navigate('AddRe')}}>
+                    <Image source={require('../assets/add.png')}
+                    style={{width: 32, height: 32}}/>
+                </TouchableHighlight>
             </View>
         );
    }
-
 }
+
+const TabNavigator = createBottomTabNavigator({
+    Home: FeedScreen,
+    Profile: ProfileScreen,
+    Search:SearchScreen,
+  });
+const TabContainer = createAppContainer(TabNavigator);  
 
 const styles = StyleSheet.create({
     container: {
@@ -223,4 +169,24 @@ const styles = StyleSheet.create({
     item: {
         flexDirection: 'row'
     },
+    buttonAdd: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#00b5ec',
+        position: 'absolute',
+        bottom: 10,
+        right: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+
+        elevation: 9,
+    }
 });

@@ -9,32 +9,41 @@ import CardListScreen from './CardListScreen';
 export default class DataScreen extends React.Component {
   constructor(props) {
     super(props);
-  
-    //firebase
     this.state = {
       recipe: [],
   }
  }
 
- showData()
-     {
-      let recipe = []
-      firebase.database().ref('/recipes').on('value', function (snapshot) {
-        snapshot.forEach(function (item) {
-          
-            console.log('item: ', item.key)
-            recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate,id: item.key})
-        })
-       console.log('this',recipe)
-        this.setState({
-            recipe: recipe
-        })
-    }.bind(this));
-}
-
-componentDidMount(){
+ 
+componentDidMount() {
   this.showData()
 }
+ showData() {
+  let index = 1
+  firebase.database().ref('/recipes').on('value', function (snapshot) {
+      snapshot.forEach(function (item) {
+          firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
+              let userName = user.child('fullname').val();
+              let recipe = this.state.recipe
+              recipe.push({
+                  title: item.val().title,
+                  type: item.val().type,
+                  rate: item.val().rate,
+                  id: item.key,
+                  userName: userName,
+                  user_id: item.val().user_id
+              })
+              this.setState({
+                  recipe: recipe
+              })
+          }.bind(this))
+      }.bind(this))
+  }.bind(this));
+
+
+}
+
+
 
   render(){
    return (

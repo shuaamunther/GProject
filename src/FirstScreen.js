@@ -13,33 +13,40 @@ class FirstScreen extends React.Component {
     header:null
    };
 
-   componentDidMount(){
-    if (firebase.auth().currentUser) {
-        var user = firebase.auth().currentUser;
-        firebase.database().ref().child('users').orderByKey().equalTo(user.uid).on("value", function(snapshot) {
-            if(snapshot.val()) {
-                let userData = snapshot.val()[user.uid]
-                userData['id'] = user.uid
-                this.storeUserData(userData)  
+    componentDidMount(){
+        let stopOnAuthState = firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                firebase.database().ref().child('users').orderByKey().equalTo(user.uid).on("value", function(snapshot) {
+                    if(snapshot.val()) {
+                        let userData = snapshot.val()[user.uid]
+                        userData['id'] = user.uid
+
+                        stopOnAuthState()
+                        this.storeUserData(userData).then(r => {
+                            const resetAction = StackActions.reset({
+                                index: 0,
+                                actions: [NavigationActions.navigate({ routeName: 'Main' })],
+                            });
+                            this.props.navigation.dispatch(resetAction);
+                        })
+                    }
+                }.bind(this));
+            } else {
+                // No user is signed in.
+                console.log('No User is signed in')
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                });
+                this.props.navigation.dispatch(resetAction);
             }
         }.bind(this));
-    } else {
-        const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'Login' })],
-         });
-         this.props.navigation.dispatch(resetAction);
     }
-}
 
     storeUserData = async (userData) => {
         try {
             await AsyncStorage.setItem(Constants.USER_DATA, JSON.stringify(userData))
-            const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Main' })],
-            });
-            this.props.navigation.dispatch(resetAction);
         } catch (e) {
             console.log(e.message)
         }
@@ -60,6 +67,6 @@ const styles = StyleSheet.create({
       borderRadius:8,
       alignItems: 'center',
     },
-   
+
   });
 export default FirstScreen;

@@ -1,20 +1,9 @@
 import React, {Component} from 'react'
 import {
     StyleSheet, Platform, Image, Text, View, TouchableOpacity, TabView,
-    TabBar,
-    SceneMap,
-    NavigationState,
-    SceneRendererProps,
-    Icon,
-    Dimensions,
-    SearchBar,
     TextInput,
     ScrollView,
-    TouchableHighlight,
 } from 'react-native'
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {Card, Button} from 'react-native-elements';
 import CardListScreen from './CardListScreen';
 import * as firebase from 'firebase';
 
@@ -29,21 +18,28 @@ export default class SearchScreen extends React.Component {
         }
     }
 
-    
     updateSearch = (search) => {
-        console.log(search)
-
         this.setState({search});
-        console.log(this.state.recipe)         
 
         let recipe = []
-        firebase.database().ref().child('recipes').orderByChild('title').startAt(search).on("value", function(snapshot) {
-            snapshot.forEach(function (item) { 
-                recipe.push({title: item.val().title, type: item.val().type, rate: item.val().rate,id: item.key})
+        firebase.database().ref().child('recipes').orderByChild('title').startAt(search).on("value", function (snapshot) {
+            snapshot.forEach(function (item) {
+                firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
+                    let userName = user.child('fullname').val();
+                    recipe.push({
+                        title: item.val().title,
+                        type: item.val().type,
+                        rate: item.val().rate,
+                        id: item.key,
+                        userName: userName,
+                        user_id: item.val().user_id
+                    })
+                })
             })
+
             this.setState({
                 recipe: recipe
-            })    
+            })
         }.bind(this))
     };
 
@@ -55,16 +51,15 @@ export default class SearchScreen extends React.Component {
                     <View style={styles.inputContainer}>
                         <Image style={styles.inputIcon} source={require('../assets/search.png')}/>
                         <TextInput style={styles.inputs}
-                                placeholder="Search..."
-                                autoCapitalize="none"
-                                underlineColorAndroid='transparent'
-                                onChangeText={(search) => this.updateSearch(search)}
-                                value={this.state.search} />
+                                   placeholder="Search..."
+                                   autoCapitalize="none"
+                                   underlineColorAndroid='transparent'
+                                   onChangeText={(search) => this.updateSearch(search)}
+                                   value={this.state.search}/>
                     </View>
                 </View>
-                
                 <ScrollView>
-                <CardListScreen recipe={this.state.recipe}/>
+                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
                 </ScrollView>
             </ScrollView>
         );

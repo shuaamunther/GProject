@@ -1,7 +1,8 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
-import { StyleSheet, Text, View ,Platform} from 'react-native';
+import { StyleSheet, Text, View, Platform, YellowBox} from 'react-native';
 
 import Login from './src/Login';
 import ProfileScreen from './src/ProfileScreen';
@@ -41,7 +42,10 @@ export default class App extends React.Component {
       firebase.initializeApp(firebaseConfig);
   // }
   }
-
+  constructor(props){
+    super(props)
+    YellowBox.ignoreWarnings(['Setting a timer']);
+}
   render() {
    
   return (
@@ -110,6 +114,8 @@ First:
   initialRouteName: "First"
 })
 const AppContainer = createAppContainer(AppNavigator);
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

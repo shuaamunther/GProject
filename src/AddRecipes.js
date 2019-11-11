@@ -13,12 +13,11 @@ import {
     ActivityIndicator,
     FlatList,
 } from 'react-native';
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, NavigationActions, StackActions} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import 'firebase/storage';
-import NavBar from './NavBar';
 
 const ITEMS_KEY = [
     'item1',
@@ -54,7 +53,7 @@ export default class Welcome extends React.Component {
         headerTitle: 'Add Recipes',
         headerRight: () => (
             <TouchableHighlight style={{paddingRight: 16}}
-                                onPress={() => alert('prssed')}>
+                                onPress={() => setTimeout(navigation.goBack, 0)}>
                 <Text style={styles.SearchText}>cancel</Text>
             </TouchableHighlight>
         ),
@@ -73,20 +72,17 @@ export default class Welcome extends React.Component {
             yes: false,
             No: false,
             checked: false,
-            recipe: [
-                {title: ''},
-                // {type:''},
-                {time: ''},
-                {difficality: ''},
-                {steps: ''},
-                {description: ''},
-                {ingredients: ''},
-                {calories: ''},
-                {fiber: ''},
-                {protein: ''},
-                {fat: ''},
-                {carbs: ''},
-            ],
+            title: '',
+            time: '',
+            difficulty: '',
+            steps: '',
+            description: '',
+            ingredients: '',
+            calories: '',
+            fiber: '',
+            protein: '',
+            fat: '',
+            carbs: '',
             isLoading: false,
             avatarSource: null,
             videoSource: null,
@@ -157,6 +153,8 @@ export default class Welcome extends React.Component {
                     fiber: fiber,
                     fat: fat,
                     protein: protein,
+                    user_id: firebase.auth().currentUser.uid,
+                    createdAt: Date()
                 },
                 function (error) {
                     if (error) {

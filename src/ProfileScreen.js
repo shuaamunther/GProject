@@ -1,21 +1,13 @@
 import React, {Component} from 'react'
 import {
-    StyleSheet, Platform, Image, Text, View, TouchableOpacity, TabView,
-    TabBar,
-    SceneMap,
-    NavigationState,
-    SceneRendererProps,
-    Icon,
-    Dimensions,
-    Picker
+    StyleSheet, Platform, Image, Text, View, TouchableOpacity,
+    ImageBackground, ScrollView, TouchableHighlight,error
 } from 'react-native'
-import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import {StackActions, NavigationActions} from 'react-navigation';
 import {Card, Button} from 'react-native-elements';
-import AsyncStorage from "@react-native-community/async-storage";
-import * as Constants from "./Constants";
 import * as firebase from 'firebase';
 import Modal from "react-native-modal";
+import CardListScreen from "./CardListScreen";
 
 
 class HeaderImageView extends React.Component {
@@ -27,7 +19,7 @@ class HeaderImageView extends React.Component {
     openModal = () => {
         this.setState({ visibleModal: 'bottom'});
     };
-    
+
     logout = () => {
         firebase.auth().signOut()
         .then(function() {
@@ -43,34 +35,46 @@ class HeaderImageView extends React.Component {
 
 
     }
+
     render() {
         return (
-            <View style={styles.row}>
-                <View style={styles.headerUser}>
-                    <Image style={styles.avatar} source={require('../assets/shuaa.png')}/>
-                    <Text style={styles.name}>{this.props.username}</Text>
-                    <Text style={styles.userInfo}>Student </Text>
+            <View>
+                <View style={[styles.headerUserView, styles.row]}>
+                    <ImageBackground source={require('../assets/logo2.png')} style={{width: '100%', height: '100%'}}>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <Image style={styles.avatar} source={require('../assets/logo22.png')}/>
+                            <Text style={[styles.name,{color:'black'}]}>{this.props.username}</Text>
+                            <TouchableHighlight
+                                style={this.props.isSameUser == true ? {display: 'none'} : {display: 'flex'}}
+                                onPress={() => {}}>
+                                <View style={[styles.buttonFollow]}>
+                                    <Image source={require('../assets/camera.png')}
+                                           style={{width: 18, height: 18}}/>
+                                    <Text style={{marginLeft: 8, marginRight: 8, color: "#fff", fontSize: 16}}>Follow</Text>
+                                </View>
+                            </TouchableHighlight>
+                        </View>
+                    </ImageBackground>
                 </View>
-                <View style={styles.headerEdit}>
-                    <TouchableOpacity onPress={this.openModal}>
-                        <Image style={styles.editButton}
-                               source={require('../assets/edit.png')} />
-                    </TouchableOpacity>
+                <View style={{position: 'absolute', top:20, right:20}}>
+                    <TouchableHighlight onPress={this.openModal}>
+                        <Image source={require('../assets/edit.png')}
+                        style={{width: 28, height: 28}}/>
+                    </TouchableHighlight>
                 </View>
                 <Modal
                     isVisible={this.state.visibleModal === 'bottom'}
                     onSwipeComplete={() => this.setState({visibleModal: null})}
                     swipeDirection={['up', 'left', 'right', 'down']}
                     style={styles.bottomModal}>
-                <View style={styles.modelContent}>                
+                    <View style={styles.modelContent}>
                         <Button title="Edit Profile" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10}}/>
                         <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                            onPress={() => {this.logout()}}/>
+                                onPress={() => {this.logout()}}/>
                         <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
                         <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
-                </View>
+                    </View>
                 </Modal>
-
             </View>
         )
     }
@@ -79,18 +83,25 @@ class HeaderImageView extends React.Component {
 class Following extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {following: 100}
+        this.state = {following: 100, followers: 240, posts: 45}
     }
 
     render() {
         return (
             <View style={styles.headerFollowing}>
                 <TouchableOpacity>
-                    <Text style={styles.userInfo}>{this.state.following} Following</Text>
+                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.following}</Text>
+                    <Text style={styles.followingTitle}>Following</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
-                    <Text style={styles.userInfo}>{this.state.following} Followers</Text>
+                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.followers}</Text>
+                    <Text style={styles.followingTitle}>Followers</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity>
+                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.posts}</Text>
+                    <Text style={styles.followingTitle}>Posts</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -101,7 +112,9 @@ class Preview extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            activeIndex: 0
+            activeIndex: 0,
+            recipe: [],
+            myRecipe: []
         }
     }
 
@@ -111,25 +124,83 @@ class Preview extends React.Component {
         })
     }
 
+    componentDidMount= () => {
+        this.showMyRecipe(this.props.user_id);
+        this.showData()
+    }
+
+    showMyRecipe(userId) {
+        let myRecipe = []
+        try{
+        firebase.database().ref().child('recipes').orderByChild('user_id').equalTo(userId).on("value", function (snapshot) {
+            snapshot.forEach(function (item) {
+                firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
+                    let userName = user.child('fullname').val();
+                    myRecipe.push({
+                        title: item.val().title,
+                        type: item.val().type,
+                        rate: item.val().rate,
+                        id: item.key,
+                        userName: userName,
+                        user_id: item.val().user_id
+                    })
+                })
+            })
+
+            this.setState({
+                myRecipe: myRecipe
+            })
+
+        }.bind(this));
+    }
+    catch(error){
+        console.log(error)
+
+    }
+    }
+    showData() {
+        let recipe = []
+        firebase.database().ref('/recipes').on('value', function (snapshot) {
+            snapshot.forEach(function (item) {
+                firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
+                    let userName = user.child('fullname').val();
+                    recipe.push({
+                        title: item.val().title,
+                        type: item.val().type,
+                        rate: item.val().rate,
+                        id: item.key,
+                        userName: userName,
+                        user_id: item.val().user_id
+                    })
+                })
+            })
+
+            this.setState({
+                recipe: recipe
+            })
+
+        }.bind(this));
+    }
+
     renderSection = () => {
         if (this.state.activeIndex == 0) {
             return (
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                    <Text>first</Text>
+                    <CardListScreen recipe={this.state.myRecipe} navigation={this.props.navigation}/>
                 </View>
             )
         }
         if (this.state.activeIndex == 1) {
             return (
                 <View>
-                    <Text>this is the 2 section</Text>
+                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
                 </View>
             )
         }
         if (this.state.activeIndex == 2) {
             return (
                 <View>
-                    <Text>hello 3</Text>
+                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
                 </View>
             )
         }
@@ -139,19 +210,31 @@ class Preview extends React.Component {
         return (
             <View style={styles.previewContainer}>
                 <View style={styles.Preview}>
-                    <TouchableOpacity onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}>
-                        <Image style={[this.state.activeIndex == 0 ? {} : {color: 'grey'}, styles.PreviewIcon]}
-                               source={require('../assets/feed.png')}/>
+                    <TouchableOpacity
+                        style={this.state.activeIndex == 0 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
+                        onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}>
+                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
+                            this.state.activeIndex == 0 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
+                            Posts
+                        </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => this.segrantClicked(1)} active={this.state.activeIndex == 1}>
-                        <Image style={[this.state.activeIndex == 1 ? {} : {color: 'grey'}, styles.PreviewIcon]}
-                               source={require('../assets/rev.png')}/>
+                    <TouchableOpacity
+                        style={this.state.activeIndex == 1 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
+                        onPress={() => this.segrantClicked(1)} active={this.state.activeIndex == 1}>
+                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
+                            this.state.activeIndex == 1 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
+                            Review
+                        </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => this.segrantClicked(2)} active={this.state.activeIndex == 2}>
-                        <Image style={[this.state.activeIndex == 2 ? {} : {color: 'grey'}, styles.PreviewIcon]}
-                               source={require('../assets/save.png')}/>
+                    <TouchableOpacity
+                        style={this.state.activeIndex == 2 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
+                        onPress={() => this.segrantClicked(2)} active={this.state.activeIndex == 2}>
+                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
+                            this.state.activeIndex == 2 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
+                            Saved
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 {this.renderSection()}
@@ -162,7 +245,7 @@ class Preview extends React.Component {
 
 export default class ProfileScreen extends React.Component {
     static navigationOptions = {
-        title: 'Profile',
+        header: null
     };
 
     constructor(props) {
@@ -173,38 +256,44 @@ export default class ProfileScreen extends React.Component {
     }
 
     componentDidMount(){
-        firebase.database().ref().child('users').orderByKey().equalTo(firebase.auth().currentUser.uid).on("value", function(snapshot) {
+        const { navigation } = this.props;
+
+        let isSameUser = JSON.stringify(navigation.getParam('isSameUser', false))
+
+        let userId = String(navigation.getParam('user_id', ""))
+
+        firebase.database().ref().child('users').orderByKey().equalTo(userId).on("value", function(snapshot) {
             if(snapshot.val()) {
-                let userData = snapshot.val()[firebase.auth().currentUser.uid]
-                console.log(userData)
+                let userData = snapshot.val()[userId]
                 userData['id'] = firebase.auth().currentUser.uid
                 this.setState({username: userData['fullname']})
             }
         }.bind(this));
     }
 
-
     render() {
-        const { navigation } = this.props
-
+        const { navigation } = this.props;
+        let userId = String(navigation.getParam('user_id', ""))
+        let isSameUser = firebase.auth().currentUser.uid == userId
         return (
-            <View style={styles.container}> 
-                <HeaderImageView navigation={navigation} username={this.state.username}/>
+            <ScrollView>
+            <View style={{marginBottom: 20}}>
+                <HeaderImageView navigation={navigation} username={this.state.username} isSameUser={isSameUser}/>
                 <Following />
-                <Preview />
+                <Preview user_id={userId}/>
             </View>
+            </ScrollView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 7,
-        paddingLeft: 10,
-        paddingRight: 10,
-    },
     row: {
         flexDirection: 'row'
+    },
+    headerUserView: {
+        height: 320,
+        backgroundColor: 'red'
     },
     headerUser: {
         flex: 1,
@@ -216,22 +305,44 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     headerFollowing: {
-        alignItems: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        borderRadius: 30,
+        borderColor:"#00b5ec",
         flexDirection: 'row',
-        marginTop: 20
+        backgroundColor: '#fff',
+        padding: 16,
+        marginLeft: 20,
+        marginRight: 20,
+        top: -30,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+        elevation: 4
+    },
+    followingTitle: {
+        fontSize: 16,
+        color: "#7c8191",
+        fontWeight: '600',
+        textAlign: 'center'
+    },
+    followingTitleForNumbers: {
+        fontWeight: 'bold',
     },
     previewContainer: {
-        paddingTop: 20,
+        paddingTop: 5,
     },
     Preview: {
-
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         flexDirection: 'row',
         borderTopColor: '#eae5e5',
         borderBottomWidth: 1,
         borderBottomColor: '#eae5e5',
         paddingBottom: 10,
-        marginBottom: 20
     },
     PreviewIcon: {
         width: 25,
@@ -247,7 +358,7 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 63,
         borderWidth: 4,
-        borderColor: "white",
+        borderColor: "#00b5ec",
         marginBottom: 10
     },
     editButton: {
@@ -257,14 +368,9 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 22,
-        color: "#000000",
-        fontWeight: '600'
-    },
-    userInfo: {
-        fontSize: 16,
-        color: "#000000",
-        fontWeight: '600',
-        marginRight: 10
+        color: 'black',
+        fontWeight: '800',
+        textTransform: 'capitalize',
     },
     body: {
         backgroundColor: "white",
@@ -288,12 +394,10 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.1)',
       },
       buttonContainer: {
-        marginTop: 30,
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
         width: 250,
         borderRadius: 30,
         backgroundColor: '#00BFFF',
@@ -302,7 +406,6 @@ const styles = StyleSheet.create({
     },
     NextButton: {
         backgroundColor: "#00b5ec",
-        marginBottom: 40,
         width: 100,
         borderRadius: 30,
         marginTop: 50,
@@ -311,4 +414,14 @@ const styles = StyleSheet.create({
     loginText: {
         color: 'white',
     },
+    buttonFollow: {
+        marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#fff',
+        borderWidth: 1,
+        padding: 8,
+        borderRadius: 5
+    }
 });
