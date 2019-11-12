@@ -40,7 +40,7 @@ class HeaderImageView extends React.Component {
                 {this.props.rate}
             </Text>
             </View>
-            <View style={{flex:1,flexDirection:'row',marginTop:20,marginLeft:20,justifyContent: 'space-between',}}>
+            <View style={{flex:1,flexDirection:'row',marginTop:20,marginLeft:20,justifyContent: 'space-between',alignItems:'flex-start',marginBottom:-20}}>
                         <View style={{flex:1,flexDirection:'column',justifyContent: 'space-between',}}>
                            <TouchableHighlight>
                               <Image style={styles.inputIcon} source={require('../assets/like.png')}/> 
