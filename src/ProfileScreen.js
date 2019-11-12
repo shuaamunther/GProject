@@ -140,6 +140,7 @@ class Preview extends React.Component {
                         title: item.val().title,
                         type: item.val().type,
                         rate: item.val().rate,
+                        imagesource:item.val().imagesource,
                         id: item.key,
                         userName: userName,
                         user_id: item.val().user_id
@@ -193,14 +194,14 @@ class Preview extends React.Component {
         if (this.state.activeIndex == 1) {
             return (
                 <View>
-                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
+                    <Text>Reviews</Text>
                 </View>
             )
         }
         if (this.state.activeIndex == 2) {
             return (
                 <View>
-                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
+                    <Text>Saved</Text>
                 </View>
             )
         }

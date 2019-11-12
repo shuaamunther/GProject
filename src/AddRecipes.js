@@ -18,6 +18,7 @@ import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import 'firebase/storage';
+import {withNavigation} from 'react-navigation';
 
 const ITEMS_KEY = [
     'item1',
@@ -47,7 +48,7 @@ class LogoTitle extends React.Component {
     }
 }
 
-export default class Welcome extends React.Component {
+class AddRecipes extends React.Component {
 
     static navigationOptions = {
         headerTitle: 'Add Recipes',
@@ -474,4 +475,5 @@ const styles = StyleSheet.create({
       },
 
 });
+export default withNavigation(AddRecipes);
      

@@ -7,6 +7,7 @@ import {
     Alert,
     KeyboardAvoidingView,
     ScrollView,
+    ActivityIndicator,
 }from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -37,7 +38,7 @@ export default class login extends React.Component {
         currentUser: '',
         users: [],
         userId:'',
-
+        isLoading: false,
     }
 
     handleLogin = () => {
@@ -94,11 +95,15 @@ export default class login extends React.Component {
 
     setCurrentUser() {
         alert('login succsess');
-        this.props.navigation.navigate('Profile');
+        const resetAction = StackActions.reset({
+            index: 0,
+              actions: [NavigationActions.navigate({ routeName: 'Main' })],
+          });
+           this.props.navigation.dispatch(resetAction);
     }
 
     LogInUser = (email, password) => {
-      //  let accessToken
+        this.setState({isLoading: true})
         if (this.state.emailvalid == true) {
             if (this.state.passwordvalid == true) {
                 firebase.auth().signInWithEmailAndPassword(email, password).then((res) =>
@@ -174,6 +179,8 @@ export default class login extends React.Component {
                                             onPress={this.SignUpuser.bind(this)}>
                             <Text>{'\n'}Register</Text>
                         </TouchableHighlight>
+
+                        <ActivityIndicator size="large" color="#00b5ec" style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
                     </KeyboardAvoidingView>
                 </ScrollView>
             </View>

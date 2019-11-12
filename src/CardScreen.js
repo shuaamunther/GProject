@@ -40,6 +40,20 @@ class HeaderImageView extends React.Component {
                 {this.props.rate}
             </Text>
             </View>
+            <View style={{flex:1,flexDirection:'row',marginTop:20,marginLeft:20,justifyContent: 'space-between',}}>
+                        <View style={{flex:1,flexDirection:'column',justifyContent: 'space-between',}}>
+                           <TouchableHighlight>
+                              <Image style={styles.inputIcon} source={require('../assets/like.png')}/> 
+                           </TouchableHighlight>
+                           <Text style={{fontSize:20}}>3</Text>
+                           </View>
+                           <View style={{flex:5,flexDirection:'column',justifyContent: 'space-between'}}>
+                         <TouchableHighlight>
+                             <Image style={styles.inputIcon} source={require('../assets/book.png')}/> 
+                         </TouchableHighlight>
+                         <Text style={{fontSize:20}}>10</Text>
+                    </View>
+                </View>
         </View>
         )
     }
@@ -50,10 +64,11 @@ class HeaderTextView extends React.Component {
         return(
             <View style= {styles.headerView} >
                 <View style = {styles.ViewText} >
+                  
                     <Text style={styles.titleText}>
                         {this.props.title}
                     </Text>
-                    <Text style={styles.DiscriptionnText}>
+                    <Text>
                         {this.props.type}
                     </Text>
                 </View>
@@ -170,6 +185,18 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 22,
         fontWeight: 'bold',
+    },
+    likeText: {
+        color: 'black',
+        fontSize: 22,
+        fontWeight: 'bold',
+    },
+    inputIcon: {
+        width: 30,
+        height: 30,
+        marginLeft: -10,
+        justifyContent: 'center',
+        marginTop:-18,
     },
   });
 export default withNavigation(CardScreen);

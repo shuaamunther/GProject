@@ -54,6 +54,14 @@ export default class FeedScreen extends React.Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+           loading:false,
+           page:1,
+           seed:1,
+           error:null,
+           refreshing:false,
+
+        }
     }
     
     componentDidMount() {
@@ -71,9 +79,23 @@ export default class FeedScreen extends React.Component {
         }
     }
 
+    handelRefresh =() => {
+        this.setState({
+            page:1,
+            refreshing:true,
+            seed : this.state.seed +1,
+        }, () => {
+            this.makeRemoteRequest();
+        }
+        
+        )
+    }
+
     render() {
         return (
-            <View style={{flex:1, marginTop:10, marginBottom: 20}}>
+            <View style={{flex:1, marginTop:10, marginBottom: 20}}
+            refreshing={this.state.refreshing}
+                onRefresh={this.handelRefresh}>
                 <DataScreen navigation={this.props.navigation}/>
                 <TouchableHighlight style={styles.buttonAdd}
                     onPress={() => {this.props.navigation.navigate('AddRe')}}>
@@ -81,6 +103,7 @@ export default class FeedScreen extends React.Component {
                     style={{width: 32, height: 32}}/>
                 </TouchableHighlight>
             </View>
+            
         );
    }
 }
