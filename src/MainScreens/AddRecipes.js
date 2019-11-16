@@ -22,6 +22,7 @@ import * as firebase from 'firebase';
 import 'firebase/storage';
 import {withNavigation} from 'react-navigation';
 
+const mainColor = '#3ca897';
 const ITEMS_KEY = [
     'item1',
     'item2',
@@ -78,7 +79,8 @@ class AddRecipes extends React.Component {
             title: '',
             time: '',
             difficulty: '',
-            steps: '',
+            Arraysteps:[],
+            steps:[],
             description: '',
             ingredients: [],
             calories: '',
@@ -88,12 +90,14 @@ class AddRecipes extends React.Component {
             carbs: '',
             isLoading: false,
             avatarSource: null,
-            videoSource: null,
             tags: {
                 tag: '',
                 tagsArray: []
               },
+              tagsColor: mainColor,
+              tagsText: '#fff',
         };
+        
     }
 
     updateTagState = (state) => {
@@ -138,7 +142,7 @@ class AddRecipes extends React.Component {
         let title = this.state.title
         let time = this.state.time
         // let type = this.state.type
-        let ingredients = this.state.ingredients
+        let ingredients = this.state.tags.tagsArray
         let steps = this.state.steps
         let difficality = this.state.difficality
         let description= this.state.description
@@ -149,15 +153,15 @@ class AddRecipes extends React.Component {
         let protein = this.state.protein
         let carbs = this.state.carbs
         let avatarSource = this.state.avatarSource
-        this.setState({isLoading: true})
 
         if (title == '' || time === '' || ingredients === '' || steps === '') {
             alert('please fill all fields')
             return null
         } else {
+            this.setState({isLoading: true})
             firebase.database().ref('recipes/').push({
                     title: title,
-                    ingredients:[ ingredients],
+                    ingredients:ingredients,
                     steps: steps,
                     time: time,
                     difficality: difficality,
@@ -167,27 +171,48 @@ class AddRecipes extends React.Component {
                     fat: fat,
                     protein: protein,
                     user_id: firebase.auth().currentUser.uid,
-                    createdAt: Date()
+                    createdAt: Date(),
+                    avatarSource:avatarSource,
                 },
                 function (error) {
                     if (error) {
                         Alert.alert("Failed adding: Message: " + error)
                     }
+                    
                 });
+        }
+        
+        const resetAction = StackActions.reset({
+            index: 0,
+              actions: [NavigationActions.navigate({ routeName: 'Main' })],
+          });
+           this.props.navigation.dispatch(resetAction);
+           
+    }
+
+    convet =(steps) => {
+        let i=0
+        for( i=0;i< steps.size;i++){
+            if(steps === '\n')
+            {
+               this.setState.Arraysteps[i]=steps
+               
+            }
         }
     }
 
     renderImage = (index) => {
         const itemKey = ITEMS_KEY[index]
         let output = this.state[itemKey] ? IMAGES_CHECKED[index] : IMAGES_UNCHECKED[index];
-
+        
         return <Image style={{width: 30, height: 30}} source={output}/>
     }
 
     _renderItem = (item) => {
-        console.log('_renderItem: ')
-        console.log(item);
+   //     console.log('_renderItem: ')
+     //   console.log(item);
         let itemKey = item.item
+        
 
         return (
             <TouchableOpacity
@@ -206,7 +231,8 @@ class AddRecipes extends React.Component {
       }
 
     render() {
-       console.log('tags',this.state.tagsArray)
+       console.log('tags',this.state.tags.tagsArray)
+       console.log('type',this.state.type)
         return (
             <ScrollView style={styles.scrollView}>
                 <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
@@ -249,6 +275,7 @@ class AddRecipes extends React.Component {
                         <FlatList data={ITEMS_KEY}
                                   renderItem={this._renderItem}
                                   keyExtractor={item => item}
+                                 {...this.setState.type=this.item}
                                   numColumns={4}/>
                     </View>
 
@@ -260,7 +287,7 @@ class AddRecipes extends React.Component {
                     width: 335,
                     backgroundColor: this.props.backgroundColor,
                 }}>
-                    <Text>ingredients</Text>
+                    <Text>INGREDIENTS</Text>
                 </View>
 
                 <View style={{}}>
@@ -271,7 +298,11 @@ class AddRecipes extends React.Component {
                            backgroundColor: '#E3F2FD',
                            marginLeft: 3,}}
                          updateState={this.updateTagState}
+                         placeholder="  ingredients..."  
+                         onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
+                         onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
                          tags={this.state.tags}
+                        
                 />
                 </View>
 
@@ -291,6 +322,7 @@ class AddRecipes extends React.Component {
                                underlineColorAndroid='transparent'
                                onChangeText={(time) => this.setState({time})}
                     />
+                    <FlatList  data={[{name: 'John'}, {name: 'Paul'}]}/>
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -312,9 +344,10 @@ class AddRecipes extends React.Component {
                     backgroundColor: '#E3F2FD'
                 }}>
 
-                    <TextInput style={styles.inputs}
-                               placeholder="steps"
+                    <TextInput style={{hight:159, marginLeft: 16, borderBottomColor: '#FFDE03',  flex: 1,}}
+                               placeholder="steps "
                                underlineColorAndroid='transparent'
+                               multiline
                                onChangeText={(steps) => this.setState({steps})}
                     />
                 </View>
@@ -489,53 +522,12 @@ const styles = StyleSheet.create({
         width: 349,
         alignItems: 'center',
       },
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+      tag: {
+        backgroundColor: '#fff'
       },
-    
-    container: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      alignItems: "center"
-    },
-    
-    textInputContainer: {
-      ///flex: 1,
-      minWidth: 335,
-      height: 32,
-      margin: 4,
-      borderRadius: 16,
-      backgroundColor: '#E3F2FD',
-      marginLeft: 10,
-    },
-    
-    textInput: {
-      margin: 0,
-      padding: 0,
-      paddingLeft: 12,
-      paddingRight: 12,
-      flex: 1,
-      height: 32,
-      fontSize: 13,
-      color: "rgba(0, 0, 0, 0.87)"
-    },
-    
-    tag: {
-      justifyContent: "center",
-      backgroundColor: '#E3F2FD',
-      borderRadius: 16,
-      paddingLeft: 12,
-      paddingRight: 12,
-      height: 32,
-      margin: 4
-    },
-    tagLabel: {
-      fontSize: 13,
-      color: "rgba(0, 0, 0, 0.87)"
-    },
+    tagText: {
+        color: mainColor
+      },
 
 });
 export default withNavigation(AddRecipes);

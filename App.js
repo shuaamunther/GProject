@@ -107,7 +107,7 @@ First:
   {screen:FirstScreen}
 },
 {
-  initialRouteName: "AddRe"
+  initialRouteName: "First"
 })
 const AppContainer = createAppContainer(AppNavigator);
 

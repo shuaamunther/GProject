@@ -12,7 +12,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     FlatList,
-   
+    RefreshControl,
 } from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
@@ -34,6 +34,12 @@ class LogoTitle extends React.Component {
         );
     }
 }
+
+function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
 
 export default class FeedScreen extends React.Component {
     static navigationOptions = ({navigation}) => {
@@ -79,23 +85,9 @@ export default class FeedScreen extends React.Component {
         }
     }
 
-    handelRefresh =() => {
-        this.setState({
-            page:1,
-            refreshing:true,
-            seed : this.state.seed +1,
-        }, () => {
-            this.makeRemoteRequest();
-        }
-        
-        )
-    }
-
     render() {
         return (
-            <View style={{flex:1, marginTop:10, marginBottom: 20}}
-            refreshing={this.state.refreshing}
-                onRefresh={this.handelRefresh}>
+            <View style={{flex:1, marginTop:10, marginBottom: 20}} >
                 <DataScreen navigation={this.props.navigation}/>
                 <TouchableHighlight style={styles.buttonAdd}
                     onPress={() => {this.props.navigation.navigate('AddRe')}}>
