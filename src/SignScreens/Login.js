@@ -12,7 +12,7 @@ import {
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
-import * as Constants from './Constants';
+import * as Constants from './../utils/Constants';
 import {AsyncStorage} from 'react-native';
 
 export default class login extends React.Component {
@@ -140,11 +140,11 @@ export default class login extends React.Component {
                 <ScrollView style={styles.scrollView}>
                     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                         <View style={styles.container}>
-                            <Image style={styles.logo} source={require('../assets/logo.png')}/>
+                            <Image style={styles.logo} source={require('../../assets/logo.png')}/>
                             <Text>{'\n'}</Text>
                         </View>
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../assets/email.png')}/>
+                            <Image style={styles.inputIcon} source={require('../../assets/email.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Email"
                                        keyboardType="email-address"
@@ -155,7 +155,7 @@ export default class login extends React.Component {
                         </View>
 
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../assets/key.png')}/>
+                            <Image style={styles.inputIcon} source={require('../../assets/key.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Password"
                                        autoCapitalize="none"

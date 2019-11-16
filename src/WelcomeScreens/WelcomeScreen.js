@@ -11,7 +11,7 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import WelcomeHeader from './WelcomeHeader';
-import * as Constants from './Constants'
+import * as Constants from '../utils/Constants'
 import {AsyncStorage} from 'react-native';
 
 export default class Welcome extends React.Component {
@@ -51,7 +51,7 @@ export default class Welcome extends React.Component {
                 </View>
                 <View style={styles.headerView}>
                     <Image style={styles.avatar}
-                           source={require('../assets/user.png')}/>
+                           source={require('../../assets/user.png')}/>
                     <Text style={styles.info}></Text>
                     <Text style={styles.name}>Welcome to Bon Appetit</Text>
                     <Text style={styles.description}>Your answers to the next few questions will

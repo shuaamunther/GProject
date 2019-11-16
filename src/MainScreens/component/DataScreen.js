@@ -1,6 +1,5 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
-import CardScreen from '../src/CardScreen';
 import { Card, Button } from 'react-native-elements';
 import * as firebase from 'firebase';
 import CardListScreen from './CardListScreen';

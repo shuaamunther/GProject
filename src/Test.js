@@ -1,96 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  Image,
-  PixelRatio,
+  Dimensions,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
+  Text
 } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
 
-export default class App extends React.Component {
-  state = {
-    avatarSource: null,
-    videoSource: null,
-  };
+import TagInput from 'react-native-tags-input';
 
+export default class Test extends React.Component {
   constructor(props) {
     super(props);
-
-    this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
-    this.selectVideoTapped = this.selectVideoTapped.bind(this);
-  }
-
-  selectPhotoTapped() {
-    const options = {
-      quality: 1.0,
-      maxWidth: 500,
-      maxHeight: 500,
-      storageOptions: {
-        skipBackup: true,
+    this.state = {
+      tags: {
+        tag: '',
+        tagsArray: []
       },
     };
-
-    ImagePicker.showImagePicker(options, response => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled photo picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        let source = {uri: response.uri};
-
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({
-          avatarSource: source,
-        });
-      }
-    });
   }
-
-  selectVideoTapped() {
-    const options = {
-      title: 'Video Picker',
-      takePhotoButtonTitle: 'Take Video...',
-      mediaType: 'video',
-      videoQuality: 'medium',
+  
+  updateTagState = (state) => {
+      this.setState({
+        tags: state
+      })
     };
-
-    ImagePicker.showImagePicker(options, response => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled video picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        this.setState({
-          videoSource: response.uri,
-        });
-      }
-    });
-  }
 
   render() {
     return (
-      <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
-      <View style={styles.view}>
-         {this.state.avatarSource === null ? (
-              <Image style={styles.inputIcon} source={require('../assets/camera.png')}/>
-         ) : (
-              <Image style={styles.avatar} source={this.state.avatarSource} />
-         )}
-        </View>
-       </TouchableOpacity>
-
+      <View style={styles.container}>
+        <TagInput style={{ minWidth: 335,
+                           height: 32,
+                           margin: 4,
+                           borderRadius: 16,
+                           backgroundColor: '#E3F2FD',
+                           marginLeft: 10,}}
+          updateState={this.updateTagState}
+          tags={this.state.tags}
+          />
+      </View>
     );
   }
 }
@@ -100,17 +47,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  avatarContainer: {
-    borderColor: '#9B9B9B',
-    borderWidth: 1 / PixelRatio.get(),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatar: {
-    borderRadius: 75,
-    width: 150,
-    height: 150,
+    
   },
 });

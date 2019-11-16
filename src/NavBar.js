@@ -12,7 +12,7 @@ import {
 class LogoTitle extends React.Component {
     render() {
         return (
-            <Image source={require('../assets/NavBar.png')}
+            <Image source={require('../../assets/NavBar.png')}
                    style={{width: 170, height: 50, marginLeft: 5, marginTop: 7}}/>
         );
     }

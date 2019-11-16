@@ -19,7 +19,7 @@ render(){
    <ScrollView style={styles.scrollView}>
    
         <View style={styles.container}>
-        <Image style={styles.recipeImage} source={require('../assets/recipeImage.jpg')}/>
+        <Image style={styles.recipeImage} source={require('../../assets/recipeImage.jpg')}/>
         </View>
 		
 		<Text style={styles.titleText}>Pan Cakes{'\n'}{'\n'}</Text>

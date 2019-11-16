@@ -7,7 +7,7 @@ import {StackActions, NavigationActions} from 'react-navigation';
 import {Card, Button} from 'react-native-elements';
 import * as firebase from 'firebase';
 import Modal from "react-native-modal";
-import CardListScreen from "./CardListScreen";
+import CardListScreen from "./component/CardListScreen";
 
 
 class HeaderImageView extends React.Component {
@@ -40,15 +40,15 @@ class HeaderImageView extends React.Component {
         return (
             <View>
                 <View style={[styles.headerUserView, styles.row]}>
-                    <ImageBackground source={require('../assets/logo2.png')} style={{width: '100%', height: '100%'}}>
+                    <ImageBackground source={require('../../assets/logo2.png')} style={{width: '100%', height: '100%'}}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Image style={styles.avatar} source={require('../assets/logo22.png')}/>
+                            <Image style={styles.avatar} source={require('../../assets/logo22.png')}/>
                             <Text style={[styles.name,{color:'black'}]}>{this.props.username}</Text>
                             <TouchableHighlight
                                 style={this.props.isSameUser == true ? {display: 'none'} : {display: 'flex'}}
                                 onPress={() => {}}>
                                 <View style={[styles.buttonFollow]}>
-                                    <Image source={require('../assets/camera.png')}
+                                    <Image source={require('../../assets/camera.png')}
                                            style={{width: 18, height: 18}}/>
                                     <Text style={{marginLeft: 8, marginRight: 8, color: "#fff", fontSize: 16}}>Follow</Text>
                                 </View>
@@ -58,7 +58,7 @@ class HeaderImageView extends React.Component {
                 </View>
                 <View style={{position: 'absolute', top:20, right:20}}>
                     <TouchableHighlight onPress={this.openModal}>
-                        <Image source={require('../assets/edit.png')}
+                        <Image source={require('../../assets/edit.png')}
                         style={{width: 28, height: 28}}/>
                     </TouchableHighlight>
                 </View>

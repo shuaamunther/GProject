@@ -4,22 +4,21 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { StyleSheet, Text, View, Platform, YellowBox} from 'react-native';
 
-import Login from './src/Login';
-import ProfileScreen from './src/ProfileScreen';
-import SignUpScreen from './src/SignUpScreen';
-import ForgotPasswordScreen from './src/ForgotPasswordScreen';
-import FeedScreen from './src/FeedScreen';
-import WelcomeScreen from './src/WelcomeScreen';
-import WelcomeScreen1 from './src/WelcomeScreen1';
-import WelcomeScreen2 from './src/WelcomeScreen2';
-import WelcomeScreen3 from './src/WelcomeScreen3';
-import WelcomeScreen4 from './src/WelcomeScreen4';
-import CardScreen from './src/CardScreen';
-import SearchScreen from './src/SearchScreen';
-import DataScreen from './src/DataScreen';
-import TestScreen from './src/Test';
-import NavBar from './src/NavBar';
-import AddRecipes from './src/AddRecipes';
+import Login from './src/SignScreens/Login';
+import ProfileScreen from './src/MainScreens/ProfileScreen';
+import SignUpScreen from './src/SignScreens/SignUpScreen';
+import ForgotPasswordScreen from './src/SignScreens/ForgotPasswordScreen';
+import FeedScreen from './src/MainScreens/FeedScreen';
+import WelcomeScreen from './src/WelcomeScreens/WelcomeScreen';
+import WelcomeScreen1 from './src/WelcomeScreens/WelcomeScreen1';
+import WelcomeScreen2 from './src/WelcomeScreens/WelcomeScreen2';
+import WelcomeScreen3 from './src/WelcomeScreens/WelcomeScreen3';
+import WelcomeScreen4 from './src/WelcomeScreens/WelcomeScreen4';
+import CardScreen from './src/MainScreens/component/CardScreen';
+import SearchScreen from './src/MainScreens/SearchScreen';
+import DataScreen from './src/MainScreens/component/DataScreen';
+import Test from './src/Test';
+import AddRecipes from './src/MainScreens/AddRecipes';
 import PickingPicture from './src/PickingPicture'
 import FirstScreen from './src/FirstScreen'
 import * as firebase from 'firebase';
@@ -97,10 +96,7 @@ const AppNavigator = createStackNavigator({
   screen:DataScreen
  },
  Test:{
- screen:TestScreen
- },
- NavBars:{
- screen:NavBar
+ screen:Test
  },
  AddRe:{
  screen:AddRecipes
@@ -111,7 +107,7 @@ First:
   {screen:FirstScreen}
 },
 {
-  initialRouteName: "First"
+  initialRouteName: "AddRe"
 })
 const AppContainer = createAppContainer(AppNavigator);
 

@@ -5,7 +5,7 @@ import * as firebase from 'firebase';
 import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import * as Constants from './Constants'
+import * as Constants from './utils/Constants'
 
 
 class FirstScreen extends React.Component {

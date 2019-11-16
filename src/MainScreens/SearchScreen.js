@@ -4,7 +4,7 @@ import {
     TextInput,
     ScrollView,
 } from 'react-native'
-import CardListScreen from './CardListScreen';
+import CardListScreen from './component/CardListScreen';
 import * as firebase from 'firebase';
 
 
@@ -49,7 +49,7 @@ export default class SearchScreen extends React.Component {
             <ScrollView>
                 <View style={styles.row}>
                     <View style={styles.inputContainer}>
-                        <Image style={styles.inputIcon} source={require('../assets/search.png')}/>
+                        <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
                         <TextInput style={styles.inputs}
                                    placeholder="Search..."
                                    autoCapitalize="none"

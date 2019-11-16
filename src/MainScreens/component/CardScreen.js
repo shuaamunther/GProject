@@ -11,7 +11,7 @@ class HeaderUserView extends React.Component {
                 onPress={() => {this.props.navigation.navigate('Profile', {user_id: this.props.user_id})}}>
                 <View style={styles.headerUserView}>
                     <Image
-                        source={this.props.userImage ? this.props.userImage : require('../assets/logouser.png')}
+                        source={this.props.userImage ? this.props.userImage : require('../../../assets/logouser.png')}
                         style={{width: 42, height: 42, borderRadius: 42 / 2}}
                     />
                     <Text style={{marginLeft: 12, fontSize: 18}}>{this.props.userName}</Text>
@@ -34,7 +34,7 @@ class HeaderImageView extends React.Component {
             <View style={styles.headerStarView}>
             <Image
                 style={styles.headerStarIcon}
-                source={require('../assets/star.png')}
+                source={require('../../../assets/star.png')}
                 />
             <Text style={styles.headerStarText}>
                 {this.props.rate}
@@ -43,13 +43,13 @@ class HeaderImageView extends React.Component {
             <View style={{flex:1,flexDirection:'row',marginTop:20,marginLeft:20,justifyContent: 'space-between',alignItems:'flex-start',marginBottom:-20}}>
                         <View style={{flex:1,flexDirection:'column',justifyContent: 'space-between',}}>
                            <TouchableHighlight>
-                              <Image style={styles.inputIcon} source={require('../assets/like.png')}/> 
+                              <Image style={styles.inputIcon} source={require('../../../assets/like.png')}/> 
                            </TouchableHighlight>
                            <Text style={{fontSize:20}}>3</Text>
                            </View>
                            <View style={{flex:5,flexDirection:'column',justifyContent: 'space-between'}}>
                          <TouchableHighlight>
-                             <Image style={styles.inputIcon} source={require('../assets/book.png')}/> 
+                             <Image style={styles.inputIcon} source={require('../../../assets/book.png')}/> 
                          </TouchableHighlight>
                          <Text style={{fontSize:20}}>10</Text>
                     </View>

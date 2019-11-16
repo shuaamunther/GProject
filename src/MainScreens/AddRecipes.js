@@ -13,6 +13,8 @@ import {
     ActivityIndicator,
     FlatList,
 } from 'react-native';
+import TagInput from 'react-native-tags-input';
+import PropTypes from "prop-types";
 import {createAppContainer, NavigationActions, StackActions} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -27,22 +29,22 @@ const ITEMS_KEY = [
     'item4',
 ]
 const IMAGES_CHECKED = [
-    require('../assets/sweet.png'),
-    require('../assets/breakfast.png'),
-    require('../assets/veg.png'),
-    require('../assets/lunch.png'),
+    require('../../assets/sweet.png'),
+    require('../../assets/breakfast.png'),
+    require('../../assets/veg.png'),
+    require('../../assets/lunch.png'),
 ]
 const IMAGES_UNCHECKED = [
-    require('../assets/sweet1.png'),
-    require('../assets/breakfast1.png'),
-    require('../assets/veg1.png'),
-    require('../assets/lunch1.png'),
+    require('../../assets/sweet1.png'),
+    require('../../assets/breakfast1.png'),
+    require('../../assets/veg1.png'),
+    require('../../assets/lunch1.png'),
 ]
 
 class LogoTitle extends React.Component {
     render() {
         return (
-            <Image source={require('../assets/NavBar.png')}
+            <Image source={require('../../assets/NavBar.png')}
                    style={{width: 170, height: 50, marginLeft: 5, marginTop: 7}}/>
         );
     }
@@ -78,7 +80,7 @@ class AddRecipes extends React.Component {
             difficulty: '',
             steps: '',
             description: '',
-            ingredients: '',
+            ingredients: [],
             calories: '',
             fiber: '',
             protein: '',
@@ -87,8 +89,18 @@ class AddRecipes extends React.Component {
             isLoading: false,
             avatarSource: null,
             videoSource: null,
+            tags: {
+                tag: '',
+                tagsArray: []
+              },
         };
     }
+
+    updateTagState = (state) => {
+        this.setState({
+          tags: state
+        })
+      };
 
     selectPhotoTapped() {
         const options = {
@@ -145,7 +157,7 @@ class AddRecipes extends React.Component {
         } else {
             firebase.database().ref('recipes/').push({
                     title: title,
-                    ingredients: ingredients,
+                    ingredients:[ ingredients],
                     steps: steps,
                     time: time,
                     difficality: difficality,
@@ -194,12 +206,13 @@ class AddRecipes extends React.Component {
       }
 
     render() {
+       console.log('tags',this.state.tagsArray)
         return (
             <ScrollView style={styles.scrollView}>
                 <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
                    <View style={styles.view}>
                       {this.state.avatarSource === null ? (
-                           <Image style={styles.inputIcon} source={require('../assets/camera.png')}/>
+                           <Image style={styles.inputIcon} source={require('../../assets/camera.png')}/>
                       ) : (
                            <Image style={styles.avatar} source={this.state.avatarSource} />
                       )}
@@ -247,16 +260,19 @@ class AddRecipes extends React.Component {
                     width: 335,
                     backgroundColor: this.props.backgroundColor,
                 }}>
-                    <Text>INGREDIANTS</Text>
+                    <Text>ingredients</Text>
                 </View>
 
-                <View style={styles.inputContainer}>
-                    <Image style={{marginLeft: 15, width: 30, height: 30}} source={require('../assets/plus.png')}/>
-                    <TextInput style={styles.inputs}
-                               placeholder="Add ingrediants"
-                               underlineColorAndroid='transparent'
-                               onChangeText={(ingredients) => this.setState({ingredients})}
-                    />
+                <View style={{}}>
+                <TagInput style={{ minWidth: 330,
+                           height: 40,
+                           margin: 4,
+                           borderRadius: 20,
+                           backgroundColor: '#E3F2FD',
+                           marginLeft: 3,}}
+                         updateState={this.updateTagState}
+                         tags={this.state.tags}
+                />
                 </View>
 
                 <View style={{
@@ -366,7 +382,7 @@ class AddRecipes extends React.Component {
             </ScrollView>
         )
     }
-
+    
     makeImageIfAny(styles) {
         if (this.props.showImage) {
             return <Image style={styles.image} source={R.images.check}/>
@@ -473,6 +489,53 @@ const styles = StyleSheet.create({
         width: 349,
         alignItems: 'center',
       },
+      container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+    
+    container: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center"
+    },
+    
+    textInputContainer: {
+      ///flex: 1,
+      minWidth: 335,
+      height: 32,
+      margin: 4,
+      borderRadius: 16,
+      backgroundColor: '#E3F2FD',
+      marginLeft: 10,
+    },
+    
+    textInput: {
+      margin: 0,
+      padding: 0,
+      paddingLeft: 12,
+      paddingRight: 12,
+      flex: 1,
+      height: 32,
+      fontSize: 13,
+      color: "rgba(0, 0, 0, 0.87)"
+    },
+    
+    tag: {
+      justifyContent: "center",
+      backgroundColor: '#E3F2FD',
+      borderRadius: 16,
+      paddingLeft: 12,
+      paddingRight: 12,
+      height: 32,
+      margin: 4
+    },
+    tagLabel: {
+      fontSize: 13,
+      color: "rgba(0, 0, 0, 0.87)"
+    },
 
 });
 export default withNavigation(AddRecipes);

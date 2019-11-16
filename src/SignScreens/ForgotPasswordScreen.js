@@ -38,12 +38,12 @@ export default class ForgotPa extends React.Component {
                 <ScrollView style={styles.scrollView}>
                     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                         <View style={styles.container}>
-                            <Image style={styles.logo} source={require('../assets/logo.png')}/>
+                            <Image style={styles.logo} source={require('../../assets/logo.png')}/>
                         </View>
                         <Text style={styles.titleText}>Find your Account</Text>
                         <Text>Please enter your email to search for your account{'\n'}{'\n'}</Text>
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../assets/email.png')}/>
+                            <Image style={styles.inputIcon} source={require('../../assets/email.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Email"
                                        keyboardType="email-address"

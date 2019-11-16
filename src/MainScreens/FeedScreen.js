@@ -20,8 +20,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import 'firebase/storage';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import DataScreen from './DataScreen';
-import * as Constants from './Constants'
+import DataScreen from './component/DataScreen';
+import * as Constants from './../utils/Constants'
 import AsyncStorage from '@react-native-community/async-storage';
 import ProfileScreen from './ProfileScreen';
 import SearchScreen from "./SearchScreen";
@@ -29,7 +29,7 @@ import SearchScreen from "./SearchScreen";
 class LogoTitle extends React.Component {
     render() {
         return (
-            <Image source={require('../assets/NavBar.png')}
+            <Image source={require('../../assets/NavBar.png')}
                    style={{width: 170, height: 50, marginLeft: 5, marginTop: 7}}/>
         );
     }
@@ -43,7 +43,7 @@ export default class FeedScreen extends React.Component {
                 <TouchableHighlight style={{paddingRight: 16}}
                                     onPress={() => navigation.navigate('Profile', {user_id: firebase.auth().currentUser.uid})}>
                     <Image
-                        source={require('../assets/deuser.png')}
+                        source={require('../../assets/deuser.png')}
                         style={{width: 32, height: 32, borderRadius: 32 / 2}}
                     />
                     
@@ -99,7 +99,7 @@ export default class FeedScreen extends React.Component {
                 <DataScreen navigation={this.props.navigation}/>
                 <TouchableHighlight style={styles.buttonAdd}
                     onPress={() => {this.props.navigation.navigate('AddRe')}}>
-                    <Image source={require('../assets/add.png')}
+                    <Image source={require('../../assets/add.png')}
                     style={{width: 32, height: 32}}/>
                 </TouchableHighlight>
             </View>

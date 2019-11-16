@@ -12,7 +12,7 @@ import {
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
-import * as Constants from './Constants'
+import * as Constants from '../utils/Constants'
 import { ButtonGroup } from 'react-native-elements';
 import WelcomeHeader from './WelcomeHeader'
 

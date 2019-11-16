@@ -13,7 +13,7 @@ import {StackActions, NavigationActions, createAppContainer} from 'react-navigat
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import {AsyncStorage} from 'react-native';
-import * as Constants from './Constants'
+import * as Constants from './../utils/Constants'
 
 export default class SignUpScreen extends React.Component {
     static navigationOptions = {
@@ -135,12 +135,12 @@ export default class SignUpScreen extends React.Component {
                 <ScrollView style={styles.scrollView}>
                     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                         <View style={styles.container}>
-                            <Image style={styles.logo} source={require('../assets/logo.png')}/>
+                            <Image style={styles.logo} source={require('../../assets/logo.png')}/>
                             <Text style={styles.titleText}>Welcome to Bon Appetit{'\n'}</Text>
                         </View>
 
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../assets/person.png')}/>
+                            <Image style={styles.inputIcon} source={require('../../assets/person.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Full Name"
                                        underlineColorAndroid='transparent'
@@ -148,7 +148,7 @@ export default class SignUpScreen extends React.Component {
                         </View>
 
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../assets/email.png')}/>
+                            <Image style={styles.inputIcon} source={require('../../assets/email.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Email"
                                        keyboardType="email-address"
@@ -159,7 +159,7 @@ export default class SignUpScreen extends React.Component {
                         </View>
 
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../assets/person.png')}/>
+                            <Image style={styles.inputIcon} source={require('../../assets/person.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Age"
                                        keyboardType="numeric"
@@ -168,7 +168,7 @@ export default class SignUpScreen extends React.Component {
                         </View>
 
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../assets/key.png')}/>
+                            <Image style={styles.inputIcon} source={require('../../assets/key.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Password"
                                        secureTextEntry={true}
