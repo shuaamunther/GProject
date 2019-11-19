@@ -27,12 +27,6 @@ const ITEMS_KEY = [
     'item8',
     'item9',
     'item10',
-    'item11',
-    'item12',
-    'item13',
-    'item14',
-    'item15',
-    'item16',
 ]
 const IMAGES_CHECKED = [
     require('../../assets/welcome3/Dairy.png'),
@@ -69,6 +63,7 @@ export default class Welcome extends React.Component {
     }
 
     renderImage = (index) => {
+        console.log(IMAGES_CHECKED[index]);
         const itemKey = ITEMS_KEY[index]
         let output = this.state[itemKey] ? IMAGES_CHECKED[index] : IMAGES_UNCHECKED[index];
 
@@ -76,8 +71,8 @@ export default class Welcome extends React.Component {
     }
 
     _renderItem = (item) => {
-        console.log('_renderItem: ')
-        console.log(item);
+        //console.log('_renderItem: ')
+       // console.log(item);
         let itemKey = item.item
 
         return (

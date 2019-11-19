@@ -92,22 +92,22 @@ const AppNavigator = createStackNavigator({
   Search:{
   screen : SearchScreen
   },
- Data:{
+  Data:{
   screen:DataScreen
- },
- Test:{
- screen:Test
- },
- AddRe:{
- screen:AddRecipes
+  },
+  Test:{
+  screen:Test
+  },
+  AddRe:{
+  screen:AddRecipes
   },
   Pic:
   {screen:PickingPicture},
-First:
+  First:
   {screen:FirstScreen}
 },
 {
-  initialRouteName: "First"
+  initialRouteName: "Welcome3"
 })
 const AppContainer = createAppContainer(AppNavigator);
 

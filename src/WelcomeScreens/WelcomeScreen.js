@@ -64,7 +64,7 @@ export default class Welcome extends React.Component {
                     </TouchableHighlight>
 
                     <Text style={styles.description2}>
-                        Already have a Pinterest account? for you
+                        Already have a Bon Appetit account? for you
                         {'\n'}
                         Log in instead
                     </Text>

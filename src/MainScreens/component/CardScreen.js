@@ -1,9 +1,17 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image, FlatList, TouchableHighlight} from 'react-native';
+import {Text, View, StyleSheet, Image, FlatList, TouchableHighlight,TouchableOpacity} from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import {withNavigation} from 'react-navigation'
+import * as firebase from 'firebase';
 
-
+const Arrayimages = {
+    Image1: require('../../../assets/like.png'),
+    Image2: require('../../../assets/int_Likes.png'),
+    Image3: require('../../../assets/book.png'),
+    Image4: require('../../../assets/bookmark.png'),
+    };
+let sum=0;
+let sum2=0;
 class HeaderUserView extends React.Component {
     render() {
         return (
@@ -24,6 +32,45 @@ class HeaderUserView extends React.Component {
 
 
 class HeaderImageView extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            likes:0,
+            saved:0,
+        };
+    }
+    segrantClicked = (index) => {
+        this.setState({
+            activeIndex: index,
+        })
+    }
+    segrantClicked1 = (index) => {
+        this.setState({
+            saveindex:index,
+        })
+    }
+     
+  /*  add = () => {
+        let likes
+        let id=firebase.auth().currentUser.uid;
+        if(this.state.activeIndex==0){
+            likes=+likes;
+       }
+       firebase.database().ref('recipes/').push({
+        likes:{likes,id}
+        
+    },
+    function (error) {
+        if (error) {
+            Alert.alert("Failed adding: Message: " + error)
+        }
+        
+    });
+    }
+    componentWillMount(){
+        this.add();
+    }*/
+
     render() {
         return(
             <View>
@@ -42,16 +89,18 @@ class HeaderImageView extends React.Component {
             </View>
             <View style={{flex:1,flexDirection:'row',marginTop:20,marginLeft:20,justifyContent: 'space-between',alignItems:'flex-start',marginBottom:-20}}>
                         <View style={{flex:1,flexDirection:'column',justifyContent: 'space-between',}}>
-                           <TouchableHighlight>
-                              <Image style={styles.inputIcon} source={require('../../../assets/like.png')}/> 
-                           </TouchableHighlight>
-                           <Text style={{fontSize:20}}>3</Text>
+                           <TouchableOpacity
+                           onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}sum={sum}>
+                            <Image  style={styles.inputIcon} source={this.state.activeIndex == 0 ? Arrayimages.Image1 : Arrayimages.Image2}/>
+                           </TouchableOpacity>
+                           <Text style={{fontSize:20}}> {sum++} </Text>
                            </View>
                            <View style={{flex:5,flexDirection:'column',justifyContent: 'space-between'}}>
-                         <TouchableHighlight>
-                             <Image style={styles.inputIcon} source={require('../../../assets/book.png')}/> 
-                         </TouchableHighlight>
-                         <Text style={{fontSize:20}}>10</Text>
+                           <TouchableOpacity
+                           onPress={() => this.segrantClicked1(2)} active={this.state.saveindex == 2} >
+                            <Image  style={styles.inputIcon} source={this.state.saveindex == 2 ? Arrayimages.Image4 : Arrayimages.Image3}/>
+                           </TouchableOpacity>
+                         
                     </View>
                 </View>
         </View>
@@ -84,9 +133,6 @@ class HeaderTextView extends React.Component {
 }
 
 class CardScreen extends React.Component {
-    constructor(props){
-        super(props)
-    }
     render() {
         return (
             <View style={styles.container}>
@@ -192,8 +238,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     inputIcon: {
-        width: 30,
-        height: 30,
+        width: 40,
+        height: 40,
         marginLeft: -10,
         justifyContent: 'center',
         marginTop:-18,

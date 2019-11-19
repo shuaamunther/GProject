@@ -29,19 +29,17 @@ const ITEMS_KEY = [
     'item3',
     'item4',
 ]
-const IMAGES_CHECKED = [
-    require('../../assets/sweet.png'),
-    require('../../assets/breakfast.png'),
-    require('../../assets/veg.png'),
-    require('../../assets/lunch.png'),
-]
-const IMAGES_UNCHECKED = [
-    require('../../assets/sweet1.png'),
-    require('../../assets/breakfast1.png'),
-    require('../../assets/veg1.png'),
-    require('../../assets/lunch1.png'),
-]
-
+const Arrayimages = {
+    Image1: require('../../assets/sweet1.png'),
+    Image2: require('../../assets/breakfast1.png'),
+    Image3: require('../../assets/veg1.png'),
+    Image4: require('../../assets/lunch1.png'),
+    Image5: require('../../assets/sweet.png'),
+    Image6: require('../../assets/breakfast.png'),
+    Image7: require('../../assets/veg.png'),
+    Image8: require('../../assets/lunch.png'),
+    };
+const sum=0;
 class LogoTitle extends React.Component {
     render() {
         return (
@@ -90,16 +88,23 @@ class AddRecipes extends React.Component {
             carbs: '',
             isLoading: false,
             avatarSource: null,
+            type:'sweet,breakfast,salt,lunch' ,
             tags: {
                 tag: '',
                 tagsArray: []
               },
-              tagsColor: mainColor,
-              tagsText: '#fff',
-        };
-        
+            tagsColor: mainColor,
+            tagsText: '#fff',
+            activeindex:0,                     
+        };  
     }
 
+    segrantClicked = (index) => {
+        this.setState({
+            activeIndex: index
+        })
+    }
+  
     updateTagState = (state) => {
         this.setState({
           tags: state
@@ -153,14 +158,28 @@ class AddRecipes extends React.Component {
         let protein = this.state.protein
         let carbs = this.state.carbs
         let avatarSource = this.state.avatarSource
+        let type
+        if(this.state.activeIndex==0){
+             type='sweet';
+        }
+        else if(this.state.activeIndex==1){
+             type='breakfast';
+        }
+        else if(this.state.activeIndex==2){
+             type='salat';
+        }
+        else if(this.state.activeIndex==3){
+             type='lunch';
+        }
 
         if (title == '' || time === '' || ingredients === '' || steps === '') {
             alert('please fill all fields')
             return null
         } else {
-            this.setState({isLoading: true})
+            
             firebase.database().ref('recipes/').push({
                     title: title,
+                    type:type,
                     ingredients:ingredients,
                     steps: steps,
                     time: time,
@@ -181,7 +200,7 @@ class AddRecipes extends React.Component {
                     
                 });
         }
-        
+        this.setState({isLoading: true})
         const resetAction = StackActions.reset({
             index: 0,
               actions: [NavigationActions.navigate({ routeName: 'Main' })],
@@ -193,24 +212,22 @@ class AddRecipes extends React.Component {
     convet =(steps) => {
         let i=0
         for( i=0;i< steps.size;i++){
-            if(steps === '\n')
-            {
-               this.setState.Arraysteps[i]=steps
+           // if(steps[i] != '\n')
+           // {
+               this.setState.Arraysteps=steps
                
-            }
+           // }
         }
     }
 
     renderImage = (index) => {
-        const itemKey = ITEMS_KEY[index]
-        let output = this.state[itemKey] ? IMAGES_CHECKED[index] : IMAGES_UNCHECKED[index];
-        
-        return <Image style={{width: 30, height: 30}} source={output}/>
+        return <Image style={{width: 20, height: 20}} source={this.state.route.iconSelected}/>;
     }
 
     _renderItem = (item) => {
    //     console.log('_renderItem: ')
-     //   console.log(item);
+      // console.log(item.item
+       // );
         let itemKey = item.item
         
 
@@ -231,8 +248,8 @@ class AddRecipes extends React.Component {
       }
 
     render() {
-       console.log('tags',this.state.tags.tagsArray)
-       console.log('type',this.state.type)
+      // console.log('tags',this.state.tags.tagsArray)
+       console.log('type',this.state.steps)
         return (
             <ScrollView style={styles.scrollView}>
                 <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
@@ -271,12 +288,23 @@ class AddRecipes extends React.Component {
                     alignItems: 'center',
                     marginLeft: 10
                 }}>
-                    <View style={{flex: 5}}>
-                        <FlatList data={ITEMS_KEY}
-                                  renderItem={this._renderItem}
-                                  keyExtractor={item => item}
-                                 {...this.setState.type=this.item}
-                                  numColumns={4}/>
+                    <View style={{flex: 1,marginLeft: 10,flexDirection: 'row',justifyContent: 'space-around',}}>
+                    <TouchableOpacity
+                        onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}>
+                        <Image  style={styles.inputIcon} source={this.state.activeIndex == 0 ? Arrayimages.Image5 : Arrayimages.Image1}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.segrantClicked(1)} active={this.state.activeIndex == 1}>
+                        <Image  style={styles.inputIcon} source={this.state.activeIndex == 1 ? Arrayimages.Image6 : Arrayimages.Image2}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.segrantClicked(2)} active={this.state.activeIndex == 2}>
+                        <Image  style={styles.inputIcon} source={this.state.activeIndex == 2 ? Arrayimages.Image7 : Arrayimages.Image3}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.segrantClicked(3)} active={this.state.activeIndex == 3}>
+                        <Image  style={styles.inputIcon} source={this.state.activeIndex == 3 ? Arrayimages.Image8 : Arrayimages.Image4}/>
+                    </TouchableOpacity>
                     </View>
 
                 </View>
@@ -322,7 +350,7 @@ class AddRecipes extends React.Component {
                                underlineColorAndroid='transparent'
                                onChangeText={(time) => this.setState({time})}
                     />
-                    <FlatList  data={[{name: 'John'}, {name: 'Paul'}]}/>
+                    
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -491,9 +519,9 @@ const styles = StyleSheet.create({
         color: "#00b5ec",
     },
     inputIcon: {
-        width: 50,
-        height: 50,
-        marginLeft: 15,
+        width: 40,
+        height: 40,
+        marginLeft: -15,
         justifyContent: 'center'
     },
     saveButton: {
