@@ -19,6 +19,7 @@ import SearchScreen from './src/MainScreens/SearchScreen';
 import DataScreen from './src/MainScreens/component/DataScreen';
 import Test from './src/Test';
 import AddRecipes from './src/MainScreens/AddRecipes';
+import RecipeScreen from './src/MainScreens/RecipeScreen';
 import PickingPicture from './src/PickingPicture'
 import FirstScreen from './src/FirstScreen'
 import * as firebase from 'firebase';
@@ -71,6 +72,9 @@ const AppNavigator = createStackNavigator({
   Main: {
     screen: FeedScreen
   },
+  Recipe: {
+    screen: RecipeScreen
+  },
   Welcome: {
     screen: WelcomeScreen
   },
@@ -107,7 +111,7 @@ const AppNavigator = createStackNavigator({
   {screen:FirstScreen}
 },
 {
-  initialRouteName: "Welcome3"
+  initialRouteName: "Recipe"
 })
 const AppContainer = createAppContainer(AppNavigator);
 

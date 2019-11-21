@@ -30,7 +30,6 @@ class HeaderUserView extends React.Component {
     }
 }
 
-
 class HeaderImageView extends React.Component {
     constructor(props){
         super(props)
@@ -87,22 +86,7 @@ class HeaderImageView extends React.Component {
                 {this.props.rate}
             </Text>
             </View>
-            <View style={{flex:1,flexDirection:'row',marginTop:20,marginLeft:20,justifyContent: 'space-between',alignItems:'flex-start',marginBottom:-20}}>
-                        <View style={{flex:1,flexDirection:'column',justifyContent: 'space-between',}}>
-                           <TouchableOpacity
-                           onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}sum={sum}>
-                            <Image  style={styles.inputIcon} source={this.state.activeIndex == 0 ? Arrayimages.Image1 : Arrayimages.Image2}/>
-                           </TouchableOpacity>
-                           <Text style={{fontSize:20}}> {sum++} </Text>
-                           </View>
-                           <View style={{flex:5,flexDirection:'column',justifyContent: 'space-between'}}>
-                           <TouchableOpacity
-                           onPress={() => this.segrantClicked1(2)} active={this.state.saveindex == 2} >
-                            <Image  style={styles.inputIcon} source={this.state.saveindex == 2 ? Arrayimages.Image4 : Arrayimages.Image3}/>
-                           </TouchableOpacity>
-                         
-                    </View>
-                </View>
+          
         </View>
         )
     }

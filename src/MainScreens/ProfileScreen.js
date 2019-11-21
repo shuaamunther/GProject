@@ -48,7 +48,7 @@ class HeaderImageView extends React.Component {
                                 style={this.props.isSameUser == true ? {display: 'none'} : {display: 'flex'}}
                                 onPress={() => {}}>
                                 <View style={[styles.buttonFollow]}>
-                                    <Image source={require('../../assets/camera.png')}
+                                    <Image source={require('../../assets/add.png')}
                                            style={{width: 18, height: 18}}/>
                                     <Text style={{marginLeft: 8, marginRight: 8, color: "#fff", fontSize: 16}}>Follow</Text>
                                 </View>

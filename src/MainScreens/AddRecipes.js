@@ -39,7 +39,7 @@ const Arrayimages = {
     Image7: require('../../assets/veg.png'),
     Image8: require('../../assets/lunch.png'),
     };
-const sum=0;
+
 class LogoTitle extends React.Component {
     render() {
         return (
@@ -50,7 +50,6 @@ class LogoTitle extends React.Component {
 }
 
 class AddRecipes extends React.Component {
-
     static navigationOptions = {
         headerTitle: 'Add Recipes',
         headerRight: () => (
@@ -62,14 +61,12 @@ class AddRecipes extends React.Component {
     };
 
     handleCheckboxChange = event => this.setState({checked: event.target.checked})
-
     constructor(props) {
         super(props);
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
         ITEMS_KEY.forEach((key) => {
             this.state = {[key]: false}
         })
-        
         this.state = {
             yes: false,
             No: false,
@@ -132,13 +129,13 @@ class AddRecipes extends React.Component {
             console.log('User tapped custom button: ', response.customButton);
           } else {
             let source = {uri: response.uri};
-             console.log(response.uri)
+             console.log('uri',response.uri)
             // You can also display the image using data:
             // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                this.uploading(response.uri)
             this.setState({
               avatarSource: source,
             });
+            this.uploading(response.uri)
           }
         });
       }
@@ -196,8 +193,7 @@ class AddRecipes extends React.Component {
                 function (error) {
                     if (error) {
                         Alert.alert("Failed adding: Message: " + error)
-                    }
-                    
+                    }   
                 });
         }
         this.setState({isLoading: true})
@@ -206,7 +202,6 @@ class AddRecipes extends React.Component {
               actions: [NavigationActions.navigate({ routeName: 'Main' })],
           });
            this.props.navigation.dispatch(resetAction);
-           
     }
 
     convet =(steps) => {
@@ -215,7 +210,6 @@ class AddRecipes extends React.Component {
            // if(steps[i] != '\n')
            // {
                this.setState.Arraysteps=steps
-               
            // }
         }
     }
@@ -229,8 +223,6 @@ class AddRecipes extends React.Component {
       // console.log(item.item
        // );
         let itemKey = item.item
-        
-
         return (
             <TouchableOpacity
                 style={styles.checkboxButton}
@@ -249,7 +241,7 @@ class AddRecipes extends React.Component {
 
     render() {
       // console.log('tags',this.state.tags.tagsArray)
-       console.log('type',this.state.steps)
+       //console.log('type',this.state.steps)
         return (
             <ScrollView style={styles.scrollView}>
                 <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
@@ -286,8 +278,8 @@ class AddRecipes extends React.Component {
                     width: 335,
                     paddingLeft: 18,
                     alignItems: 'center',
-                    marginLeft: 10
-                }}>
+                    marginLeft: 10}}
+                >
                     <View style={{flex: 1,marginLeft: 10,flexDirection: 'row',justifyContent: 'space-around',}}>
                     <TouchableOpacity
                         onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}>
@@ -306,7 +298,6 @@ class AddRecipes extends React.Component {
                         <Image  style={styles.inputIcon} source={this.state.activeIndex == 3 ? Arrayimages.Image8 : Arrayimages.Image4}/>
                     </TouchableOpacity>
                     </View>
-
                 </View>
                 <View style={{
                     paddingLeft: 14,
@@ -320,17 +311,16 @@ class AddRecipes extends React.Component {
 
                 <View style={{}}>
                 <TagInput style={{ minWidth: 330,
-                           height: 40,
-                           margin: 4,
-                           borderRadius: 20,
-                           backgroundColor: '#E3F2FD',
-                           marginLeft: 3,}}
-                         updateState={this.updateTagState}
-                         placeholder="  ingredients..."  
-                         onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
-                         onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
-                         tags={this.state.tags}
-                        
+                                   height: 40,
+                                   margin: 4,
+                                   borderRadius: 20,
+                                   backgroundColor: '#E3F2FD',
+                                   marginLeft: 3,}}
+                           updateState={this.updateTagState}
+                           placeholder="  ingredients..."  
+                           onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
+                           onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
+                           tags={this.state.tags}
                 />
                 </View>
 
@@ -369,9 +359,7 @@ class AddRecipes extends React.Component {
                     height: 150,
                     width: 335,
                     marginLeft: 10,
-                    backgroundColor: '#E3F2FD'
-                }}>
-
+                    backgroundColor: '#E3F2FD' }}>
                     <TextInput style={{hight:159, marginLeft: 16, borderBottomColor: '#FFDE03',  flex: 1,}}
                                placeholder="steps "
                                underlineColorAndroid='transparent'
