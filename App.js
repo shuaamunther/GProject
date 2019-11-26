@@ -15,6 +15,7 @@ import WelcomeScreen2 from './src/WelcomeScreens/WelcomeScreen2';
 import WelcomeScreen3 from './src/WelcomeScreens/WelcomeScreen3';
 import WelcomeScreen4 from './src/WelcomeScreens/WelcomeScreen4';
 import CardScreen from './src/MainScreens/component/CardScreen';
+import UserCard from './src/MainScreens/component/UsersCard';
 import SearchScreen from './src/MainScreens/SearchScreen';
 import DataScreen from './src/MainScreens/component/DataScreen';
 import Test from './src/Test';
@@ -38,7 +39,7 @@ export default class App extends React.Component {
         measurementId: "G-Y004ZTSSHX"
     };
 
-   // if (!firebase.app.length) {
+  //  if (!firebase.app.length) {
       firebase.initializeApp(firebaseConfig);
   // }
   }
@@ -109,9 +110,11 @@ const AppNavigator = createStackNavigator({
   {screen:PickingPicture},
   First:
   {screen:FirstScreen},
+  Users:
+  {screen:UserCard},
 },
 {
-  initialRouteName: "Search"
+  initialRouteName: "First"
 })
 const AppContainer = createAppContainer(AppNavigator);
 

@@ -1,7 +1,6 @@
 import React,{Component} from 'react'
 import {
     StyleSheet, Text, View, TextInput,
-    Button,
     TouchableHighlight,
     Image,
     ScrollView,
@@ -15,6 +14,7 @@ import {
     RefreshControl,
 } from 'react-native';
 import {createAppContainer} from 'react-navigation';
+import {Card, Button} from 'react-native-elements';
 import DrawerActions from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import ImagePicker from 'react-native-image-picker';
@@ -28,7 +28,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import ProfileScreen from './ProfileScreen';
 import SearchScreen from "./SearchScreen";
 import ModalWrapper from 'react-native-modal-wrapper'
-import MenuImage from "./component/SideIcone"
+import MenuImage from "./component/SideIcone";
+import Modal from "react-native-modal";
 
 
 class LogoTitle extends React.Component {
@@ -40,6 +41,8 @@ class LogoTitle extends React.Component {
     }
 }
 
+
+
 function wait(timeout) {
     return new Promise(resolve => {
       setTimeout(resolve, timeout);
@@ -47,6 +50,23 @@ function wait(timeout) {
   }
 
 export default class FeedScreen extends React.Component {
+    
+    constructor(props) {
+        super(props)
+        this.state = {
+           loading:false,
+           visibleModal: null,
+           page:1,
+           seed:1,
+           error:null,
+           refreshing:false,
+
+        }
+    }
+    openModal = () => {
+        this.setState({ visibleModal: 'bottom'});
+        console.log('hoiiiiiiiiiiiii')
+    };
     static navigationOptions = ({navigation}) => {
         return {
             headerTitle: () => <LogoTitle/>,
@@ -56,33 +76,39 @@ export default class FeedScreen extends React.Component {
                     <Image
                         source={require('../../assets/deuser.png')}
                         style={{width: 32, height: 32, borderRadius: 32 / 2}}
-                    />
-                    
+                    />   
                 </TouchableHighlight>
             ),
-            headerLeft: (
-                <MenuImage
-                  onPress={() => { 
-                  }}
-                />
+           headerLeft: () =>(
+               <View>
+                <TouchableOpacity onPress={() =>this.openModal}>
+                    <Image source={require('../../assets/menu.png')}
+                    style={{width: 28, height: 28,marginLeft:5}}/>
+                </TouchableOpacity>
+                </View>
+           
               )
         };
     }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-           loading:false,
-           page:1,
-           seed:1,
-           error:null,
-           refreshing:false,
-
-        }
-    }
     
     componentDidMount() {
         this.getUserData()
+        
+        
+    }
+    logout = () => {
+        firebase.auth().signOut()
+        .then(function() {
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Login' })],
+             });
+             this.props.navigation.dispatch(resetAction);
+        }.bind(this))
+        .catch(function(error) {
+            console.log("logout failed: ", error)
+        });
     }
 
     getUserData = async () => {
@@ -96,6 +122,11 @@ export default class FeedScreen extends React.Component {
         }
     }
 
+    openModal = () => {
+        this.setState({ visibleModal: 'bottom'});
+        console.log('hoiiiiiiiiiiiii')
+    };
+
     render() {
         return (
             <View style={{flex:1, marginTop:10, marginBottom: 20}} >
@@ -105,6 +136,29 @@ export default class FeedScreen extends React.Component {
                     <Image source={require('../../assets/add.png')}
                     style={{width: 32, height: 32}}/>
                 </TouchableHighlight>
+                <View style={{position: 'absolute', top:-38,marginLeft:4 }}>
+                    <TouchableHighlight onPress={this.openModal}>
+                        <Image source={require('../../assets/edit.png')}
+                        style={{width: 28, height: 28}}/>
+                    </TouchableHighlight>
+                </View>
+                <Modal
+                    
+                    isVisible={this.state.visibleModal === 'bottom'}
+                    onSwipeComplete={() => this.setState({visibleModal: null})}
+                    swipeDirection={['up', 'left', 'right', 'down']}
+                    style={styles.bottomModal}>
+                    <View style={styles.modelContent}>
+                        <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.props.navigation.navigate('Search')}}/>
+                          <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.props.navigation.navigate('Main')}}/>  
+                           <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.logout()}}/>          
+                        <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                    </View>
+                </Modal>
             </View>
             
         );
@@ -231,5 +285,17 @@ const styles = StyleSheet.create({
         shadowRadius: 5.46,
 
         elevation: 9,
-    }
+    },
+    bottomModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    modelContent: {
+        backgroundColor: 'white',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+      },
 });

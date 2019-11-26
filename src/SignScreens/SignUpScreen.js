@@ -72,6 +72,8 @@ export default class SignUpScreen extends React.Component {
                             fullname: fullname,
                             email: email,
                             age: age,
+                            followers:'',
+                            follwing:'',
                         },
                         function (error) {
                             if (error) {

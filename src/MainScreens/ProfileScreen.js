@@ -8,13 +8,17 @@ import {Card, Button} from 'react-native-elements';
 import * as firebase from 'firebase';
 import Modal from "react-native-modal";
 import CardListScreen from "./component/CardListScreen";
-import ModalWrapper from 'react-native-modal-wrapper'
+import ModalWrapper from 'react-native-modal-wrapper';
 
 
 class HeaderImageView extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {visibleModal: null}
+        this.state = {
+            visibleModal: null,
+            followers:'',
+            followeing:'',
+        }
     }
 
     openModal = () => {
@@ -33,9 +37,25 @@ class HeaderImageView extends React.Component {
         .catch(function(error) {
             console.log("logout failed: ", error)
         });
-
-
     }
+
+    addFollowing(user_id){
+      /* let iduser=firebase.auth().currentUser.uid
+        let follower=['firebase.auth().currentUser.uid']
+        console.log('hi')
+        let users = []
+        firebase.database().ref().child('users').orderByChild('uid').startAt(user_id).on("value", function (snapshot) {
+            snapshot.forEach(function (item) 
+                   // let userName = user.child('fullname').val();
+                    .set({
+                        followers:firebase.auth().currentUser.uid
+                    })
+                )
+            this.setState({
+                users:users
+            })
+        }.bind(this))*/
+    };
 
     render() {
         return (
@@ -47,7 +67,7 @@ class HeaderImageView extends React.Component {
                             <Text style={[styles.name,{color:'black'}]}>{this.props.username}</Text>
                             <TouchableHighlight
                                 style={this.props.isSameUser == true ? {display: 'none'} : {display: 'flex'}}
-                                onPress={() => {}}>
+                                onPress={() => {this.addFollowing()}}>
                                 <View style={[styles.buttonFollow]}>
                                     <Image source={require('../../assets/add.png')}
                                            style={{width: 18, height: 18}}/>
@@ -86,8 +106,7 @@ class Following extends React.Component {
         super(props)
         this.state = {following: 100, followers: 240, posts: 45}
     }
-
-    render() {
+        render() {
         return (
             <View style={styles.headerFollowing}>
                 <TouchableOpacity>

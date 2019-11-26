@@ -3,16 +3,65 @@ import {
     StyleSheet, Platform, Image, Text, View, TouchableOpacity, TabView,
     TextInput,
     ScrollView,
+    FlatList,
+    TouchableHighlight,
+    ActivityIndicator
 } from 'react-native'
 import CardListScreen from './component/CardListScreen';
 import * as firebase from 'firebase';
 import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
+import { Card, Button,List, ListItem } from 'react-native-elements';
+import Modal from "react-native-modal";
 
+class HeaderUserView extends React.Component {
+    openModal = () => {
+        this.setState({ visibleModal: 'bottom'});
+    };
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            visibleModal: null,
+            
+        }
+    }
+    render() {
+        return (
+            <View>
+            <View style={{position: 'absolute', top:8 ,marginLeft:5,direction:'row'}}>
+            <TouchableOpacity onPress={() => this.openModal}>
+                    <Image source={require('../../assets/menu.png')}
+                    style={{width: 28, height: 28}}/>
+                </TouchableOpacity>
+                <Text style={{marginLeft:50,marginTop:-25,fontSize:20}}>Search</Text>
+            </View>
+            <Modal
+                animationType="slide"
+                isVisible={this.state.visibleModal === 'bottom'}
+                onSwipeComplete={() => this.setState({visibleModal: null})}
+                swipeDirection={['up', 'left', 'right', 'down']}
+                style={styles.bottomModal}>
+                <View style={styles.modelContent}>
+                    <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                            onPress={() => {this.props.navigation.navigate('Search')}}/>
+                      <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                            onPress={() => {this.props.navigation.navigate('Main')}}/>  
+                       <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                            onPress={() => {this.logout()}}/>          
+                    <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
+                    <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                </View>
+            </Modal>
+            </View>
+
+        )
+    }
+}
 
 export default class SearchScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Search',
-    };
+    static navigationOptions ={
+        header:null
+       };
     constructor(props) {
         super(props)
 
@@ -21,12 +70,14 @@ export default class SearchScreen extends React.Component {
             UserSearch: '',
             FilterSearch: '',
             recipe: [],
+            users:[],
+            source:'',
+            visibleModal: null,
         }
     }
 
     updateSearch = (search) => {
         this.setState({search});
-
         let recipe = []
         firebase.database().ref().child('recipes').orderByChild('title').startAt(search).on("value", function (snapshot) {
             snapshot.forEach(function (item) {
@@ -49,19 +100,42 @@ export default class SearchScreen extends React.Component {
         }.bind(this))
     };
 
+   
+
+    renderSeparator = () => {
+        return (
+          <View
+            style={{
+              height: 1,
+              width: "86%",
+              backgroundColor: "#CED0CE",
+              marginLeft: "14%"
+            }}
+          >
+              <Image source={require('../../assets/logouser.png')}/>
+              </View>
+          
+        );
+      };
+    componentWillMount(){
+        this.updateSearch();
+            this.props.openModal
+            
+    }
     updateSearch2 = (UserSearch) => {
         this.setState({UserSearch});
-
-        let recipe = []
-        firebase.database().ref().child('users').orderByChild('fullname').startAt(search).on("value", function (snapshot) {
-                    let userName = user.child('fullname').val();
-                    recipe.push({
-                        fullname:fullname
+        
+        let users = []
+        firebase.database().ref().child('users').orderByChild('fullname').startAt(UserSearch).on("value", function (snapshot) {
+            snapshot.forEach(function (item) {
+                   // let userName = user.child('fullname').val();
+                    users.push({
+                        fullname: item.val().fullname,
+                        user_id:item.key,
                     })
-               
-
+                })
             this.setState({
-                recipe: recipe
+                users:users
             })
         }.bind(this))
     };
@@ -98,16 +172,29 @@ export default class SearchScreen extends React.Component {
                     <View style={styles.inputContainer}>
                         <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
                         <TextInput style={styles.inputs}
-                                   placeholder="Search..."
+                                   placeholder="Search ..."
                                    autoCapitalize="none"
                                    underlineColorAndroid='transparent'
-                                   onChangeText={(UserSearch) => this.updateSearch(UserSearch)}
+                                   onChangeText={(UserSearch) => this.updateSearch2(UserSearch)}
                                    value={this.state.UserSearch}
                                    />     
                     </View>
                 </View>
-                <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
-            </ScrollView>
+                <ActivityIndicator size="large" color="#00b5ec" style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
+                 <FlatList 
+                          data={this.state.users}
+                          renderItem={({ item }) => (
+                   <ListItem onPress={() => {this.props.navigation.navigate('Profile', {user_id: `${item.user_id}`})}}
+                             roundAvatar
+                             title={`${item.fullname} `}
+                             disabled={this.state.isLoading}
+                             ItemSeparatorComponent={this.renderSeparator}
+                             leftAvatar={{ source:  require('../../assets/logouser.png')  }}
+                             rightAvatar={{ source:  require('../../assets/left.png')  }}
+                   />
+                          )}         
+               />    
+            </ScrollView> 
             )
         }
         if (this.state.activeIndex == 2) {
@@ -130,12 +217,31 @@ export default class SearchScreen extends React.Component {
             )
         }
     }
+    openModal = () => {
+        this.setState({ visibleModal: 'bottom'});
+    };
+   
 
     render() {
-        console.log(this.state.search2)
+   
+        logout = () => {
+            firebase.auth().signOut()
+            .then(function() {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                 });
+                 this.props.navigation.dispatch(resetAction);
+            }.bind(this))
+            .catch(function(error) {
+                console.log("logout failed: ", error)
+            });
+        }
+        
+        console.log(this.state.users)
         return (
-            <ScrollView>
-              
+            <ScrollView>   
+                <HeaderUserView/>         
                 <View style={styles.previewContainer}>
                 <View style={styles.Preview}>
                     <TouchableOpacity
@@ -168,6 +274,29 @@ export default class SearchScreen extends React.Component {
                 </View>
                 {this.renderSection()}
             </View>
+            <View style={{position: 'absolute', top:8,marginLeft:4 }}>
+                    <TouchableHighlight onPress={this.openModal}>
+                        <Image source={require('../../assets/menu.png')}
+                        style={{width: 28, height: 28}}/>
+                    </TouchableHighlight>
+                </View>
+
+                <Modal
+                    isVisible={this.state.visibleModal === 'bottom'}
+                    onSwipeComplete={() => this.setState({visibleModal: null})}
+                    swipeDirection={['up', 'left', 'right', 'down']}
+                    style={styles.bottomModal}>
+                    <View style={styles.modelContent}>
+                        <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.props.navigation.navigate('Search')}}/>
+                          <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.props.navigation.navigate('Main')}}/>  
+                           <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.logout()}}/>          
+                        <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                    </View>
+                </Modal>
                
             </ScrollView>
         );
@@ -299,7 +428,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     previewContainer: {
-        paddingTop: 10,
+        paddingTop: 50,
+        borderTopWidth:2
     },
     Preview: {
         justifyContent: 'space-around',
