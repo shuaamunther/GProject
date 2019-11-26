@@ -9,7 +9,6 @@ import * as firebase from 'firebase';
 import Modal from "react-native-modal";
 import CardListScreen from "./component/CardListScreen";
 
-
 class HeaderImageView extends React.Component {
     constructor(props) {
         super(props)

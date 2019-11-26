@@ -8,6 +8,7 @@ import {Card, Button} from 'react-native-elements';
 import * as firebase from 'firebase';
 import Modal from "react-native-modal";
 import CardListScreen from "./component/CardListScreen";
+import ModalWrapper from 'react-native-modal-wrapper'
 
 
 class HeaderImageView extends React.Component {

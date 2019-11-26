@@ -15,6 +15,8 @@ import {
     RefreshControl,
 } from 'react-native';
 import {createAppContainer} from 'react-navigation';
+import DrawerActions from 'react-navigation';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
@@ -25,6 +27,9 @@ import * as Constants from './../utils/Constants'
 import AsyncStorage from '@react-native-community/async-storage';
 import ProfileScreen from './ProfileScreen';
 import SearchScreen from "./SearchScreen";
+import ModalWrapper from 'react-native-modal-wrapper'
+import MenuImage from "./component/SideIcone"
+
 
 class LogoTitle extends React.Component {
     render() {
@@ -55,6 +60,12 @@ export default class FeedScreen extends React.Component {
                     
                 </TouchableHighlight>
             ),
+            headerLeft: (
+                <MenuImage
+                  onPress={() => { 
+                  }}
+                />
+              )
         };
     }
 
@@ -99,13 +110,30 @@ export default class FeedScreen extends React.Component {
         );
    }
 }
-
-const TabNavigator = createBottomTabNavigator({
-    Home: FeedScreen,
-    Profile: ProfileScreen,
-    Search:SearchScreen,
-  });
-const TabContainer = createAppContainer(TabNavigator);  
+const DrawerNavigatorExample = createDrawerNavigator({
+    //Drawer Optons and indexing
+    Home: {
+      //Title
+      screen: FeedScreen,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 2',
+      },
+    },
+    Profile: {
+      //Title
+      screen: ProfileScreen,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 2',
+      },
+    },
+    Search: {
+      //Title
+      screen: SearchScreen,
+      navigationOptions: {
+        drawerLabel: 'Demo Screen 3',
+      },
+    },
+  }); 
 
 const styles = StyleSheet.create({
     container: {

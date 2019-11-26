@@ -21,7 +21,7 @@ import Test from './src/Test';
 import AddRecipes from './src/MainScreens/AddRecipes';
 import RecipeScreen from './src/MainScreens/RecipeScreen';
 import PickingPicture from './src/PickingPicture'
-import FirstScreen from './src/FirstScreen'
+import FirstScreen from './src/FirstScreen';
 import * as firebase from 'firebase';
 
 export default class App extends React.Component {
@@ -108,10 +108,10 @@ const AppNavigator = createStackNavigator({
   Pic:
   {screen:PickingPicture},
   First:
-  {screen:FirstScreen}
+  {screen:FirstScreen},
 },
 {
-  initialRouteName: "Recipe"
+  initialRouteName: "Search"
 })
 const AppContainer = createAppContainer(AppNavigator);
 
