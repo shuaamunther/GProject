@@ -124,7 +124,6 @@ export default class FeedScreen extends React.Component {
 
     openModal = () => {
         this.setState({ visibleModal: 'bottom'});
-        console.log('hoiiiiiiiiiiiii')
     };
 
     render() {
@@ -142,8 +141,7 @@ export default class FeedScreen extends React.Component {
                         style={{width: 28, height: 28}}/>
                     </TouchableHighlight>
                 </View>
-                <Modal
-                    
+                <Modal 
                     isVisible={this.state.visibleModal === 'bottom'}
                     onSwipeComplete={() => this.setState({visibleModal: null})}
                     swipeDirection={['up', 'left', 'right', 'down']}
