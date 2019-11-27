@@ -90,6 +90,8 @@ class HeaderImageView extends React.Component {
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
                         <Button title="Edit Profile" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                        <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.props.navigation.navigate('Search')}}/>
                         <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {this.logout()}}/>
                         <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
