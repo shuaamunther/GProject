@@ -287,10 +287,19 @@ export default class SearchScreen extends React.Component {
                     swipeDirection={['up', 'left', 'right', 'down']}
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
+                      <View style={{flexDirection: 'row'}}>
+                        <Image
+                          source={require('../../assets/logouser.png')}
+                          style={{width: 100, height: 100, borderRadius: 32 / 2}}
+                        />
+                        <Text style={{fontSize:20,marginLeft:12,marginTop:45}}>Shuaa5</Text>
+                        </View>                        
+                        <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.props.navigation.navigate('Main')}}/>
                         <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Search')}}/>
-                          <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Main')}}/>  
+                                onPress={() => {this.props.navigation.navigate('Search')}}/>  
+                            <Button title="Profile" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {this.props.navigation.navigate('Profile')}}/>      
                            <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {this.logout()}}/>          
                         <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>

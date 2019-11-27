@@ -106,11 +106,19 @@ class HeaderTextView extends React.Component {
                     </Text>
                 </View>
 
-                <View style = {styles.ViewButton} >
-                <TouchableHighlight style={[styles.buttonContainer,styles.MoreButton]}>
-                        <Text style={styles.MoreText}>More</Text>
-                    </TouchableHighlight>
-                </View>
+            </View>
+        )
+    }
+}
+
+class HeaderMore extends React.Component {
+    render() {
+        return(
+            <View style = {styles.ViewButton} >
+            <TouchableHighlight  onPress={() => {this.props.navigation.navigate('Recipe', {id: this.props.id})}}
+                                 style={[styles.buttonContainer,styles.MoreButton]}>
+                    <Text style={styles.MoreText}>More</Text>
+                </TouchableHighlight>
             </View>
         )
     }
@@ -125,6 +133,7 @@ class CardScreen extends React.Component {
                     <HeaderImageView rate={this.props.cardItem.rate} />
                     <HeaderTextView  title={this.props.cardItem.title}
                                      type={this.props.cardItem.type} />
+                    <HeaderMore navigation={this.props.navigation} id={this.props.cardItem.id}/>                 
                 </Card>
           </View>
         );
@@ -207,6 +216,8 @@ const styles = StyleSheet.create({
     },
     ViewButton: {
         flex: 1,
+        marginTop:-100,
+        marginRight:10,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems:'flex-end',

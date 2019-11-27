@@ -1,13 +1,16 @@
 import React, {Component} from 'react'
 import {
     StyleSheet, Platform, Image, Text, View, TouchableOpacity,
-    ImageBackground, ScrollView, TouchableHighlight,error
+    ImageBackground, ScrollView, TouchableHighlight,error,FlatList
 } from 'react-native'
 import {StackActions, NavigationActions} from 'react-navigation';
 import {Card, Button} from 'react-native-elements';
 import * as firebase from 'firebase';
 import Modal from "react-native-modal";
 import CardListScreen from "./component/CardListScreen";
+import DataScreen from "./component/DataScreen"
+
+
 
 class HeaderImageView extends React.Component {
     constructor(props) {
@@ -20,6 +23,7 @@ class HeaderImageView extends React.Component {
     };
 
     render() {
+    //    let recipeId = String(navigation.getParam('id', ""))
         return (
             <View>
                 <View style={[styles.headerUserView, styles.row]}>
@@ -53,33 +57,54 @@ class HeaderImageView extends React.Component {
 class Following extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {following: 100, followers: 240, posts: 45}
+        this.state = {
+          time : '',
+          difficulty : '',
+          type : '',
+          rate : '',
+          loading : true,
+        }
     }
+    componentDidMount(){
+        const { navigation } = this.props;
+        let recipeId=this.props.id
+      firebase.database().ref('recipes/'+recipeId).once('value').then(function (snapshot) {
+        this.setState({
+            rate : snapshot.val().rate, 
+            time: snapshot.val().time, 
+            type : snapshot.val().type,
+            difficality: snapshot.val().difficality, 
+            loading : false})
+      }.bind(this));
+   }
 
     render() {
+        //const { navigation } = this.props; 
+        let recipeId=this.props.id  
+       console.log('this.props',this.state.difficality)
         return (
             <View style={styles.headerFollowing}>
                 <TouchableOpacity>
                 <Image source={require('../../assets/time.png')}
                         style={{width: 25, height: 25}}/>
-                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>40 min</Text>
+                <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.time}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
                    <Image source={require('../../assets/level.png')}
                         style={{width: 25, height: 25}}/>
-                   <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>easy</Text>
+                <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.difficality}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
                 <Image source={require('../../assets/meal.png')}
                         style={{width: 25, height: 25}}/>
-                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>Sweet</Text>
+                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.type}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
                 <Image source={require('../../assets/rate.png')}
                         style={{width: 25, height: 25}}/>
-                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>4.5</Text>
+                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.rate}</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -92,7 +117,10 @@ class Preview extends React.Component {
         this.state = {
             activeIndex: 0,
             recipe: [],
-            myRecipe: []
+            myRecipe: [],
+            ingredients:'',
+            title:'',
+            description:''
         }
     }
 
@@ -102,28 +130,65 @@ class Preview extends React.Component {
         })
     }
 
-    componentDidMount= () => {
-    }
-
-    showMyRecipe(userId) {
-
-    }
-    showData() {
-      
-    }
+    componentDidMount(){
+        const { navigation } = this.props;
+        let recipeId=this.props.id
+      firebase.database().ref('recipes/'+recipeId).once('value').then(function (snapshot) {
+        this.setState({
+            ingredients : snapshot.val().ingredients, 
+            steps: snapshot.val().steps,  
+            title: snapshot.val().title,
+            description:snapshot.val().description,
+            calories: snapshot.val().calories,
+            fat: snapshot.val().fat, 
+            fiber: snapshot.val().fiber,
+            protein: snapshot.val().protein,
+            reviews : snapshot.val().reviews,
+            loading : false})
+      }.bind(this));
+   }
 
     renderSection = () => {
+        console.log(this.state.ingredients)
         if (this.state.activeIndex == 0) {
             return (
-                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                    <CardListScreen recipe={this.state.myRecipe} navigation={this.props.navigation}/>
-                </View>
+                <View>
+                <Text>{'\n'}</Text>
+                <View style = {{marginTop:-20,}}>
+                <FlatList style={{
+                            marginTop:-20,alignItems:'center',}}
+                        data={this.state.ingredients}
+                        numColumns={1}
+                        keyExtractor={(item, index) => item.id }
+                        renderItem={({item}) =>
+                          <View style={{borderBottomWidth:1,
+                                        alignItems:'center',
+                                        width:2,
+                                        borderRadius: 100,
+                                        borderColor: '#00b5ec',
+                                        alignContent:'center',
+                                        backgroundColor: '#E3F2FD',
+                                        width : '50%'}}>
+                                <Text style={{alignContent:'center',
+                                          marginTop:2,
+                                          fontSize:20,
+                                           fontFamily: 'notoserif',
+                                           color:"#7c8191"}}>
+                                  {item}
+                                </Text>
+                          </View>
+                        }
+                          style = {{backgroundColor : 'white'}}
+                    />
+                    </View>
+                    </View>
+
             )
         }
         if (this.state.activeIndex == 1) {
             return (
-                <View>
-                    <Text>Reviews</Text>
+                <View style={{ }}>
+                    <Text style={{marginTop:5,fontSize:25, fontFamily: 'notoserif',color:"#7c8191"}}>{this.state.steps}</Text>
                 </View>
             )
         }
@@ -135,12 +200,15 @@ class Preview extends React.Component {
             )
         }
     }
-
     render() {
+        
+        const { navigation } = this.props;
+        //let id= navigation.getParam('id', "")
+        //.log('this.props.id',id)
         return (
             <View style={styles.previewContainer}>
-              <Text style={{fontSize:40,marginTop:-10,marginBottom:20,marginLeft:10}}>Pan Cake</Text>
-              <Text style={{fontSize:20,marginTop:-20,marginBottom:8,marginLeft:10,color: '#7c8191'}}>easy sweet</Text>
+              <Text style={{fontSize:40,marginTop:-10,marginBottom:20,marginLeft:10}}>{this.state.title}</Text>
+              <Text style={{fontSize:20,marginTop:-20,marginBottom:20,marginLeft:10,color: '#7c8191'}}>{this.state.description}</Text>
                 <View style={styles.Preview}>
                     <TouchableOpacity
                         style={this.state.activeIndex == 0 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
@@ -181,24 +249,71 @@ export default class RecipeScreen extends React.Component {
     };
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
+            activeIndex: 0,
+            loading : true,
+            title : '',
+            description : '',
+            ingrediants : '',
+            steps : '',
+            calories :'',
+            fiber : '',
+            fat : '',
+            protein : '',
+            reviews : '',
+            rate : ''
         }
     }
 
+   /* componentWillMount(){
+        firebase.database().ref('recipes/'+id).once('value').then(function (snapshot) {
+          this.setState({
+              title : snapshot.val().title,
+              steps: snapshot.val().steps,
+              ingredients: snapshot.val().ingredients,
+              rate : snapshot.val().rate,
+              description: snapshot.val().description,
+              calories: snapshot.val().calories,
+              fat: snapshot.val().fat, 
+              fiber: snapshot.val().fiber,
+              protein: snapshot.val().protein,
+              reviews : snapshot.val().reviews, 
+              loading : false , 
+              activeIndex : 0,
+              showAddReview : true , 
+              //user_review = ''
+            })
+           global.reviews = this.state.reviews;
+           global.addRate = 1;
+           global.addReviewText = '';
+           this.state.reviews.forEach(function(item) {
+               if(item.user_id == global.user_logged_in){
+                   this.state.user_review = item;
+                   this.state.showAddReview = false;
+                   this.forceUpdate()
+               }
+               });
+        }.bind(this));
+        
+    
+      
+    }*/
     componentDidMount(){
-        const { navigation } = this.props;      
+        const { navigation } = this.props; 
+        let id = String(navigation.getParam('id', ""))     
     }
 
     render() {
         const { navigation } = this.props;
-       
+        let id= navigation.getParam('id', "")
+       console.log('hi',id)
         return (
             <ScrollView>
             <View style={{marginBottom: 20}}>
                 <HeaderImageView />
-                <Following />
-                <Preview />
+                <Following id={id} />
+                <Preview id={id}/>
             </View>
             </ScrollView>
         );

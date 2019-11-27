@@ -23,6 +23,8 @@ import AddRecipes from './src/MainScreens/AddRecipes';
 import RecipeScreen from './src/MainScreens/RecipeScreen';
 import PickingPicture from './src/PickingPicture'
 import FirstScreen from './src/FirstScreen';
+//import FlatListDemo from './src/ChatScreens/LoginToChat';
+//import ChatScreen from './src/ChatScreens/ChatScreen';
 import * as firebase from 'firebase';
 
 export default class App extends React.Component {
@@ -112,6 +114,10 @@ const AppNavigator = createStackNavigator({
   {screen:FirstScreen},
   Users:
   {screen:UserCard},
+  //LoginChat:
+  //{screen:FlatListDemo},
+  //Chat:
+ // {screen:ChatScreen},
 },
 {
   initialRouteName: "First"
