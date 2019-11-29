@@ -265,40 +265,7 @@ export default class RecipeScreen extends React.Component {
             rate : ''
         }
     }
-
-   /* componentWillMount(){
-        firebase.database().ref('recipes/'+id).once('value').then(function (snapshot) {
-          this.setState({
-              title : snapshot.val().title,
-              steps: snapshot.val().steps,
-              ingredients: snapshot.val().ingredients,
-              rate : snapshot.val().rate,
-              description: snapshot.val().description,
-              calories: snapshot.val().calories,
-              fat: snapshot.val().fat, 
-              fiber: snapshot.val().fiber,
-              protein: snapshot.val().protein,
-              reviews : snapshot.val().reviews, 
-              loading : false , 
-              activeIndex : 0,
-              showAddReview : true , 
-              //user_review = ''
-            })
-           global.reviews = this.state.reviews;
-           global.addRate = 1;
-           global.addReviewText = '';
-           this.state.reviews.forEach(function(item) {
-               if(item.user_id == global.user_logged_in){
-                   this.state.user_review = item;
-                   this.state.showAddReview = false;
-                   this.forceUpdate()
-               }
-               });
-        }.bind(this));
-        
     
-      
-    }*/
     componentDidMount(){
         const { navigation } = this.props; 
         let id = String(navigation.getParam('id', ""))     

@@ -27,7 +27,7 @@ export default class SignUpScreen extends React.Component {
             email: '',
             password: '',
             age: '',
-            userId:'',
+            userId:'hi',
             myKey: null,
             isLoading: false
         };
@@ -54,7 +54,7 @@ export default class SignUpScreen extends React.Component {
         let email = this.state.email
         let password = this.state.password
         let age = this.state.age
-        let userId = this.state.userId
+       // let userId = this.state.userId
 
         this.setState({isLoading: true})
         if (fullname == '' || email === '' || age === null || password === '') {
@@ -74,18 +74,17 @@ export default class SignUpScreen extends React.Component {
                             age: age,
                             followers:'',
                             follwing:'',
+                            diet:'false',
+                            veg:'false',
+                            allergies:{dairy:'false',egg:'false',gluten:'false',peanut:'false',seafood:'false',sesame:'false',soy:'false',treenut:'false',wheat:'false',sulfite:'false'},
+                            dislikes:{alcohole:'false',avocado:'false',beef:'false',eggplant:'false',mushrooms:'false',pork:'false',onions:'false',suger:'false',olives:'false'},
                         },
                         function (error) {
                             if (error) {
                                 Alert.alert("Failed signup user: Message: " + error)
                             }
                         })
-                    const resetAction = StackActions.reset({
-                      index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'Welcome' })],
-                    });
-                     this.props.navigation.dispatch(resetAction);
-
+    
                 })
                 .catch((error) => {
                     this.errorSignUp(error)
@@ -126,6 +125,14 @@ export default class SignUpScreen extends React.Component {
     saveToken = async (accessToken) => {
         try {
             await AsyncStorage.setItem(Constants.ACCESS_TOKEN, accessToken);
+         //   this.setState({accessToken:this.state.userId})
+            console.log('userid',this.state.userId)
+                const resetAction = StackActions.reset({
+                      index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Welcome' },{user_id: firebase.auth().currentUser.uid})],
+                    });
+                     this.props.navigation.dispatch(resetAction);
+
         } catch (error) {
             console.log("Error saving data" + error);
         }

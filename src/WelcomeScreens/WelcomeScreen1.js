@@ -21,8 +21,18 @@ export default class Welcome extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIndex: -1
+            selectedIndex: -1,
+            diet:'',
+            id:''
         };  
+    }
+    dietInfo(){
+        
+
+    }
+    
+    componentWillMount(){
+        global.user_logged_in=firebase.auth().currentUser.uid
     }
 
     getToken = async () =>{
@@ -38,12 +48,30 @@ export default class Welcome extends React.Component {
 
     updateIndex = (selectedIndex) => {
         this.setState({selectedIndex})
+        let onDiet=this.state.selectedIndex
+        let result
+        if(onDiet == 0)
+        {
+          result='false'
+        }
+        else if(onDiet==1)
+        {
+            result='true'
+        }
+        let id=firebase.auth().currentUser.uid
+        try{
+        firebase.database().ref('users/' +id).child('/diet').set(result)
+         }
+        catch(error){
+            console.log(error)
+        }
     }
 
     render() {
+        console.log('id',firebase.auth().currentUser.uid)
         const buttons = ['YES', 'NO']
         const { selectedIndex } = this.state
-
+        console.log(this.state.selectedIndex)
         return (
             <View style={styles.header}>
                 <View style={styles.WelcomeHeader}>

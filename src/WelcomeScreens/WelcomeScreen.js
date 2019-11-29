@@ -30,20 +30,12 @@ export default class Welcome extends React.Component {
             userId:null,
         };
     }
+    componentDidMount(){
+        console.log('print',firebase.auth().currentUser.uid) 
+    }
+
     render() {
-        getToken = async () =>{
-            try {
-                const value =await AsyncStorage.getItem(Constants.ACCESS_TOKEN);
-                if(value!==null) {
-                   // this.setState({userId: value})
-                    console.log('this',value)
-                }
-            } catch (error) {
-                console.log("Error retrieving data" + error);
-            }
-            return value
-        }
-     //   var value =  getToken()
+       ///console.log('print',firebase.auth().currentUser.uid)
         return (
             <View style={styles.header}>
                 <View style={styles.WelcomeHeader}>

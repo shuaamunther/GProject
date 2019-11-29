@@ -38,6 +38,23 @@ export default class Welcome extends React.Component {
 
     updateIndex = (selectedIndex) => {
         this.setState({selectedIndex})
+        let onDiet=this.state.selectedIndex
+        let result
+        if(onDiet == 0)
+        {
+          result='false'
+        }
+        else if(onDiet==1)
+        {
+            result='true'
+        }
+        let id=firebase.auth().currentUser.uid
+        try{
+        firebase.database().ref('users/' +id).child('/veg').set(result)
+         }
+        catch(error){
+            console.log(error)
+        }
     }
 
     render() {
