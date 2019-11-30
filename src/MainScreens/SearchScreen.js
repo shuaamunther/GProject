@@ -171,6 +171,28 @@ export default class SearchScreen extends React.Component {
             tagsColor: mainColor,
             tagsText: '#fff',
             switchValue: false,
+            switchValue2: false,
+            diet:false,
+            veg:false,
+            dairy: false,
+            egg: false,
+            gluten: false,
+            peanut: false,
+            seafood: false,
+            sesame: false,
+            soy: false,
+            treenut: false,
+            wheat: false,
+            sulfite: false,
+            alcohole: false,
+            avocado: false,
+            beef: false,
+            eggplant: 'false',
+            mushrooms: 'false',
+            pork: 'false',
+            onions: 'false',
+            suger: 'false',
+            olives: 'false'
         }
     }
 
@@ -248,6 +270,117 @@ export default class SearchScreen extends React.Component {
             activeIndex: index
         })
     }
+
+    _handleToggleSwitch = () =>
+    this.setState(state => ({
+      switchValue: !state.switchValue,
+    }));
+
+    _handleToggleSwitch2 = () =>
+    this.setState(state => ({
+      switchValue2: !state.switchValue2,
+    }));
+
+    _handleToggleSwitch3 = () =>
+    this.setState(state => ({
+      dairy: !state.dairy,
+    }));
+
+    _handleToggleSwitch4 = () =>
+    this.setState(state => ({
+      egg: !state.egg,
+    }));
+
+    _handleToggleSwitch5 = () =>
+    this.setState(state => ({
+      gluten: !state.gluten,
+    }));
+
+    _handleToggleSwitch6 = () =>
+    this.setState(state => ({
+      peanut: !state.peanut,
+    }));
+
+    _handleToggleSwitch7 = () =>
+    this.setState(state => ({
+      seafood: !state.seafood,
+    }));
+
+    _handleToggleSwitch8 = () =>
+    this.setState(state => ({
+      sesame: !state.sesame,
+    }));
+
+    _handleToggleSwitch9 = () =>
+    this.setState(state => ({
+      soy: !state.soy,
+    }));
+
+    _handleToggleSwitch10 = () =>
+    this.setState(state => ({
+      wheat: !state.wheat,
+    }));
+
+    _handleToggleSwitch11 = () =>
+    this.setState(state => ({
+      sulfite: !state.sulfite,
+    }));
+
+    _handleToggleSwitch12 = () =>
+    this.setState(state => ({
+      diet: !state.diet,
+    }));
+
+    _handleToggleSwitch13 = () =>
+    this.setState(state => ({
+      veg: !state.veg,
+    }));
+
+    _handleToggleSwitch14 = () =>
+    this.setState(state => ({
+      alcohole: !state.alcohole,
+    }));
+
+    _handleToggleSwitch15 = () =>
+    this.setState(state => ({
+      avocado: !state.avocado,
+    }));
+
+    _handleToggleSwitch16 = () =>
+    this.setState(state => ({
+      beef: !state.beef,
+    }));
+
+    _handleToggleSwitch17 = () =>
+    this.setState(state => ({
+      eggplant: !state.eggplant,
+    }));
+
+    _handleToggleSwitch18 = () =>
+    this.setState(state => ({
+      mushrooms: !state.mushrooms,
+    }));
+
+    _handleToggleSwitch19 = () =>
+    this.setState(state => ({
+      pork: !state.pork,
+    }));
+
+    _handleToggleSwitch20 = () =>
+    this.setState(state => ({
+      onions: !state.onions,
+    }));
+
+    _handleToggleSwitch21 = () =>
+    this.setState(state => ({
+      suger: !state.suger,
+    }));
+
+    _handleToggleSwitch22 = () =>
+    this.setState(state => ({
+      olives: !state.olives,
+    }));
+
     renderSection = () => {
         if (this.state.activeIndex == 0) {
             return (
@@ -316,7 +449,7 @@ export default class SearchScreen extends React.Component {
                     <Modal
                     animationType="slide"
                     isVisible={this.state.visibleModal2 === 'bottom'}
-                    onSwipeComplete={() => this.setState({visibleModal: null})}
+                    onSwipeComplete={() => this.setState({visibleModal2: null})}
                     swipeDirection={['up', 'left', 'right', 'down']}
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
@@ -344,7 +477,6 @@ export default class SearchScreen extends React.Component {
                     </View>
              
                  <View style={{}}>       
-                    
                     <RNPickerSelect  placeholder={placeholder}
                      style={pickerSelectStyles} 
                                      onValueChange={(value) => console.log(value)}
@@ -371,14 +503,233 @@ export default class SearchScreen extends React.Component {
                     />
                     </View>  
 
-                    <View style={{flexDirection:'row',borderColor:'#E3F2FD',marginTop:9}}>
-                      <Switch/>
+                    <View style={{flexDirection:'row',borderColor:'grey',marginTop:9}}>
+                            <Switch
+                                  onValueChange={this._handleToggleSwitch}
+                                  value={this.state.switchValue}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />
                       <Text style={{fontSize:15,marginTop:6}}>use my user prerefrence </Text>
                     </View> 
+
                     <View style={{flexDirection:'row',borderColor:'#E3F2FD',marginTop:9}}>
-                      <Switch onPress={() => {alert('clicked')}}/>
-                      <Text style={{fontSize:15,marginTop:6}}>use my user prerefrence </Text>
-                    </View> 
+                      <Switch
+                                  onValueChange={this._handleToggleSwitch2}
+                                  value={this.state.switchValue2}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                                  
+                           />
+                      <Text style={{fontSize:15,marginTop:6}}>Change my prerefrence prerefrence </Text>
+                    </View >
+                     
+                    <View hide={this.state.switchValue2}
+                          style={{borderWidth:2,borderColor:'#00b5ec',borderRadius:20,flexDirection:'column',marginTop:3}}>
+                           <View style={{flexDirection:'row',justifyContent: 'space-around',}}>
+                           <View style={{flexDirection:'row'}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch12}
+                                  value={this.state.diet}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />  
+                           <Text style={{fontSize:15,marginTop:6}}>diet </Text>
+                           </View>  
+
+                           <View style={{flexDirection:'row'}}  >              
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch13}
+                                  value={this.state.veg}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />                  
+                            <Text style={{fontSize:15,marginTop:6}}>vegetarian </Text> 
+                              </View> 
+                        </View>
+                        <Text style={{fontSize:18,marginTop:6,marginLeft:10}}>allergies</Text>
+                        <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
+                        <View style={{flexDirection:'row',marginLeft:-9}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch3}
+                                  value={this.state.dairy}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>dairy</Text> 
+                           </View>
+                           <View style={{flexDirection:'row',}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch4}
+                                  value={this.state.egg}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6,}}>egg</Text> 
+                           </View>
+                           <View style={{flexDirection:'row',marginLeft:15}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch5}
+                                  value={this.state.gluten}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>gluten </Text> 
+                           </View>
+                           </View>  
+                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
+                        <View style={{flexDirection:'row',marginLeft:-3}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch6}
+                                  value={this.state.peanut}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>peanut </Text> 
+                           </View>
+                           <View style={{flexDirection:'row',marginLeft:-4}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch7}
+                                  value={this.state.seafood}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>seafood </Text> 
+                           </View>
+                           <View style={{flexDirection:'row'}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch8}
+                                  value={this.state.sesame}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>sesame</Text> 
+                           </View>
+                           </View> 
+                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
+                        <View style={{flexDirection:'row',marginLeft:-10}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch9}
+                                  value={this.state.soy}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>soy</Text> 
+                           </View>
+                           <View style={{flexDirection:'row',marginLeft:7}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch10}
+                                  value={this.state.wheat}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>wheat </Text> 
+                           </View>
+                           <View style={{flexDirection:'row'}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch11}
+                                  value={this.state.sulfite}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>sulfite</Text> 
+                           </View>
+                           
+                           </View> 
+
+                           <View style={{flexDirection:'row',justifyContent: 'space-around',}}>
+                            
+                        </View>
+                        <Text style={{fontSize:18,marginTop:6,marginLeft:10}}>disliks</Text>
+                        <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
+                        <View style={{flexDirection:'row',marginLeft:-3}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch14}
+                                  value={this.state.alcohole}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>alcohole</Text> 
+                           </View>
+                           <View style={{flexDirection:'row',marginLeft:7}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch15}
+                                  value={this.state.avocado}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>avocado</Text> 
+                           </View>
+                           <View style={{flexDirection:'row',marginLeft:16}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch16}
+                                  value={this.state.beef}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>beef </Text> 
+                           </View>
+                           </View>  
+                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
+                        <View style={{flexDirection:'row'}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch17}
+                                  value={this.state.eggplant}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>eggplant </Text> 
+                           </View>
+                           <View style={{flexDirection:'row'}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch18}
+                                  value={this.state.mushrooms}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>mushrooms</Text> 
+                           </View>
+                           <View style={{flexDirection:'row',marginLeft:-10}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch19}
+                                  value={this.state.pork}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>pork</Text> 
+                           </View>
+                           </View> 
+                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
+                        <View style={{flexDirection:'row',marginLeft:-10}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch20}
+                                  value={this.state.onions}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>onions</Text> 
+                           </View>
+                           <View style={{flexDirection:'row'}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch21}
+                                  value={this.state.suger}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>suger</Text> 
+                           </View>
+                           <View style={{flexDirection:'row',marginLeft:8}}  > 
+                           <Switch
+                                  onValueChange={this._handleToggleSwitch22}
+                                  value={this.state.olives}
+                                  trackColor={'#00b5ec'}
+                                  trackColor={'grey'}
+                           />      
+                           <Text style={{fontSize:15,marginTop:6}}>olives</Text> 
+                           </View>
+                           
+                           </View> 
+                    </View>
                     
                         <View style={{marginTop: 15,flexDirection:'row',marginBottom: 10,alignItems:'center',marginLeft:40}}>
                         <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 20,}}
@@ -388,14 +739,9 @@ export default class SearchScreen extends React.Component {
                                 }}/>
                         <Button title="Reset" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{width:100 ,marginLeft:70 }}
-                                onPress={() => {
-                                    alert('reset')
-                                }}/>
+                                onPress={() => this.setState({visibleModal2: null})}/>
                                 </View>
-                        <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
-                        <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
-                                onPress={() => this.setState({visibleModal2: null})}
-                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
+
                     </View>
                 </Modal>
                 </ScrollView>
@@ -425,7 +771,7 @@ export default class SearchScreen extends React.Component {
                 });
         }
 
-        console.log(this.state.users)
+        console.log(this.state.switchValue2)
         return (
             <ScrollView>
                 <HeaderUserView/>

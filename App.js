@@ -118,6 +118,6 @@ const AppNavigator = createStackNavigator({
         //     {screen: ChatScreen},
     },
     {
-        initialRouteName: "Search"
+        initialRouteName: "Frst"
     })
 const AppContainer = createAppContainer(AppNavigator);
