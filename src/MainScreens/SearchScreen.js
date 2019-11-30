@@ -12,6 +12,31 @@ import * as firebase from 'firebase';
 import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
 import {Card, Button, List, ListItem} from 'react-native-elements';
 import Modal from "react-native-modal";
+import TagInput from 'react-native-tags-input';
+import RNPickerSelect from 'react-native-picker-select';
+
+const placeholder = {
+    label: 'Select a sport...',
+    value: null,
+    color: '#9EA0A4',
+  };
+  
+const sports = [
+    {
+      label: 'Football',
+      value: 'football',
+    },
+    {
+      label: 'Baseball',
+      value: 'baseball',
+    },
+    {
+      label: 'Hockey',
+      value: 'hockey',
+    },
+  ];
+
+const mainColor = '#00b5ec';
 
 class HeaderUserView extends React.Component {
     openModal = () => {
@@ -24,7 +49,7 @@ class HeaderUserView extends React.Component {
             visibleModal: null,
         }
     }
-
+  
     render() {
         return (
             <View>
@@ -85,8 +110,21 @@ export default class SearchScreen extends React.Component {
             users: [],
             source: '',
             visibleModal: null,
+            visibleModal2: null,
+            tags: {
+                tag: '',
+                tagsArray: []
+              },
+            tagsColor: mainColor,
+            tagsText: '#fff',
         }
     }
+
+    updateTagState = (state) => {
+        this.setState({
+          tags: state
+        })
+      };
 
     updateSearch = (search) => {
         this.setState({search});
@@ -130,6 +168,7 @@ export default class SearchScreen extends React.Component {
     componentWillMount() {
         this.updateSearch();
         this.props.openModal
+        this.props.openModal2
     }
 
     updateSearch2 = (UserSearch) => {
@@ -213,25 +252,82 @@ export default class SearchScreen extends React.Component {
         if (this.state.activeIndex == 2) {
             return (
                 <ScrollView>
-                    <View style={styles.row}>
-                        <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
-                            <TextInput style={styles.inputs}
-                                       placeholder="Search..."
-                                       autoCapitalize="none"
-                                       underlineColorAndroid='transparent'
-                                       onChangeText={(FilterSearch) => this.updateSearch(FilterSearch)}
-                                       value={this.state.FilterSearch}
-                            />
-                        </View>
+                    <View style={{flexDirection:'row'}}>
+                       <Text style={{marginLeft:5,marginTop:10,fontSize:20,color:'#7c8191',}}>Press on this button to filter your search </Text>
+                       <TouchableHighlight onPress={this.openModal2}>
+                          <Image source={require('../../assets/filter.png')}
+                                style={{width: 30, height: 30,marginTop:5,marginLeft:15}}/>
+                       </TouchableHighlight>
                     </View>
-                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
+                    <Modal
+                    animationType="slide"
+                    isVisible={this.state.visibleModal2 === 'bottom'}
+                    onSwipeComplete={() => this.setState({visibleModal: null})}
+                    swipeDirection={['up', 'left', 'right', 'down']}
+                    style={styles.bottomModal}>
+                    <View style={styles.modelContent}>
+                        <Text style={{marginLeft:5,marginTop:10,fontSize:20,color:'#00b5ec',}}>
+                              cheak all filter you need
+                        </Text>
+                    <View style={{flexDirection:'row',marginTop:10,alignContent:'center'}}>
+                        <Text style={{marginLeft:20,marginTop:10,fontSize:20,color:'#7c8191',}}>
+                            ingredients
+                        </Text>
+                        <TagInput style={{ minWidth: 180,
+                                   height: 40,
+                                   margin: 4,
+                                   borderRadius: 20,
+                                   backgroundColor: '#E3F2FD',
+                                   marginLeft: 20,}}
+                           updateState={this.updateTagState}
+                           placeholder="  ingredients..."  
+                           onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
+                           onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
+                           tags={this.state.tags}
+                        />
+                    </View>
+             
+                   
+                    <RNPickerSelect  
+                                    onValueChange={(value) => console.log(value)}
+                                    items={[   { label: 'Football', value: 'football' },
+                                               { label: 'Baseball', value: 'baseball' },
+                                               { label: 'Hockey', value: 'hockey' },
+                                           ]}
+                    />
+                  
+
+                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Search')
+                                }}/>
+                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Main')
+                                }}/>
+                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.logout()
+                                }}/>
+                        <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
+                                onPress={() => this.setState({visibleModal2: null})}
+                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                    </View>
+                </Modal>
                 </ScrollView>
             )
         }
     }
     openModal = () => {
         this.setState({visibleModal: 'bottom'});
+    };
+
+    openModal2 = () => {
+        this.setState({visibleModal2: 'bottom'});
     };
 
     render() {
