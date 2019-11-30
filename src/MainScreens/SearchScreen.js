@@ -5,7 +5,9 @@ import {
     ScrollView,
     FlatList,
     TouchableHighlight,
-    ActivityIndicator
+    ActivityIndicator,
+    CheckBox,
+    Switch
 } from 'react-native'
 import CardListScreen from './component/CardListScreen';
 import * as firebase from 'firebase';
@@ -16,26 +18,77 @@ import TagInput from 'react-native-tags-input';
 import RNPickerSelect from 'react-native-picker-select';
 
 const placeholder = {
-    label: 'Select a sport...',
+    label: ' Select craisine ',
     value: null,
-    color: '#9EA0A4',
-  };
-  
-const sports = [
-    {
-      label: 'Football',
-      value: 'football',
-    },
-    {
-      label: 'Baseball',
-      value: 'baseball',
-    },
-    {
-      label: 'Hockey',
-      value: 'hockey',
-    },
-  ];
+    color: '#00b5ec',
+    marginLeft:50,
+    minWidth:60,
+    icon: {
+		position: 'absolute',
+		backgroundColor: 'transparent',
+		borderTopWidth: 5,
+		borderTopColor: '#00000099',
+		borderRightWidth: 5,
+		borderRightColor: 'transparent',
+		borderLeftWidth: 5,
+		borderLeftColor: 'transparent',
+		width: 0,
+		height: 0,
+		top: 20,
+		right: 15,
+	},
 
+  };
+
+  const placeholder1 = {
+    label: ' Select type ',
+    value: null,
+    color: '#00b5ec',
+    marginLeft:50,
+    minWidth:60,
+    icon: {
+		position: 'absolute',
+		backgroundColor: 'transparent',
+		borderTopWidth: 5,
+		borderTopColor: '#00000099',
+		borderRightWidth: 5,
+		borderRightColor: 'transparent',
+		borderLeftWidth: 5,
+		borderLeftColor: 'transparent',
+		width: 0,
+		height: 0,
+		top: 20,
+		right: 15,
+	},
+  };
+
+  const placeholder2 = {
+    label: ' Select difficulty ',
+    value: null,
+    color: '#00b5ec',
+    marginLeft:50,
+    minWidth:60,
+    icon: {
+		position: 'absolute',
+		backgroundColor: 'transparent',
+		borderTopWidth: 5,
+		borderTopColor: '#00000099',
+		borderRightWidth: 5,
+		borderRightColor: 'transparent',
+		borderLeftWidth: 5,
+		borderLeftColor: 'transparent',
+		width: 0,
+		height: 0,
+		top: 20,
+		right: 15,
+	},
+  };
+
+const pickerstyle ={
+    width:100,
+    marginLeft:50,
+}  
+  
 const mainColor = '#00b5ec';
 
 class HeaderUserView extends React.Component {
@@ -117,6 +170,7 @@ export default class SearchScreen extends React.Component {
               },
             tagsColor: mainColor,
             tagsText: '#fff',
+            switchValue: false,
         }
     }
 
@@ -270,48 +324,74 @@ export default class SearchScreen extends React.Component {
                               cheak all filter you need
                         </Text>
                     <View style={{flexDirection:'row',marginTop:10,alignContent:'center'}}>
-                        <Text style={{marginLeft:20,marginTop:10,fontSize:20,color:'#7c8191',}}>
-                            ingredients
-                        </Text>
-                        <TagInput style={{ minWidth: 180,
+                        
+                        <TagInput style={{ minWidth: 300,
                                    height: 40,
-                                   margin: 4,
-                                   borderRadius: 20,
-                                   backgroundColor: '#E3F2FD',
-                                   marginLeft: 20,}}
+                                  // margin: 4,
+                                  borderRadius: 20,
+                                  borderWidth:1,
+                                  borderColor:'#E3F2FD',
+                                 //  backgroundColor: '#E3F2FD',
+                                 //  marginLeft: 20,
+                                 
+                                }}
                            updateState={this.updateTagState}
-                           placeholder="  ingredients..."  
+                           placeholder="ingredients..."  
                            onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
                            onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
                            tags={this.state.tags}
                         />
                     </View>
              
-                   
-                    <RNPickerSelect  
-                                    onValueChange={(value) => console.log(value)}
-                                    items={[   { label: 'Football', value: 'football' },
-                                               { label: 'Baseball', value: 'baseball' },
-                                               { label: 'Hockey', value: 'hockey' },
-                                           ]}
+                 <View style={{}}>       
+                    
+                    <RNPickerSelect  placeholder={placeholder}
+                     style={pickerSelectStyles} 
+                                     onValueChange={(value) => console.log(value)}
+                                     items={[   { label: 'Football', value: 'football' },
+                                                { label: 'Baseball', value: 'baseball' },
+                                                { label: 'Hockey', value: 'hockey' },
+                                            ]}
                     />
-                  
+                      <RNPickerSelect  placeholder={placeholder1}
+                     style={pickerSelectStyles} 
+                                     onValueChange={(value) => console.log(value)}
+                                     items={[   { label: 'lunch', value: 'lunch' },
+                                                { label: 'brakfast', value: 'brakfast' },
+                                                { label: 'sweet', value: 'sweet' },
+                                            ]}
+                    />
+                      <RNPickerSelect  placeholder={placeholder2}
+                     style={pickerSelectStyles} 
+                                     onValueChange={(value) => console.log(value)}
+                                     items={[   { label: 'dificult', value: 'dificult' },
+                                                { label: 'mid', value: 'baseball' },
+                                                { label: 'easy', value: 'easy' },
+                                            ]}
+                    />
+                    </View>  
 
-                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                    <View style={{flexDirection:'row',borderColor:'#E3F2FD',marginTop:9}}>
+                      <Switch/>
+                      <Text style={{fontSize:15,marginTop:6}}>use my user prerefrence </Text>
+                    </View> 
+                    <View style={{flexDirection:'row',borderColor:'#E3F2FD',marginTop:9}}>
+                      <Switch onPress={() => {alert('clicked')}}/>
+                      <Text style={{fontSize:15,marginTop:6}}>use my user prerefrence </Text>
+                    </View> 
+                    
+                        <View style={{marginTop: 15,flexDirection:'row',marginBottom: 10,alignItems:'center',marginLeft:40}}>
+                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 20,}}
+                                containerStyle={{width:100 }}
                                 onPress={() => {
-                                    this.props.navigation.navigate('Search')
+                                    alert('saved')
                                 }}/>
-                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                        <Button title="Reset" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{width:100 ,marginLeft:70 }}
                                 onPress={() => {
-                                    this.props.navigation.navigate('Main')
+                                    alert('reset')
                                 }}/>
-                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {
-                                    this.logout()
-                                }}/>
+                                </View>
                         <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
                         <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
                                 onPress={() => this.setState({visibleModal2: null})}
@@ -666,3 +746,26 @@ const styles = StyleSheet.create({
         borderRadius: 5
     }
 });
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 10,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 4,
+      color: 'black',
+      paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      borderWidth: 0.5,
+      borderColor: 'purple',
+      borderRadius: 8,
+      color: 'black',
+      paddingRight: 30, // to ensure the text is never behind the icon
+    },
+  });
