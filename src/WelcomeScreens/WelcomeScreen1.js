@@ -13,7 +13,7 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import * as Constants from '../utils/Constants'
-import { ButtonGroup } from 'react-native-elements';
+import {ButtonGroup} from 'react-native-elements';
 import WelcomeHeader from './WelcomeHeader'
 
 
@@ -22,23 +22,19 @@ export default class Welcome extends React.Component {
         super(props);
         this.state = {
             selectedIndex: -1,
-            diet:'',
-            id:''
-        };  
-    }
-    dietInfo(){
-        
-
-    }
-    
-    componentWillMount(){
-        global.user_logged_in=firebase.auth().currentUser.uid
+            diet: '',
+            id: ''
+        };
     }
 
-    getToken = async () =>{
+    componentWillMount() {
+        global.user_logged_in = firebase.auth().currentUser.uid
+    }
+
+    getToken = async () => {
         try {
-            const value =await AsyncStorage.getItem(Constants.ACCESS_TOKEN);
-            if(value!==null) {
+            const value = await AsyncStorage.getItem(Constants.ACCESS_TOKEN);
+            if (value !== null) {
                 this.setState({userId: value})
             }
         } catch (error) {
@@ -48,29 +44,25 @@ export default class Welcome extends React.Component {
 
     updateIndex = (selectedIndex) => {
         this.setState({selectedIndex})
-        let onDiet=this.state.selectedIndex
+        let onDiet = this.state.selectedIndex
         let result
-        if(onDiet == 0)
-        {
-          result='false'
+        if (onDiet == 0) {
+            result = 'false'
+        } else if (onDiet == 1) {
+            result = 'true'
         }
-        else if(onDiet==1)
-        {
-            result='true'
-        }
-        let id=firebase.auth().currentUser.uid
-        try{
-        firebase.database().ref('users/' +id).child('/diet').set(result)
-         }
-        catch(error){
+        let id = firebase.auth().currentUser.uid
+        try {
+            firebase.database().ref('users/' + id).child('/diet').set(result)
+        } catch (error) {
             console.log(error)
         }
     }
 
     render() {
-        console.log('id',firebase.auth().currentUser.uid)
+        console.log('id', firebase.auth().currentUser.uid)
         const buttons = ['YES', 'NO']
-        const { selectedIndex } = this.state
+        const {selectedIndex} = this.state
         console.log(this.state.selectedIndex)
         return (
             <View style={styles.header}>
@@ -90,9 +82,9 @@ export default class Welcome extends React.Component {
                         style={{flex: 1}}
                     />
 
-                    <TouchableHighlight style={[styles.buttonContainer,styles.NextButton,]}
+                    <TouchableHighlight style={[styles.buttonContainer, styles.NextButton,]}
                                         onPress={() => this.props.navigation.navigate('Welcome2')}>
-                            <Text style={styles.loginText}>Next</Text>
+                        <Text style={styles.loginText}>Next</Text>
                     </TouchableHighlight>
                 </View>
             </View>
@@ -116,7 +108,7 @@ const styles = StyleSheet.create({
     headerView: {
         flex: 1,
         justifyContent: 'center',
-        alignItems : 'center',
+        alignItems: 'center',
     },
     buttonContainer: {
         marginTop: 30,

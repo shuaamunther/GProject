@@ -1,8 +1,8 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createStackNavigator } from 'react-navigation-stack';
-import { StyleSheet, Text, View, Platform, YellowBox} from 'react-native';
+import {createAppContainer} from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createStackNavigator} from 'react-navigation-stack';
+import {StyleSheet, Text, View, Platform, YellowBox} from 'react-native';
 
 import Login from './src/SignScreens/Login';
 import ProfileScreen from './src/MainScreens/ProfileScreen';
@@ -29,107 +29,95 @@ import * as firebase from 'firebase';
 
 export default class App extends React.Component {
 
-  componentWillMount() {
-    const firebaseConfig = {
-        apiKey: "AIzaSyAbdvpkiwh1E19r39slZ5Ixyrm6JgUEMgY",
-        authDomain: "gradproject-408c0.firebaseapp.com",
-        databaseURL: "https://gradproject-408c0.firebaseio.com",
-        projectId: "gradproject-408c0",
-        storageBucket: "gradproject-408c0.appspot.com",
-        messagingSenderId: "1071288752672",
-        appId: "1:1071288752672:web:4459fbec630c9219e3fa45",
-        measurementId: "G-Y004ZTSSHX"
-    };
+    componentWillMount() {
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbdvpkiwh1E19r39slZ5Ixyrm6JgUEMgY",
+            authDomain: "gradproject-408c0.firebaseapp.com",
+            databaseURL: "https://gradproject-408c0.firebaseio.com",
+            projectId: "gradproject-408c0",
+            storageBucket: "gradproject-408c0.appspot.com",
+            messagingSenderId: "1071288752672",
+            appId: "1:1071288752672:web:4459fbec630c9219e3fa45",
+            measurementId: "G-Y004ZTSSHX"
+        };
+        //  if (!firebase.app.length) {
+        firebase.initializeApp(firebaseConfig);
+        // }
+    }
 
-  //  if (!firebase.app.length) {
-      firebase.initializeApp(firebaseConfig);
-  // }
-  }
-  constructor(props){
-    super(props)
-    YellowBox.ignoreWarnings(['Setting a timer']);
+    constructor(props) {
+        super(props)
+        YellowBox.ignoreWarnings(['Setting a timer']);
+    }
+
+    render() {
+        return (
+            <AppContainer/>
+        );
+    }
 }
-  render() {
-   
-  return (
-     
-      <AppContainer />
-    
-    
-  );
-}
-}
+
 const AppNavigator = createStackNavigator({
-  Login: {
-    screen: Login
-  },
-  Profile: {
-    screen: ProfileScreen
-  },
-  SignUp: {
-    screen: SignUpScreen
-  },
-  ForgetPassword: {
-    screen: ForgotPasswordScreen
-  },
-  Main: {
-    screen: FeedScreen
-  },
-  Recipe: {
-    screen: RecipeScreen
-  },
-  Welcome: {
-    screen: WelcomeScreen
-  },
-  Welcome1: {
-    screen: WelcomeScreen1
-  },
-  Welcome2: {
-    screen: WelcomeScreen2
-  },
-  Welcome3: {
-    screen: WelcomeScreen3
-  },
-  Welcome4: {
-    screen: WelcomeScreen4
-  },
-  Card:{
-  screen : CardScreen
-  },
-  Search:{
-  screen : SearchScreen
-  },
-  Data:{
-  screen:DataScreen
-  },
-  Test:{
-  screen:Test
-  },
-  AddRe:{
-  screen:AddRecipes
-  },
-  Pic:
-  {screen:PickingPicture},
-  First:
-  {screen:FirstScreen},
-  Users:
-  {screen:UserCard},
-  //LoginChat:
-  //{screen:FlatListDemo},
-  //Chat:
- // {screen:ChatScreen},
-},
-{
-  initialRouteName: "First"
-})
+        Login: {
+            screen: Login
+        },
+        Profile: {
+            screen: ProfileScreen
+        },
+        SignUp: {
+            screen: SignUpScreen
+        },
+        ForgetPassword: {
+            screen: ForgotPasswordScreen
+        },
+        Main: {
+            screen: FeedScreen
+        },
+        Recipe: {
+            screen: RecipeScreen
+        },
+        Welcome: {
+            screen: WelcomeScreen
+        },
+        Welcome1: {
+            screen: WelcomeScreen1
+        },
+        Welcome2: {
+            screen: WelcomeScreen2
+        },
+        Welcome3: {
+            screen: WelcomeScreen3
+        },
+        Welcome4: {
+            screen: WelcomeScreen4
+        },
+        Card: {
+            screen: CardScreen
+        },
+        Search: {
+            screen: SearchScreen
+        },
+        Data: {
+            screen: DataScreen
+        },
+        Test: {
+            screen: Test
+        },
+        AddRe: {
+            screen: AddRecipes
+        },
+        Pic:
+            {screen: PickingPicture},
+        First:
+            {screen: FirstScreen},
+        Users:
+            {screen: UserCard},
+        // LoginChat:
+        //     {screen: FlatListDemo},
+        // Chat:
+        //     {screen: ChatScreen},
+    },
+    {
+        initialRouteName: "First"
+    })
 const AppContainer = createAppContainer(AppNavigator);
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

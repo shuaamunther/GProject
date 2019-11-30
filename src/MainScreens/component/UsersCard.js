@@ -1,6 +1,6 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image, FlatList, TouchableHighlight,TouchableOpacity} from 'react-native';
-import { Card, Button } from 'react-native-elements';
+import {Text, View, StyleSheet, Image, FlatList, TouchableHighlight, TouchableOpacity} from 'react-native';
+import {Card, Button} from 'react-native-elements';
 import {withNavigation} from 'react-navigation'
 import * as firebase from 'firebase';
 
@@ -9,14 +9,17 @@ const Arrayimages = {
     Image2: require('../../../assets/int_Likes.png'),
     Image3: require('../../../assets/book.png'),
     Image4: require('../../../assets/bookmark.png'),
-    };
-let sum=0;
-let sum2=0;
+};
+let sum = 0;
+let sum2 = 0;
+
 class HeaderUserView extends React.Component {
     render() {
         return (
             <TouchableHighlight
-                onPress={() => {this.props.navigation.navigate('Profile', {user_id: this.props.user_id})}}>
+                onPress={() => {
+                    this.props.navigation.navigate('Profile', {user_id: this.props.user_id})
+                }}>
                 <View style={styles.headerUserView}>
                     <Image
                         source={this.props.userImage ? this.props.userImage : require('../../../assets/logouser.png')}
@@ -34,17 +37,18 @@ class UserCard extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Card containerStyle={{padding: 0, borderRadius: 10,borderColor:"#00b5ec"}}>
-                    <HeaderUserView userName={this.props.userName} navigation={this.props.navigation} user_id={this.props.user_id}/>
+                <Card containerStyle={{padding: 0, borderRadius: 10, borderColor: "#00b5ec"}}>
+                    <HeaderUserView userName={this.props.userName} navigation={this.props.navigation}
+                                    user_id={this.props.user_id}/>
                 </Card>
-          </View>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-      borderRadius:8,
+        borderRadius: 8,
     },
     headerUserView: {
         marginLeft: 8,
@@ -53,16 +57,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    headerImage:{
+    headerImage: {
         backgroundColor: "#c3c3c3",
-        height:200,
+        height: 200,
         width: '100%',
         borderColor: "white",
     },
     headerStarView: {
         position: 'absolute',
-        top:5,
-        right:5,
+        top: 5,
+        right: 5,
         height: 55,
         width: 55,
     },
@@ -83,14 +87,14 @@ const styles = StyleSheet.create({
         backgroundColor: "#00b5ec",
         marginBottom: 40,
         width: 80,
-        height:30,
-        borderRadius:10,
+        height: 30,
+        borderRadius: 10,
         marginTop: 50,
         marginBottom: 10,
     },
     MoreText: {
         color: 'white',
-        fontSize:16
+        fontSize: 16
     },
     headerStarIcon: {
         height: '100%',
@@ -110,17 +114,17 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20
     },
-    ViewText:{
+    ViewText: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems:'flex-start'
+        alignItems: 'flex-start'
     },
     ViewButton: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems:'flex-end',
+        alignItems: 'flex-end',
     },
     titleText: {
         color: 'black',
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
         height: 40,
         marginLeft: -10,
         justifyContent: 'center',
-        marginTop:-18,
+        marginTop: -18,
     },
-  });
+});
 export default withNavigation(UserCard);

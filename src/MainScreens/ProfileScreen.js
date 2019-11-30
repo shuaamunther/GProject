@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {
     StyleSheet, Platform, Image, Text, View, TouchableOpacity,
-    ImageBackground, ScrollView, TouchableHighlight,error
+    ImageBackground, ScrollView, TouchableHighlight, error
 } from 'react-native'
 import {StackActions, NavigationActions} from 'react-navigation';
 import {Card, Button} from 'react-native-elements';
@@ -10,51 +10,50 @@ import Modal from "react-native-modal";
 import CardListScreen from "./component/CardListScreen";
 import ModalWrapper from 'react-native-modal-wrapper';
 
-
 class HeaderImageView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             visibleModal: null,
-            followers:'',
-            followeing:'',
+            followers: '',
+            followeing: '',
         }
     }
 
     openModal = () => {
-        this.setState({ visibleModal: 'bottom'});
+        this.setState({visibleModal: 'bottom'});
     };
 
     logout = () => {
         firebase.auth().signOut()
-        .then(function() {
-            const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Login' })],
-             });
-             this.props.navigation.dispatch(resetAction);
-        }.bind(this))
-        .catch(function(error) {
-            console.log("logout failed: ", error)
-        });
+            .then(function () {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({routeName: 'Login'})],
+                });
+                this.props.navigation.dispatch(resetAction);
+            }.bind(this))
+            .catch(function (error) {
+                console.log("logout failed: ", error)
+            });
     }
 
-    addFollowing(user_id){
-      /* let iduser=firebase.auth().currentUser.uid
-        let follower=['firebase.auth().currentUser.uid']
-        console.log('hi')
-        let users = []
-        firebase.database().ref().child('users').orderByChild('uid').startAt(user_id).on("value", function (snapshot) {
-            snapshot.forEach(function (item) 
-                   // let userName = user.child('fullname').val();
-                    .set({
-                        followers:firebase.auth().currentUser.uid
-                    })
-                )
-            this.setState({
-                users:users
-            })
-        }.bind(this))*/
+    addFollowing(user_id) {
+        /* let iduser=firebase.auth().currentUser.uid
+          let follower=['firebase.auth().currentUser.uid']
+          console.log('hi')
+          let users = []
+          firebase.database().ref().child('users').orderByChild('uid').startAt(user_id).on("value", function (snapshot) {
+              snapshot.forEach(function (item)
+                     // let userName = user.child('fullname').val();
+                      .set({
+                          followers:firebase.auth().currentUser.uid
+                      })
+                  )
+              this.setState({
+                  users:users
+              })
+          }.bind(this))*/
     };
 
     render() {
@@ -64,23 +63,30 @@ class HeaderImageView extends React.Component {
                     <ImageBackground source={require('../../assets/logo2.png')} style={{width: '100%', height: '100%'}}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                             <Image style={styles.avatar} source={require('../../assets/logo22.png')}/>
-                            <Text style={[styles.name,{color:'black'}]}>{this.props.username}</Text>
+                            <Text style={[styles.name, {color: 'black'}]}>{this.props.username}</Text>
                             <TouchableHighlight
                                 style={this.props.isSameUser == true ? {display: 'none'} : {display: 'flex'}}
-                                onPress={() => {this.addFollowing()}}>
+                                onPress={() => {
+                                    this.addFollowing()
+                                }}>
                                 <View style={[styles.buttonFollow]}>
                                     <Image source={require('../../assets/add.png')}
                                            style={{width: 18, height: 18}}/>
-                                    <Text style={{marginLeft: 8, marginRight: 8, color: "#fff", fontSize: 16}}>Follow</Text>
+                                    <Text style={{
+                                        marginLeft: 8,
+                                        marginRight: 8,
+                                        color: "#fff",
+                                        fontSize: 16
+                                    }}>Follow</Text>
                                 </View>
                             </TouchableHighlight>
                         </View>
                     </ImageBackground>
                 </View>
-                <View style={{position: 'absolute', top:20, right:20}}>
+                <View style={{position: 'absolute', top: 20, right: 20}}>
                     <TouchableHighlight onPress={this.openModal}>
                         <Image source={require('../../assets/edit.png')}
-                        style={{width: 28, height: 28}}/>
+                               style={{width: 28, height: 28}}/>
                     </TouchableHighlight>
                 </View>
                 <Modal
@@ -89,24 +95,39 @@ class HeaderImageView extends React.Component {
                     swipeDirection={['up', 'left', 'right', 'down']}
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
-                      <View style={{flexDirection: 'row'}}>
-                        <Image
-                          source={require('../../assets/logouser.png')}
-                          style={{width: 100, height: 100, borderRadius: 32 / 2}}
-                        />
-                        <Text style={{fontSize:20,marginLeft:12,marginTop:45}}>Shuaa5</Text>
+                        <View style={{flexDirection: 'row'}}>
+                            <Image
+                                source={require('../../assets/logouser.png')}
+                                style={{width: 100, height: 100, borderRadius: 32 / 2}}
+                            />
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
                         </View>
-                        <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Main')}}/>  
-                        <Button title="Edit Profile" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10}}/>
-                        <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Search')}}/>
-                            <Button title="Profile" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Profile')}}/> 
-                        <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.logout()}}/>
-                        <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
-                        <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Main')
+                                }}/>
+                        <Button title="Edit Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Search')
+                                }}/>
+                        <Button title="Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Profile')
+                                }}/>
+                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.logout()
+                                }}/>
+                        <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
+                                onPress={() => this.setState({visibleModal: null})}
+                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
                     </View>
                 </Modal>
             </View>
@@ -119,21 +140,22 @@ class Following extends React.Component {
         super(props)
         this.state = {following: 100, followers: 240, posts: 45}
     }
-        render() {
+
+    render() {
         return (
             <View style={styles.headerFollowing}>
                 <TouchableOpacity>
-                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.following}</Text>
+                    <Text style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.following}</Text>
                     <Text style={styles.followingTitle}>Following</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
-                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.followers}</Text>
+                    <Text style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.followers}</Text>
                     <Text style={styles.followingTitle}>Followers</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
-                    <Text  style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.posts}</Text>
+                    <Text style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.posts}</Text>
                     <Text style={styles.followingTitle}>Posts</Text>
                 </TouchableOpacity>
             </View>
@@ -157,41 +179,41 @@ class Preview extends React.Component {
         })
     }
 
-    componentDidMount= () => {
+    componentDidMount = () => {
         this.showMyRecipe(this.props.user_id);
         this.showData()
     }
 
     showMyRecipe(userId) {
         let myRecipe = []
-        try{
-        firebase.database().ref().child('recipes').orderByChild('user_id').equalTo(userId).on("value", function (snapshot) {
-            snapshot.forEach(function (item) {
-                firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
-                    let userName = user.child('fullname').val();
-                    myRecipe.push({
-                        title: item.val().title,
-                        type: item.val().type,
-                        rate: item.val().rate,
-                        imagesource:item.val().imagesource,
-                        id: item.key,
-                        userName: userName,
-                        user_id: item.val().user_id
+        try {
+            firebase.database().ref().child('recipes').orderByChild('user_id').equalTo(userId).on("value", function (snapshot) {
+                snapshot.forEach(function (item) {
+                    firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
+                        let userName = user.child('fullname').val();
+                        myRecipe.push({
+                            title: item.val().title,
+                            type: item.val().type,
+                            rate: item.val().rate,
+                            imagesource: item.val().imagesource,
+                            id: item.key,
+                            userName: userName,
+                            user_id: item.val().user_id
+                        })
                     })
                 })
-            })
 
-            this.setState({
-                myRecipe: myRecipe
-            })
+                this.setState({
+                    myRecipe: myRecipe
+                })
 
-        }.bind(this));
-    }
-    catch(error){
-        console.log(error)
+            }.bind(this));
+        } catch (error) {
+            console.log(error)
 
+        }
     }
-    }
+
     showData() {
         let recipe = []
         firebase.database().ref('/recipes').on('value', function (snapshot) {
@@ -245,27 +267,36 @@ class Preview extends React.Component {
             <View style={styles.previewContainer}>
                 <View style={styles.Preview}>
                     <TouchableOpacity
-                        style={this.state.activeIndex == 0 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
+                        style={this.state.activeIndex == 0 ? {
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#156a95'
+                        } : {color: '#7c8191'}}
                         onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}>
-                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
+                        <Text style={[styles.followingTitle, styles.followingTitleForNumbers,
                             this.state.activeIndex == 0 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
                             Posts
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={this.state.activeIndex == 1 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
+                        style={this.state.activeIndex == 1 ? {
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#156a95'
+                        } : {color: '#7c8191'}}
                         onPress={() => this.segrantClicked(1)} active={this.state.activeIndex == 1}>
-                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
+                        <Text style={[styles.followingTitle, styles.followingTitleForNumbers,
                             this.state.activeIndex == 1 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
                             Review
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={this.state.activeIndex == 2 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
+                        style={this.state.activeIndex == 2 ? {
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#156a95'
+                        } : {color: '#7c8191'}}
                         onPress={() => this.segrantClicked(2)} active={this.state.activeIndex == 2}>
-                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
+                        <Text style={[styles.followingTitle, styles.followingTitleForNumbers,
                             this.state.activeIndex == 2 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
                             Saved
                         </Text>
@@ -289,15 +320,15 @@ export default class ProfileScreen extends React.Component {
         }
     }
 
-    componentDidMount(){
-        const { navigation } = this.props;
+    componentDidMount() {
+        const {navigation} = this.props;
 
         let isSameUser = JSON.stringify(navigation.getParam('isSameUser', false))
 
         let userId = String(navigation.getParam('user_id', ""))
 
-        firebase.database().ref().child('users').orderByKey().equalTo(userId).on("value", function(snapshot) {
-            if(snapshot.val()) {
+        firebase.database().ref().child('users').orderByKey().equalTo(userId).on("value", function (snapshot) {
+            if (snapshot.val()) {
                 let userData = snapshot.val()[userId]
                 userData['id'] = firebase.auth().currentUser.uid
                 this.setState({username: userData['fullname']})
@@ -306,16 +337,16 @@ export default class ProfileScreen extends React.Component {
     }
 
     render() {
-        const { navigation } = this.props;
+        const {navigation} = this.props;
         let userId = String(navigation.getParam('user_id', ""))
         let isSameUser = firebase.auth().currentUser.uid == userId
         return (
             <ScrollView>
-            <View style={{marginBottom: 20}}>
-                <HeaderImageView navigation={navigation} username={this.state.username} isSameUser={isSameUser}/>
-                <Following />
-                <Preview user_id={userId}/>
-            </View>
+                <View style={{marginBottom: 20}}>
+                    <HeaderImageView navigation={navigation} username={this.state.username} isSameUser={isSameUser}/>
+                    <Following/>
+                    <Preview user_id={userId}/>
+                </View>
             </ScrollView>
         );
     }
@@ -342,7 +373,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         borderRadius: 30,
-        borderColor:"#00b5ec",
+        borderColor: "#00b5ec",
         flexDirection: 'row',
         backgroundColor: '#fff',
         padding: 16,
@@ -426,8 +457,8 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
-      },
-      buttonContainer: {
+    },
+    buttonContainer: {
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',

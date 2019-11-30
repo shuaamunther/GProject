@@ -25,8 +25,8 @@ export default class login extends React.Component {
 
     render() {
         return (
-            <View >
-                
+            <View>
+
             </View>
         );
     }

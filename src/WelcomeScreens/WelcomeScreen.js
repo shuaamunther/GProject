@@ -18,6 +18,7 @@ export default class Welcome extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
     };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -27,15 +28,16 @@ export default class Welcome extends React.Component {
             age: '',
             myKey: null,
             isLoading: false,
-            userId:null,
+            userId: null,
         };
     }
-    componentDidMount(){
-        console.log('print',firebase.auth().currentUser.uid) 
+
+    componentDidMount() {
+        console.log('print', firebase.auth().currentUser.uid)
     }
 
     render() {
-       ///console.log('print',firebase.auth().currentUser.uid)
+        ///console.log('print',firebase.auth().currentUser.uid)
         return (
             <View style={styles.header}>
                 <View style={styles.WelcomeHeader}>
@@ -47,11 +49,11 @@ export default class Welcome extends React.Component {
                     <Text style={styles.info}></Text>
                     <Text style={styles.name}>Welcome to Bon Appetit</Text>
                     <Text style={styles.description}>Your answers to the next few questions will
-                                    help us find the right ideas for you
+                        help us find the right ideas for you
                     </Text>
 
-                    <TouchableHighlight style={[styles.buttonContainer,styles.NextButton]}
-                                                onPress={() => this.props.navigation.navigate('Welcome1')}>
+                    <TouchableHighlight style={[styles.buttonContainer, styles.NextButton]}
+                                        onPress={() => this.props.navigation.navigate('Welcome1')}>
                         <Text style={styles.loginText}>Next</Text>
                     </TouchableHighlight>
 
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     headerView: {
         flex: 1,
         justifyContent: 'center',
-        alignItems : 'center',
+        alignItems: 'center',
     },
     avatar: {
         width: 130,
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#00BFFF',
         marginTop: 12,
-        marginBottom:15,
+        marginBottom: 15,
     },
     description: {
         fontSize: 16,
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textAlign: 'center',
         alignItems: 'center',
-        marginBottom:30,
+        marginBottom: 30,
         marginTop: 12,
     },
     description2: {
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textAlign: 'center',
         alignItems: 'center',
-        marginBottom:50,
+        marginBottom: 50,
         marginTop: 50,
     },
     buttonContainer: {

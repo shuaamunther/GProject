@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React, {Component} from 'react'
 import {
     StyleSheet, Text, View, TextInput,
     TouchableHighlight,
@@ -21,7 +21,7 @@ import ImagePicker from 'react-native-image-picker';
 import {createStackNavigator} from 'react-navigation-stack';
 import * as firebase from 'firebase';
 import 'firebase/storage';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 import DataScreen from './component/DataScreen';
 import * as Constants from './../utils/Constants'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -42,29 +42,29 @@ class LogoTitle extends React.Component {
 }
 
 
-
 function wait(timeout) {
     return new Promise(resolve => {
-      setTimeout(resolve, timeout);
+        setTimeout(resolve, timeout);
     });
-  }
+}
 
 export default class FeedScreen extends React.Component {
-    
+
     constructor(props) {
         super(props)
         this.state = {
-           loading:false,
-           visibleModal: null,
-           page:1,
-           seed:1,
-           error:null,
-           refreshing:false,
+            loading: false,
+            visibleModal: null,
+            page: 1,
+            seed: 1,
+            error: null,
+            refreshing: false,
 
         }
     }
+
     openModal = () => {
-        this.setState({ visibleModal: 'bottom'});
+        this.setState({visibleModal: 'bottom'});
         console.log('hoiiiiiiiiiiiii')
     };
     static navigationOptions = ({navigation}) => {
@@ -76,129 +76,116 @@ export default class FeedScreen extends React.Component {
                     <Image
                         source={require('../../assets/deuser.png')}
                         style={{width: 32, height: 32, borderRadius: 32 / 2}}
-                    />   
+                    />
                 </TouchableHighlight>
             ),
-           headerLeft: () =>(
-               <View>
-                <TouchableOpacity onPress={() =>this.openModal}>
-                    <Image source={require('../../assets/menu.png')}
-                    style={{width: 28, height: 28,marginLeft:5}}/>
-                </TouchableOpacity>
+            headerLeft: () => (
+                <View>
+                    <TouchableOpacity onPress={() => this.openModal}>
+                        <Image source={require('../../assets/menu.png')}
+                               style={{width: 28, height: 28, marginLeft: 5}}/>
+                    </TouchableOpacity>
                 </View>
-           
-              )
+
+            )
         };
     }
 
-    
     componentDidMount() {
         this.getUserData()
-        
-        
     }
+
     logout = () => {
         firebase.auth().signOut()
-        .then(function() {
-            const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Login' })],
-             });
-             this.props.navigation.dispatch(resetAction);
-        }.bind(this))
-        .catch(function(error) {
-            console.log("logout failed: ", error)
-        });
+            .then(function () {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({routeName: 'Login'})],
+                });
+                this.props.navigation.dispatch(resetAction);
+            }.bind(this))
+            .catch(function (error) {
+                console.log("logout failed: ", error)
+            });
     }
 
     getUserData = async () => {
         try {
             const value = await AsyncStorage.getItem(Constants.USER_DATA)
-            if(value !== null) {
+            if (value !== null) {
                 console.log(JSON.parse(value))
             }
-        } catch(e) {
+        } catch (e) {
             // error reading value
         }
     }
 
     openModal = () => {
-        this.setState({ visibleModal: 'bottom'});
+        this.setState({visibleModal: 'bottom'});
     };
 
     render() {
         return (
-            <View style={{flex:1, marginTop:10, marginBottom: 20}} >
+            <View style={{flex: 1, marginTop: 10, marginBottom: 20}}>
                 <DataScreen navigation={this.props.navigation}/>
                 <TouchableHighlight style={styles.buttonAdd}
-                    onPress={() => {this.props.navigation.navigate('AddRe')}}>
+                                    onPress={() => {
+                                        this.props.navigation.navigate('AddRe')
+                                    }}>
                     <Image source={require('../../assets/add.png')}
-                    style={{width: 32, height: 32}}/>
-                    
+                           style={{width: 32, height: 32}}/>
+
                 </TouchableHighlight>
-                <View style={{position: 'absolute', top:-38,marginLeft:4 }}>
+                <View style={{position: 'absolute', top: -38, marginLeft: 4}}>
                     <TouchableHighlight onPress={this.openModal}>
                         <Image source={require('../../assets/edit.png')}
-                        style={{width: 28, height: 28}}/>
+                               style={{width: 28, height: 28}}/>
                     </TouchableHighlight>
                 </View>
-                <Modal 
+                <Modal
                     isVisible={this.state.visibleModal === 'bottom'}
                     onSwipeComplete={() => this.setState({visibleModal: null})}
                     swipeDirection={['up', 'left', 'right', 'down']}
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
                         <View style={{flexDirection: 'row'}}>
-                        <Image
-                          source={require('../../assets/logouser.png')}
-                          style={{width: 100, height: 100, borderRadius: 32 / 2}}
-                        />
-                        <Text style={{fontSize:20,marginLeft:12,marginTop:45}}>Shuaa5</Text>
+                            <Image
+                                source={require('../../assets/logouser.png')}
+                                style={{width: 100, height: 100, borderRadius: 32 / 2}}
+                            />
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
                         </View>
-                        <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Search')}}/>
-                          <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Main')}}/>       
-                           <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.logout()}}/>          
-                        <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
-                        <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Search')
+                                }}/>
+                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Main')
+                                }}/>
+                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.logout()
+                                }}/>
+                        <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
+                                onPress={() => this.setState({visibleModal: null})}
+                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
                     </View>
                 </Modal>
             </View>
-            
+
         );
-   }
+    }
 }
-const DrawerNavigatorExample = createDrawerNavigator({
-    //Drawer Optons and indexing
-    Home: {
-      //Title
-      screen: FeedScreen,
-      navigationOptions: {
-        drawerLabel: 'Demo Screen 2',
-      },
-    },
-    Profile: {
-      //Title
-      screen: ProfileScreen,
-      navigationOptions: {
-        drawerLabel: 'Demo Screen 2',
-      },
-    },
-    Search: {
-      //Title
-      screen: SearchScreen,
-      navigationOptions: {
-        drawerLabel: 'Demo Screen 3',
-      },
-    },
-  }); 
 
 const styles = StyleSheet.create({
     container: {
         paddingTop: 7,
-        marginBottom:-7,
+        marginBottom: -7,
     },
     row: {
         flexDirection: 'row'
@@ -303,5 +290,5 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
-      },
+    },
 });

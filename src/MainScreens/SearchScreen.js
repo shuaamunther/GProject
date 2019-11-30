@@ -10,48 +10,59 @@ import {
 import CardListScreen from './component/CardListScreen';
 import * as firebase from 'firebase';
 import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
-import { Card, Button,List, ListItem } from 'react-native-elements';
+import {Card, Button, List, ListItem} from 'react-native-elements';
 import Modal from "react-native-modal";
 
 class HeaderUserView extends React.Component {
     openModal = () => {
-        this.setState({ visibleModal: 'bottom'});
+        this.setState({visibleModal: 'bottom'});
     };
+
     constructor(props) {
         super(props)
-
         this.state = {
             visibleModal: null,
-            
         }
     }
+
     render() {
         return (
             <View>
-            <View style={{position: 'absolute', top:8 ,marginLeft:5,direction:'row'}}>
-            <TouchableOpacity onPress={() => this.openModal}>
-                    <Image source={require('../../assets/menu.png')}
-                    style={{width: 28, height: 28}}/>
-                </TouchableOpacity>
-                <Text style={{marginLeft:50,marginTop:-25,fontSize:20}}>Search</Text>
-            </View>
-            <Modal
-                animationType="slide"
-                isVisible={this.state.visibleModal === 'bottom'}
-                onSwipeComplete={() => this.setState({visibleModal: null})}
-                swipeDirection={['up', 'left', 'right', 'down']}
-                style={styles.bottomModal}>
-                <View style={styles.modelContent}>
-                    <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                            onPress={() => {this.props.navigation.navigate('Search')}}/>
-                      <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                            onPress={() => {this.props.navigation.navigate('Main')}}/>  
-                       <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                            onPress={() => {this.logout()}}/>          
-                    <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
-                    <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                <View style={{position: 'absolute', top: 8, marginLeft: 5, direction: 'row'}}>
+                    <TouchableOpacity onPress={() => this.openModal}>
+                        <Image source={require('../../assets/menu.png')}
+                               style={{width: 28, height: 28}}/>
+                    </TouchableOpacity>
+                    <Text style={{marginLeft: 50, marginTop: -25, fontSize: 20}}>Search</Text>
                 </View>
-            </Modal>
+                <Modal
+                    animationType="slide"
+                    isVisible={this.state.visibleModal === 'bottom'}
+                    onSwipeComplete={() => this.setState({visibleModal: null})}
+                    swipeDirection={['up', 'left', 'right', 'down']}
+                    style={styles.bottomModal}>
+                    <View style={styles.modelContent}>
+                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Search')
+                                }}/>
+                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Main')
+                                }}/>
+                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.logout()
+                                }}/>
+                        <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
+                                onPress={() => this.setState({visibleModal: null})}
+                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                    </View>
+                </Modal>
             </View>
 
         )
@@ -59,9 +70,10 @@ class HeaderUserView extends React.Component {
 }
 
 export default class SearchScreen extends React.Component {
-    static navigationOptions ={
-        header:null
-       };
+    static navigationOptions = {
+        header: null
+    };
+
     constructor(props) {
         super(props)
 
@@ -70,8 +82,8 @@ export default class SearchScreen extends React.Component {
             UserSearch: '',
             FilterSearch: '',
             recipe: [],
-            users:[],
-            source:'',
+            users: [],
+            source: '',
             visibleModal: null,
         }
     }
@@ -93,53 +105,51 @@ export default class SearchScreen extends React.Component {
                     })
                 })
             })
-
             this.setState({
                 recipe: recipe
             })
         }.bind(this))
     };
 
-   
-
     renderSeparator = () => {
         return (
-          <View
-            style={{
-              height: 1,
-              width: "86%",
-              backgroundColor: "#CED0CE",
-              marginLeft: "14%"
-            }}
-          >
-              <Image source={require('../../assets/logouser.png')}/>
-              </View>
-          
+            <View
+                style={{
+                    height: 1,
+                    width: "86%",
+                    backgroundColor: "#CED0CE",
+                    marginLeft: "14%"
+                }}
+            >
+                <Image source={require('../../assets/logouser.png')}/>
+            </View>
+
         );
-      };
-    componentWillMount(){
+    };
+
+    componentWillMount() {
         this.updateSearch();
-            this.props.openModal
-            
+        this.props.openModal
     }
+
     updateSearch2 = (UserSearch) => {
         this.setState({UserSearch});
-        
+
         let users = []
         firebase.database().ref().child('users').orderByChild('fullname').startAt(UserSearch).on("value", function (snapshot) {
             snapshot.forEach(function (item) {
-                   // let userName = user.child('fullname').val();
-                    users.push({
-                        fullname: item.val().fullname,
-                        user_id:item.key,
-                    })
+                // let userName = user.child('fullname').val();
+                users.push({
+                    fullname: item.val().fullname,
+                    user_id: item.key,
                 })
+            })
             this.setState({
-                users:users
+                users: users
             })
         }.bind(this))
     };
-    
+
     segrantClicked = (index) => {
         this.setState({
             activeIndex: index
@@ -148,136 +158,154 @@ export default class SearchScreen extends React.Component {
     renderSection = () => {
         if (this.state.activeIndex == 0) {
             return (
-                <ScrollView >
-                      <View style={styles.row}>
-                    <View style={styles.inputContainer}>
-                        <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
-                        <TextInput style={styles.inputs}
-                                   placeholder="Search..."
-                                   autoCapitalize="none"
-                                   underlineColorAndroid='transparent'
-                                   onChangeText={(search) => this.updateSearch(search)}
-                                   value={this.state.search}
-                                   />     
+                <ScrollView>
+                    <View style={styles.row}>
+                        <View style={styles.inputContainer}>
+                            <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
+                            <TextInput style={styles.inputs}
+                                       placeholder="Search..."
+                                       autoCapitalize="none"
+                                       underlineColorAndroid='transparent'
+                                       onChangeText={(search) => this.updateSearch(search)}
+                                       value={this.state.search}
+                            />
+                        </View>
                     </View>
-                </View>
-                <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
-            </ScrollView>
+                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
+                </ScrollView>
             )
         }
         if (this.state.activeIndex == 1) {
             return (
-                <ScrollView >
-                      <View style={styles.row}>
-                    <View style={styles.inputContainer}>
-                        <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
-                        <TextInput style={styles.inputs}
-                                   placeholder="Search ..."
-                                   autoCapitalize="none"
-                                   underlineColorAndroid='transparent'
-                                   onChangeText={(UserSearch) => this.updateSearch2(UserSearch)}
-                                   value={this.state.UserSearch}
-                                   />     
+                <ScrollView>
+                    <View style={styles.row}>
+                        <View style={styles.inputContainer}>
+                            <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
+                            <TextInput style={styles.inputs}
+                                       placeholder="Search ..."
+                                       autoCapitalize="none"
+                                       underlineColorAndroid='transparent'
+                                       onChangeText={(UserSearch) => this.updateSearch2(UserSearch)}
+                                       value={this.state.UserSearch}
+                            />
+                        </View>
                     </View>
-                </View>
-                <ActivityIndicator size="large" color="#00b5ec" style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
-                 <FlatList 
-                          data={this.state.users}
-                          renderItem={({ item }) => (
-                   <ListItem onPress={() => {this.props.navigation.navigate('Profile', {user_id: `${item.user_id}`})}}
-                             roundAvatar
-                             title={`${item.fullname} `}
-                             disabled={this.state.isLoading}
-                             ItemSeparatorComponent={this.renderSeparator}
-                             leftAvatar={{ source:  require('../../assets/logouser.png')  }}
-                             rightAvatar={{ source:  require('../../assets/left.png')  }}
-                   />
-                          )}         
-               />    
-            </ScrollView> 
+                    <ActivityIndicator size="large" color="#00b5ec"
+                                       style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
+                    <FlatList
+                        data={this.state.users}
+                        renderItem={({item}) => (
+                            <ListItem onPress={() => {
+                                this.props.navigation.navigate('Profile', {user_id: `${item.user_id}`})
+                            }}
+                                      roundAvatar
+                                      title={`${item.fullname} `}
+                                      disabled={this.state.isLoading}
+                                      ItemSeparatorComponent={this.renderSeparator}
+                                      leftAvatar={{source: require('../../assets/logouser.png')}}
+                                      rightAvatar={{source: require('../../assets/left.png')}}
+                            />
+                        )}
+                    />
+                </ScrollView>
             )
         }
         if (this.state.activeIndex == 2) {
             return (
-                <ScrollView >
-                      <View style={styles.row}>
-                    <View style={styles.inputContainer}>
-                        <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
-                        <TextInput style={styles.inputs}
-                                   placeholder="Search..."
-                                   autoCapitalize="none"
-                                   underlineColorAndroid='transparent'
-                                   onChangeText={(FilterSearch) => this.updateSearch(FilterSearch)}
-                                   value={this.state.FilterSearch}
-                                   />     
+                <ScrollView>
+                    <View style={styles.row}>
+                        <View style={styles.inputContainer}>
+                            <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
+                            <TextInput style={styles.inputs}
+                                       placeholder="Search..."
+                                       autoCapitalize="none"
+                                       underlineColorAndroid='transparent'
+                                       onChangeText={(FilterSearch) => this.updateSearch(FilterSearch)}
+                                       value={this.state.FilterSearch}
+                            />
+                        </View>
                     </View>
-                </View>
-                <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
-            </ScrollView>
+                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
+                </ScrollView>
             )
         }
     }
     openModal = () => {
-        this.setState({ visibleModal: 'bottom'});
+        this.setState({visibleModal: 'bottom'});
     };
-   
 
     render() {
-   
         logout = () => {
             firebase.auth().signOut()
-            .then(function() {
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
-                 });
-                 this.props.navigation.dispatch(resetAction);
-            }.bind(this))
-            .catch(function(error) {
-                console.log("logout failed: ", error)
-            });
+                .then(function () {
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({routeName: 'Login'})],
+                    });
+                    this.props.navigation.dispatch(resetAction);
+                }.bind(this))
+                .catch(function (error) {
+                    console.log("logout failed: ", error)
+                });
         }
-        
+
         console.log(this.state.users)
         return (
-            <ScrollView>   
-                <HeaderUserView/>         
+            <ScrollView>
+                <HeaderUserView/>
                 <View style={styles.previewContainer}>
-                <View style={styles.Preview}>
-                    <TouchableOpacity
-                        style={this.state.activeIndex == 0 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
-                        onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}  >
-                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
-                            this.state.activeIndex == 0 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
-                            Recipe Name
-                        </Text>
-                        
-                    </TouchableOpacity>
+                    <View style={styles.Preview}>
+                        <TouchableOpacity
+                            style={this.state.activeIndex == 0 ? {
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#156a95'
+                            } : {color: '#7c8191'}}
+                            onPress={() => this.segrantClicked(0)} active={this.state.activeIndex == 0}>
+                            <Text style={[styles.followingTitle, styles.followingTitleForNumbers,
+                                this.state.activeIndex == 0 ? {
+                                    color: '#156a95',
+                                    paddingBottom: 4
+                                } : {color: '#7c8191'}]}>
+                                Recipe Name
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={this.state.activeIndex == 1 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
-                        onPress={() => this.segrantClicked(1)} active={this.state.activeIndex == 1}>
-                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
-                            this.state.activeIndex == 1 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
-                            Users
-                        </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={this.state.activeIndex == 1 ? {
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#156a95'
+                            } : {color: '#7c8191'}}
+                            onPress={() => this.segrantClicked(1)} active={this.state.activeIndex == 1}>
+                            <Text style={[styles.followingTitle, styles.followingTitleForNumbers,
+                                this.state.activeIndex == 1 ? {
+                                    color: '#156a95',
+                                    paddingBottom: 4
+                                } : {color: '#7c8191'}]}>
+                                Users
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={this.state.activeIndex == 2 ? {borderBottomWidth: 1, borderBottomColor: '#156a95'} : {color: '#7c8191'}}
-                        onPress={() => this.segrantClicked(2)} active={this.state.activeIndex == 2}>
-                        <Text  style={[styles.followingTitle, styles.followingTitleForNumbers,
-                            this.state.activeIndex == 2 ? {color: '#156a95', paddingBottom: 4} : {color: '#7c8191'}]}>
-                            Filter Search
-                        </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={this.state.activeIndex == 2 ? {
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#156a95'
+                            } : {color: '#7c8191'}}
+                            onPress={() => this.segrantClicked(2)} active={this.state.activeIndex == 2}>
+                            <Text style={[styles.followingTitle, styles.followingTitleForNumbers,
+                                this.state.activeIndex == 2 ? {
+                                    color: '#156a95',
+                                    paddingBottom: 4
+                                } : {color: '#7c8191'}]}>
+                                Filter Search
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {this.renderSection()}
                 </View>
-                {this.renderSection()}
-            </View>
-            <View style={{position: 'absolute', top:8,marginLeft:4 }}>
+                <View style={{position: 'absolute', top: 8, marginLeft: 4}}>
                     <TouchableHighlight onPress={this.openModal}>
                         <Image source={require('../../assets/menu.png')}
-                        style={{width: 28, height: 28}}/>
+                               style={{width: 28, height: 28}}/>
                     </TouchableHighlight>
                 </View>
 
@@ -287,26 +315,39 @@ export default class SearchScreen extends React.Component {
                     swipeDirection={['up', 'left', 'right', 'down']}
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
-                      <View style={{flexDirection: 'row'}}>
-                        <Image
-                          source={require('../../assets/logouser.png')}
-                          style={{width: 100, height: 100, borderRadius: 32 / 2}}
-                        />
-                        <Text style={{fontSize:20,marginLeft:12,marginTop:45}}>Shuaa5</Text>
-                        </View>                        
-                        <Button title="Home" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Main')}}/>
-                        <Button title="Search" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Search')}}/>  
-                            <Button title="Profile" buttonStyle={{ backgroundColor:'#00b5ec',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.props.navigation.navigate('Profile')}}/>      
-                           <Button title="Logout" buttonStyle={{ backgroundColor:'#d9534f',borderRadius: 30, }} containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {this.logout()}}/>          
-                        <View style={{height: 1, backgroundColor:'#ccc', marginTop: 20, marginBottom: 2}}></View>
-                        <Button title="Close" buttonStyle={{ backgroundColor:'#8a8a8a' ,borderRadius: 30,}} onPress={() => this.setState({visibleModal: null})} containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                        <View style={{flexDirection: 'row'}}>
+                            <Image
+                                source={require('../../assets/logouser.png')}
+                                style={{width: 100, height: 100, borderRadius: 32 / 2}}
+                            />
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
+                        </View>
+                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Main')
+                                }}/>
+                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Search')
+                                }}/>
+                        <Button title="Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Profile')
+                                }}/>
+                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.logout()
+                                }}/>
+                        <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
+                        <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
+                                onPress={() => this.setState({visibleModal: null})}
+                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
                     </View>
                 </Modal>
-               
             </ScrollView>
         );
     }
@@ -393,7 +434,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: "#00b5ec",
     },
-    
+
     headerUserView: {
         height: 320,
         backgroundColor: 'red'
@@ -411,7 +452,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         borderRadius: 30,
-        borderColor:"#00b5ec",
+        borderColor: "#00b5ec",
         flexDirection: 'row',
         backgroundColor: '#fff',
         padding: 16,
@@ -438,7 +479,7 @@ const styles = StyleSheet.create({
     },
     previewContainer: {
         paddingTop: 50,
-        borderTopWidth:2
+        borderTopWidth: 2
     },
     Preview: {
         justifyContent: 'space-around',
@@ -496,8 +537,8 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
-      },
-      buttonContainer: {
+    },
+    buttonContainer: {
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',
