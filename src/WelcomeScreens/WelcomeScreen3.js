@@ -213,7 +213,6 @@ export default class Welcome extends React.Component {
         }
     }
 
-
     _renderItem = (item) => {
         console.log('_renderItem: ')
         console.log(item);

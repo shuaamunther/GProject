@@ -169,7 +169,9 @@ class Preview extends React.Component {
         this.state = {
             activeIndex: 0,
             recipe: [],
-            myRecipe: []
+            myRecipe: [],
+            savedrecipe:[],
+            saved_recipe:[],
         }
     }
 
@@ -182,6 +184,7 @@ class Preview extends React.Component {
     componentDidMount = () => {
         this.showMyRecipe(this.props.user_id);
         this.showData()
+        this.savedData()
     }
 
     showMyRecipe(userId) {
@@ -191,6 +194,7 @@ class Preview extends React.Component {
                 snapshot.forEach(function (item) {
                     firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
                         let userName = user.child('fullname').val();
+                      //  console.log('userName',userName)
                         myRecipe.push({
                             title: item.val().title,
                             type: item.val().type,
@@ -220,6 +224,7 @@ class Preview extends React.Component {
             snapshot.forEach(function (item) {
                 firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
                     let userName = user.child('fullname').val();
+                    //console.log('userName',userName)
                     recipe.push({
                         title: item.val().title,
                         type: item.val().type,
@@ -236,6 +241,42 @@ class Preview extends React.Component {
             })
 
         }.bind(this));
+    }
+
+    savedData() {
+        let savedrecipe = []
+        let Userid = firebase.auth().currentUser.uid
+        let iddd=-'Ltp4EkGUQf0O4CO_St_'
+        let ref =firebase.database().ref('/users/')
+        let name=[]
+        firebase.database().ref('/users/'+Userid+'/saved_recipe').on('value', function (snapshot) {
+            snapshot.forEach(function (item) {
+               // console.log('key',firebase.database().ref('/recipes/' + item.val()))
+                firebase.database().ref('recipes/'+item.val()).on('value', function (user) {
+                    firebase.database().ref('/users/'+user.val().user_id).child ('fullname').on('value', function (e) {
+                        name.push(e.val())
+                    })
+                     
+                  console.log('userName',name)
+                    savedrecipe.push({
+                        title: user.val().title,
+                        type: user.val().type,
+                        rate: user.val().rate,
+                        id: user.key,
+                        name: name,
+                        user_id: user.val().user_id
+
+                    })
+                })
+            })
+
+            this.setState({
+                savedrecipe: savedrecipe
+            })
+
+        }.bind(this));
+
+        
     }
 
     renderSection = () => {
@@ -255,14 +296,16 @@ class Preview extends React.Component {
         }
         if (this.state.activeIndex == 2) {
             return (
-                <View>
-                    <Text>Saved</Text>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                    <CardListScreen recipe={this.state.savedrecipe} navigation={this.props.navigation}/>
                 </View>
             )
         }
     }
 
     render() {
+       // console.log('saved',this.state.savedrecipe)
+        //console.log('recope',this.state.recipe)
         return (
             <View style={styles.previewContainer}>
                 <View style={styles.Preview}>

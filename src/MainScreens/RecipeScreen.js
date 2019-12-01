@@ -4,7 +4,7 @@ import {
     ImageBackground, ScrollView, TouchableHighlight, error, FlatList
 } from 'react-native'
 import {StackActions, NavigationActions} from 'react-navigation';
-import {Card, Button} from 'react-native-elements';
+import { Rating, Card, Button  } from 'react-native-elements';
 import * as firebase from 'firebase';
 import Modal from "react-native-modal";
 import CardListScreen from "./component/CardListScreen";
@@ -13,12 +13,48 @@ import DataScreen from "./component/DataScreen"
 class HeaderImageView extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {visibleModal: null}
+        this.state = {visibleModal: null,
+                        recipes:'',               
+        }
     }
 
     openModal = () => {
         this.setState({visibleModal: 'bottom'});
     };
+
+    saveRecipe(){
+        let Userid = firebase.auth().currentUser.uid
+        let recipeId=this.props.id
+        var userData={recipeId}
+        var id
+        let recipes = []
+        let flag=false
+       // userData.push({"recipe_id": recipeId})
+        //userData['id'] = this.props.id        
+        try {
+            firebase.database().ref().child('users/'+Userid+'/saved_recipe').on("value", function (snapshot) {
+                snapshot.forEach(function (item) {
+                    id=item.val()
+                    if(id == recipeId)
+                    {flag=true}
+                   console.log('key',id)
+                   console.log('result',flag)
+            })
+        })
+        console.log('resultout',flag)
+             if(flag==true)
+             {
+                alert('This Recipe saved already!')
+             }
+             else{
+                 firebase.database().ref('users/'+Userid).child('/saved_recipe').push(recipeId)
+                 alert('saved successfully')
+               }
+            }
+    catch(error){
+        console.log(error)
+    }
+      }
 
     render() {
         //    let recipeId = String(navigation.getParam('id', ""))
@@ -44,7 +80,8 @@ class HeaderImageView extends React.Component {
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
                         <Button title="Save Recipe" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                                containerStyle={{marginTop: 10, marginBottom: 10}}
+                                onPress={() => this.saveRecipe()}/>
                         <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
                         <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
                                 onPress={() => this.setState({visibleModal: null})}
@@ -160,10 +197,9 @@ class Preview extends React.Component {
             return (
                 <View>
                     <Text>{'\n'}</Text>
-                    <View style={{marginTop: -20,}}>
+                    <View style={{marginTop: -20,width:330,marginLeft:90}}>
                         <FlatList style={{
-                            marginTop: -20, alignItems: 'center',
-                        }}
+                            marginTop: -20, }}
                                   data={this.state.ingredients}
                                   numColumns={1}
                                   keyExtractor={(item, index) => item.id}
@@ -171,26 +207,57 @@ class Preview extends React.Component {
                                       <View style={{
                                           borderBottomWidth: 1,
                                           alignItems: 'center',
-                                          width: 2,
+                                          width: 330,
                                           borderRadius: 100,
                                           borderColor: '#00b5ec',
                                           alignContent: 'center',
                                           backgroundColor: '#E3F2FD',
                                           width: '50%'
-                                      }}>
+                                     }}>
                                           <Text style={{
                                               alignContent: 'center',
                                               marginTop: 2,
                                               fontSize: 20,
                                               fontFamily: 'notoserif',
                                               color: "#7c8191"
-                                          }}>
+                                            }}>
                                               {item}
                                           </Text>
                                       </View>
                                   }
                                   style={{backgroundColor: 'white'}}
-                        />
+                        /> 
+                    </View>
+                    <Text style={{fontSize:25,marginLeft:10,marginTop:20}}>Nutration</Text>
+                    <View style={{flexDirection:'row'}}>
+                       <View style={{marginTop:10,flexDirection:'row',marginLeft:40}}>
+                            <Text style={{fontSize:20}}>Fiber: </Text>
+                            <View style={{ backgroundColor : '#E3F2FD',borderWidth:1,borderColor:'#00b5ec',width:50,borderRadius:10}}>
+                              <Text style={{fontSize:20}}>{this.state.fat} gm</Text>
+                            </View> 
+                       </View> 
+
+                       <View style={{marginTop:10,flexDirection:'row',marginLeft:80}}>
+                            <Text style={{fontSize:20}}>Fat : </Text>
+                            <View style={{ backgroundColor : '#E3F2FD',borderWidth:1,borderColor:'#00b5ec',width:50,borderRadius:10}}>
+                              <Text style={{fontSize:20}}>{this.state.fiber} gm</Text>
+                             </View> 
+                       </View> 
+                    </View>   
+                    <View style={{flexDirection:'row',marginTop:8}}>
+                    <View style={{marginTop:10,flexDirection:'row',marginLeft:40}}>
+                            <Text style={{fontSize:20}}>Calories: </Text>
+                            <View style={{ backgroundColor : '#E3F2FD',borderWidth:1,borderColor:'#00b5ec',width:50,borderRadius:10}}>
+                              <Text style={{fontSize:20}}>{this.state.calories} c</Text>
+                            </View> 
+                    </View> 
+
+                    <View style={{marginTop:10,flexDirection:'row',marginLeft:60}}>
+                            <Text style={{fontSize:20}}>Protein: </Text>
+                            <View style={{ backgroundColor : '#E3F2FD',borderWidth:1,borderColor:'#00b5ec',width:50,borderRadius:10}}>
+                              <Text style={{fontSize:20}}>{this.state.protein} gm</Text>
+                            </View> 
+                    </View> 
                     </View>
                 </View>
             )
@@ -198,14 +265,23 @@ class Preview extends React.Component {
 
         if (this.state.activeIndex == 1) {
             return (
-                <View style={{}}>
+                <View style={{backgroundColor: '#E3F2FD',
+                             borderRadius:25,
+                             borderWidth:1,
+                             borderColor:'#00b5ec',
+                             width:320,
+                             marginLeft:20,}}>
                     <Text style={{
                         marginTop: 5,
                         fontSize: 25,
+                        marginBottom:30,
                         fontFamily: 'notoserif',
-                        color: "#7c8191"
-                    }}>{this.state.steps}</Text>
-                </View>
+                             color: "#7c8191",
+                        marginLeft:10
+                    }}>Steps :
+                        {'\n'} {'\n'}
+                      {this.state.steps}</Text>  
+               </View>
             )
         }
         if (this.state.activeIndex == 2) {
@@ -310,7 +386,7 @@ export default class RecipeScreen extends React.Component {
         return (
             <ScrollView>
                 <View style={{marginBottom: 20}}>
-                    <HeaderImageView/>
+                    <HeaderImageView id={id}/>
                     <Following id={id}/>
                     <Preview id={id}/>
                 </View>
