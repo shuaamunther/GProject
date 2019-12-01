@@ -253,11 +253,9 @@ class Preview extends React.Component {
             snapshot.forEach(function (item) {
                // console.log('key',firebase.database().ref('/recipes/' + item.val()))
                 firebase.database().ref('recipes/'+item.val()).on('value', function (user) {
-                    firebase.database().ref('/users/'+user.val().user_id).child ('fullname').on('value', function (e) {
-                        name.push(e.val())
-                    })
-                     
-                  console.log('userName',name)
+                //     firebase.database().ref('/users/'+user.val().user_id).child ('fullname').on('value', function (e) {
+                //         name.push(e.val()) })
+                //   console.log('userName',name)
                     savedrecipe.push({
                         title: user.val().title,
                         type: user.val().type,
