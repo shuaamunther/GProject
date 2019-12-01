@@ -267,14 +267,10 @@ class Preview extends React.Component {
                     })
                 })
             })
-
             this.setState({
                 savedrecipe: savedrecipe
             })
-
-        }.bind(this));
-
-        
+        }.bind(this));       
     }
 
     renderSection = () => {
