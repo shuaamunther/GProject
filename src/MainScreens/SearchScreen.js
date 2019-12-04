@@ -418,7 +418,21 @@ export default class SearchScreen extends React.Component {
                             />
                         </View>
                     </View>
-                     <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/> 
+                    <FlatList
+                        data={this.state.recipe}
+                        renderItem={({item}) => (
+                            <ListItem onPress={() => {
+                                this.props.navigation.navigate('Recipe', {id: `${item.id}`})
+                            }}
+                                      roundAvatar
+                                      title={`${item.title} `}
+                                      disabled={this.state.isLoading}
+                                      ItemSeparatorComponent={this.renderSeparator}
+                                      leftAvatar={{source: require('../../assets/meal2.png')}}
+                                      rightAvatar={{source: require('../../assets/left.png')}}
+                            />
+                        )}
+                    />   
                 </ScrollView>
             )
         }
