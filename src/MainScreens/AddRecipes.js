@@ -340,7 +340,19 @@ class AddRecipes extends React.Component {
                                underlineColorAndroid='transparent'
                                onChangeText={(time) => this.setState({time})}
                     />
-                    
+                    {/**   <RNPickerSelect  placeholder={time}
+                     //style={pickerSelectStyles} 
+                                     onValueChange={(value) =>this.setState( {...this.state, time : value})}
+                                     value = {this.state.time}
+                                     items={[
+                                                { label: '10 min', value: '10 min' },
+                                                { label: '30 min', value: '30 min' },
+                                                { label: '50 min', value: '50 min' },
+                                                { label: '1 hour', value: '1 hour' },
+                                                { label: '2 hour', value: '2 hour' },
+                                                { label: ' more than 3 hour', value: '+3 hour' },
+                                            ]}
+                    /> */}
                 </View>
 
                 <View style={styles.inputContainer}>

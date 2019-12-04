@@ -18,11 +18,12 @@ import CardScreen from './src/MainScreens/component/CardScreen';
 import UserCard from './src/MainScreens/component/UsersCard';
 import SearchScreen from './src/MainScreens/SearchScreen';
 import DataScreen from './src/MainScreens/component/DataScreen';
-import Test from './src/Test';
+import Test from './src/MainScreens/Test';
 import AddRecipes from './src/MainScreens/AddRecipes';
 import RecipeScreen from './src/MainScreens/RecipeScreen';
 import PickingPicture from './src/PickingPicture'
 import FirstScreen from './src/FirstScreen';
+import FollowingScreen from './src/MainScreens/FollowingScreen'
 //import FlatListDemo from './src/ChatScreens/LoginToChat';
 //import ChatScreen from './src/ChatScreens/ChatScreen';
 import * as firebase from 'firebase';
@@ -116,6 +117,9 @@ const AppNavigator = createStackNavigator({
         //     {screen: FlatListDemo},
         // Chat:
         //     {screen: ChatScreen},
+        Following:
+            {screen:FollowingScreen},
+
     },
     {
         initialRouteName: "First"

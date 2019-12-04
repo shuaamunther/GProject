@@ -38,22 +38,42 @@ class HeaderImageView extends React.Component {
             });
     }
 
-    addFollowing(user_id) {
-        /* let iduser=firebase.auth().currentUser.uid
-          let follower=['firebase.auth().currentUser.uid']
-          console.log('hi')
-          let users = []
-          firebase.database().ref().child('users').orderByChild('uid').startAt(user_id).on("value", function (snapshot) {
-              snapshot.forEach(function (item)
-                     // let userName = user.child('fullname').val();
-                      .set({
-                          followers:firebase.auth().currentUser.uid
-                      })
-                  )
-              this.setState({
-                  users:users
-              })
-          }.bind(this))*/
+    componentDidMount = () => {
+       // this.addFollowing(this.props.user_id)
+       let user_id=this.props.user_id
+    }
+
+    addFollowing() {
+        let Userid = firebase.auth().currentUser.uid
+        let user_id=this.props.user_id
+        let flag
+        let id
+        try
+         {
+            firebase.database().ref().child('users/'+Userid+'/follwing').on("value", function (snapshot) {
+                snapshot.forEach(function (item) {
+                    id=item.val()
+                    if(id == user_id)
+                    {flag=true}
+                   console.log('key',id)
+                   console.log('result',flag)
+            })
+        }) 
+            if(flag==true)
+            {
+                 alert('you are following him already')
+            }
+            else {
+                firebase.database().ref().child('users/'+Userid+'/follwing').push(user_id)
+                firebase.database().ref().child('users/'+user_id+'/followers').push(Userid)
+                alert('you followed this user successfully')
+            }
+
+        }
+
+        catch(error){
+          console.log(error)
+        }
     };
 
     render() {
@@ -76,8 +96,7 @@ class HeaderImageView extends React.Component {
                                         marginLeft: 8,
                                         marginRight: 8,
                                         color: "#fff",
-                                        fontSize: 16
-                                    }}>Follow</Text>
+                                        fontSize: 16}}>Follow</Text>
                                 </View>
                             </TouchableHighlight>
                         </View>
@@ -138,8 +157,34 @@ class HeaderImageView extends React.Component {
 class Following extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {following: 100, followers: 240, posts: 45}
+        this.state = {following: 77, followers: 240, posts: 45}
     }
+
+    
+    // addFollowing() {
+    //     let Userid = firebase.auth().currentUser.uid
+    //     let user_id=this.props.user_id
+    //     let flag
+    //     let id
+    //     ids=[]
+    //     try
+    //      {
+    //         firebase.database().ref().child('users/'+Userid+'/follwing').on("value", function (snapshot) {
+    //             snapshot.forEach(function (item) {
+    //                 id=item.val()
+    //                 ids.push({id:item.val()}) 
+    //                 let n=ids.length                   
+    //         })
+    //     }) 
+    //     this.setState({ ...this.state,
+    //         recipe: recipe
+    //     })
+    // }
+
+    //     catch(error){
+    //       console.log(error)
+    //     }
+    // };
 
     render() {
         return (
@@ -380,7 +425,7 @@ export default class ProfileScreen extends React.Component {
         return (
             <ScrollView>
                 <View style={{marginBottom: 20}}>
-                    <HeaderImageView navigation={navigation} username={this.state.username} isSameUser={isSameUser}/>
+                    <HeaderImageView navigation={navigation} username={this.state.username} user_id={userId} isSameUser={isSameUser}/>
                     <Following/>
                     <Preview user_id={userId}/>
                 </View>

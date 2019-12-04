@@ -7,9 +7,10 @@ import {
     TouchableHighlight,
     ActivityIndicator,
     CheckBox,
-    Switch
+    Switch, KeyboardAvoidingView,
 } from 'react-native'
 import CardListScreen from './component/CardListScreen';
+//import Firebase from 'C:/Project/AwesomeProject/firebase.js'
 import * as firebase from 'firebase';
 import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
 import {Card, Button, List, ListItem} from 'react-native-elements';
@@ -18,7 +19,7 @@ import TagInput from 'react-native-tags-input';
 import RNPickerSelect from 'react-native-picker-select';
 
 const placeholder = {
-    label: ' Select craisine ',
+    label: ' Select cruisine ',
     value: null,
     color: '#00b5ec',
     marginLeft:50,
@@ -104,11 +105,24 @@ class HeaderUserView extends React.Component {
     }
   
     render() {
+         logout = () => {
+            Firebase.auth().signOut()
+                .then(function () {
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({routeName: 'Login'})],
+                    });
+                    this.props.navigation.dispatch(resetAction);
+                }.bind(this))
+                .catch(function (error) {
+                    console.log("logout failed: ", error)
+                });
+        }
         return (
             <View>
                 <View style={{position: 'absolute', top: 8, marginLeft: 5, direction: 'row'}}>
                     <TouchableOpacity onPress={() => this.openModal}>
-                        <Image source={require('../../assets/menu.png')}
+                        <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
                                style={{width: 28, height: 28}}/>
                     </TouchableOpacity>
                     <Text style={{marginLeft: 50, marginTop: -25, fontSize: 20}}>Search</Text>
@@ -133,7 +147,7 @@ class HeaderUserView extends React.Component {
                         <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
-                                    this.logout()
+                                    this.logout
                                 }}/>
                         <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
                         <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
@@ -158,52 +172,48 @@ export default class SearchScreen extends React.Component {
         this.state = {
             Search: '',
             UserSearch: '',
-            FilterSearch: '',
             recipe: [],
             users: [],
             source: '',
             visibleModal: null,
             visibleModal2: null,
-            tags: {
+            ingredients_tags: {
+                tag: '',
+                tagsArray: []
+              },
+              allergies_tags: {
+                tag: '',
+                tagsArray: []
+              },
+             dislikes_tags: {
                 tag: '',
                 tagsArray: []
               },
             tagsColor: mainColor,
             tagsText: '#fff',
-            switchValue: false,
-            switchValue2: false,
-            diet:false,
-            veg:false,
-            dairy: false,
-            egg: false,
-            gluten: false,
-            peanut: false,
-            seafood: false,
-            sesame: false,
-            soy: false,
-            treenut: false,
-            wheat: false,
-            sulfite: false,
-            alcohole: false,
-            avocado: false,
-            beef: false,
-            eggplant: 'false',
-            mushrooms: 'false',
-            pork: 'false',
-            onions: 'false',
-            suger: 'false',
-            olives: 'false'
+            use_user_preferences: false,
+            update_user_preferences: false,
+            cruisine : '',
+            type : '',
+            difficulty : '',
+            veg : false,
+            diet : false,
+            filtered_recipe : []
         }
     }
 
-    updateTagState = (state) => {
-        this.setState({
-          tags: state
-        })
+    updateTagState_ingredients = (state) => {
+        this.setState({ ...this.state, ingredients_tags: state})
+      };
+      updateTagState_allergies = (state) => {
+        this.setState({ ...this.state, allergies_tags: state})
+      };
+      updateTagState_dislikes = (state) => {
+        this.setState({ ...this.state, dislikes_tags: state})
       };
 
     updateSearch = (search) => {
-        this.setState({search});
+        this.setState({ ...this.state,search});
         let recipe = []
         firebase.database().ref().child('recipes').orderByChild('title').startAt(search).on("value", function (snapshot) {
             snapshot.forEach(function (item) {
@@ -219,7 +229,7 @@ export default class SearchScreen extends React.Component {
                     })
                 })
             })
-            this.setState({
+            this.setState({ ...this.state,
                 recipe: recipe
             })
         }.bind(this))
@@ -235,20 +245,20 @@ export default class SearchScreen extends React.Component {
                     marginLeft: "14%"
                 }}
             >
-                <Image source={require('../../assets/logouser.png')}/>
+                {/* <Image source={require('../../assets/logouser.png')}/> */}
             </View>
 
         );
     };
 
     componentWillMount() {
-        this.updateSearch();
+        
         this.props.openModal
         this.props.openModal2
     }
 
     updateSearch2 = (UserSearch) => {
-        this.setState({UserSearch});
+        this.setState({ ...this.state,UserSearch});
 
         let users = []
         firebase.database().ref().child('users').orderByChild('fullname').startAt(UserSearch).on("value", function (snapshot) {
@@ -259,127 +269,138 @@ export default class SearchScreen extends React.Component {
                     user_id: item.key,
                 })
             })
-            this.setState({
+            this.setState({ ...this.state,
                 users: users
             })
         }.bind(this))
     };
 
     segrantClicked = (index) => {
-        this.setState({
+        this.setState({ ...this.state,
             activeIndex: index
         })
     }
 
-    _handleToggleSwitch = () =>
-    this.setState(state => ({
-      switchValue: !state.switchValue,
-    }));
+    _handleUserPreference = () =>
+    this.setState({ ...this.state, use_user_preferences: !this.state.use_user_preferences, update_user_preferences: false  });
+    
+    _handleEditUserPreference = () =>
+    this.setState({ ...this.state, use_user_preferences: false, update_user_preferences:!this.state.update_user_preferences  });
 
-    _handleToggleSwitch2 = () =>
-    this.setState(state => ({
-      switchValue2: !state.switchValue2,
-    }));
+    
+    filterSearch = () =>{
+        this.setState({...this.state,filtered_recipe: []})
+        let filters = {}
+        if(this.state.cruisine != '' && this.state.cruisine != null){
+            filters ={...filters, cruisine : this.state.cruisine}
+        }
+        if(this.state.type != '' && this.state.cruisine != null){
+            filters ={...filters, type : this.state.type}
+        }
+        if(this.state.difficulty != '' && this.state.difficulty != null){
+            filters ={...filters, difficulty : this.state.difficulty}
+        }
+        if(this.state.ingredients_tags.tagsArray.length != 0){
+            filters ={...filters, ingredients : this.state.ingredients_tags.tagsArray}
+        }
+        if(this.state.use_user_preferences){
+            //get from db and add to filters
+        }
+        else if(this.state.update_user_preferences){
+            if(this.state.diet){
+            filters ={...filters, diet : true}
+            }
+            if(this.state.veg){
+            filters ={...filters, veg : true}
+            }
+            if(this.state.allergies_tags.tagsArray.length != 0){
+              filters ={...filters, allergies : this.state.allergies_tags.tagsArray}
+            }
+            if(this.state.dislikes_tags.tagsArray.length != 0){
+            filters ={...filters, dislikes : this.state.dislikes_tags.tagsArray}
+            }
+        }
+        if(Object.keys(filters).length === 0){
+            alert('no filters added')
+            return
+        }
+        //search the db
+        function intersection(setA, setB) {
+            var _intersection = new Set();
+            for (var elem of setB) {
+                if (setA.has(elem)) {
+                    _intersection.add(elem);
+                }
+            }
+            return _intersection;
+        } 
+        function f_setState(state){
+          this.setState({...this.state,filtered_recipe: state})
+          console.log(this.state.filtered_recipe)
+        }
+        f_setState = f_setState.bind(this);
+        let filtered_result = []
+        firebase.database().ref('recipes').orderByChild('createdAt').on("value", function (snapshot) {
+         let meat = new Set (['chicken','beef','lamb','turkey','pork','ham','fish','lobster','crab','meat'])
+         snapshot.forEach(item => {
+            if(filters.hasOwnProperty('ingredients')){
+                let recipe_ingredients = new Set (item.val().ingredients) ;
+                let a = intersection(recipe_ingredients, new Set(filters.ingredients))
+                let b = new Set(filters.ingredients)
+                if(!(a.size == b.size && [...a].every(value => b.has(value)))){
+                    return
+                }
 
-    _handleToggleSwitch3 = () =>
-    this.setState(state => ({
-      dairy: !state.dairy,
-    }));
-
-    _handleToggleSwitch4 = () =>
-    this.setState(state => ({
-      egg: !state.egg,
-    }));
-
-    _handleToggleSwitch5 = () =>
-    this.setState(state => ({
-      gluten: !state.gluten,
-    }));
-
-    _handleToggleSwitch6 = () =>
-    this.setState(state => ({
-      peanut: !state.peanut,
-    }));
-
-    _handleToggleSwitch7 = () =>
-    this.setState(state => ({
-      seafood: !state.seafood,
-    }));
-
-    _handleToggleSwitch8 = () =>
-    this.setState(state => ({
-      sesame: !state.sesame,
-    }));
-
-    _handleToggleSwitch9 = () =>
-    this.setState(state => ({
-      soy: !state.soy,
-    }));
-
-    _handleToggleSwitch10 = () =>
-    this.setState(state => ({
-      wheat: !state.wheat,
-    }));
-
-    _handleToggleSwitch11 = () =>
-    this.setState(state => ({
-      sulfite: !state.sulfite,
-    }));
-
-    _handleToggleSwitch12 = () =>
-    this.setState(state => ({
-      diet: !state.diet,
-    }));
-
-    _handleToggleSwitch13 = () =>
-    this.setState(state => ({
-      veg: !state.veg,
-    }));
-
-    _handleToggleSwitch14 = () =>
-    this.setState(state => ({
-      alcohole: !state.alcohole,
-    }));
-
-    _handleToggleSwitch15 = () =>
-    this.setState(state => ({
-      avocado: !state.avocado,
-    }));
-
-    _handleToggleSwitch16 = () =>
-    this.setState(state => ({
-      beef: !state.beef,
-    }));
-
-    _handleToggleSwitch17 = () =>
-    this.setState(state => ({
-      eggplant: !state.eggplant,
-    }));
-
-    _handleToggleSwitch18 = () =>
-    this.setState(state => ({
-      mushrooms: !state.mushrooms,
-    }));
-
-    _handleToggleSwitch19 = () =>
-    this.setState(state => ({
-      pork: !state.pork,
-    }));
-
-    _handleToggleSwitch20 = () =>
-    this.setState(state => ({
-      onions: !state.onions,
-    }));
-
-    _handleToggleSwitch21 = () =>
-    this.setState(state => ({
-      suger: !state.suger,
-    }));
-
-    _handleToggleSwitch22 = () =>
-    this.setState(state => ({
-      olives: !state.olives,
-    }));
+            }
+            if(filters.hasOwnProperty('cruisine')){
+                if(item.val().cruisine!=filters.cruisine){
+                   return
+                }
+            }
+            if(filters.hasOwnProperty('type')){
+                if(item.val().type!=filters.type){
+                    return
+                 }
+            }
+            if(filters.hasOwnProperty('difficulty')){
+                if(item.val().difficulty!=filters.difficulty){
+                    return
+                 }
+            }
+            if(filters.hasOwnProperty('veg')){
+                if (intersection(new Set(item.val().ingredients), meat).size != 0){
+                    return
+               }
+            }
+            if(filters.hasOwnProperty('allergies')){
+                if ( intersection(new Set(item.val().ingredients), new Set(filters.allergies)).size != 0){
+                    return
+                }
+            }
+            if(filters.hasOwnProperty('dislikes')){
+                if ( intersection(new Set(item.val().ingredients), new Set(filters.dislikes)).size != 0){
+                    return
+                }
+            }
+            filtered_result.push({
+                id : item.key,
+                title : item.val().title,
+                calories : item.val().calories,
+                difficulty:item.val().difficulty
+            })
+        })
+        
+        if(filters.hasOwnProperty('diet')){
+            filtered_result.sort(function(a,b){
+                return parseInt(a.calories) - parseInt(b.calories);
+                })
+        }
+        f_setState(filtered_result)
+        return
+        }
+        ).bind(this)
+        return
+    }
 
     renderSection = () => {
         if (this.state.activeIndex == 0) {
@@ -387,7 +408,7 @@ export default class SearchScreen extends React.Component {
                 <ScrollView>
                     <View style={styles.row}>
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
+                            <Image style={styles.inputIcon} source={require('C:/Project/AwesomeProject/assets/search.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Search..."
                                        autoCapitalize="none"
@@ -397,7 +418,7 @@ export default class SearchScreen extends React.Component {
                             />
                         </View>
                     </View>
-                    <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/>
+                     <CardListScreen recipe={this.state.recipe} navigation={this.props.navigation}/> 
                 </ScrollView>
             )
         }
@@ -406,7 +427,7 @@ export default class SearchScreen extends React.Component {
                 <ScrollView>
                     <View style={styles.row}>
                         <View style={styles.inputContainer}>
-                            <Image style={styles.inputIcon} source={require('../../assets/search.png')}/>
+                            <Image style={styles.inputIcon} source={require('C:/Project/AwesomeProject/assets/search.png')}/>
                             <TextInput style={styles.inputs}
                                        placeholder="Search ..."
                                        autoCapitalize="none"
@@ -418,7 +439,7 @@ export default class SearchScreen extends React.Component {
                     </View>
                     <ActivityIndicator size="large" color="#00b5ec"
                                        style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
-                    <FlatList
+                     <FlatList
                         data={this.state.users}
                         renderItem={({item}) => (
                             <ListItem onPress={() => {
@@ -432,7 +453,7 @@ export default class SearchScreen extends React.Component {
                                       rightAvatar={{source: require('../../assets/left.png')}}
                             />
                         )}
-                    />
+                    /> 
                 </ScrollView>
             )
         }
@@ -440,9 +461,9 @@ export default class SearchScreen extends React.Component {
             return (
                 <ScrollView>
                     <View style={{flexDirection:'row'}}>
-                       <Text style={{marginLeft:5,marginTop:10,fontSize:20,color:'#7c8191',}}>Press on this button to filter your search </Text>
-                       <TouchableHighlight onPress={this.openModal2}>
-                          <Image source={require('../../assets/filter.png')}
+                       <Text style={{marginLeft:5,marginTop:10,fontSize:20,color:'#7c8191',alignContent:'flex-start',flex : 4}}>filter your search </Text>
+                       <TouchableHighlight onPress={this.openModal2} style={{alignContent:'flex-end', flex: 1}}>
+                          <Image source={require('C:/Project/AwesomeProject/assets/filter.png')}
                                 style={{width: 30, height: 30,marginTop:5,marginLeft:15}}/>
                        </TouchableHighlight>
                     </View>
@@ -454,50 +475,59 @@ export default class SearchScreen extends React.Component {
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
                         <Text style={{marginLeft:5,marginTop:10,fontSize:20,color:'#00b5ec',}}>
-                              cheak all filter you need
+                              check all filters you need
                         </Text>
                     <View style={{flexDirection:'row',marginTop:10,alignContent:'center'}}>
-                        
+                    
+                      
                         <TagInput style={{ minWidth: 300,
                                    height: 40,
-                                  // margin: 4,
                                   borderRadius: 20,
                                   borderWidth:1,
                                   borderColor:'#E3F2FD',
-                                 //  backgroundColor: '#E3F2FD',
-                                 //  marginLeft: 20,
-                                 
                                 }}
-                           updateState={this.updateTagState}
+                           updateState={this.updateTagState_ingredients}
                            placeholder="ingredients..."  
-                           onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
-                           onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
-                           tags={this.state.tags}
+                           onFocus={() => this.setState({ ...this.state,tagsColor: '#fff', tagsText: mainColor})}
+                           onBlur={() => this.setState({ ...this.state,tagsColor: mainColor, tagsText: '#fff'})}
+                           tags={this.state.ingredients_tags}
                         />
                     </View>
+                    
              
                  <View style={{}}>       
+                 {/* cruisine */}
                     <RNPickerSelect  placeholder={placeholder}
                      style={pickerSelectStyles} 
-                                     onValueChange={(value) => console.log(value)}
-                                     items={[   { label: 'Football', value: 'football' },
-                                                { label: 'Baseball', value: 'baseball' },
-                                                { label: 'Hockey', value: 'hockey' },
+                                     onValueChange={(value) =>this.setState( {...this.state, cruisine : value})}
+                                     value = {this.state.cruisine}
+                                     items={[
+                                                { label: 'Fast Food', value: 'fast_food' },
+                                                { label: 'Arabian', value: 'arabian' },
+                                                { label: 'Europe', value: 'europe' },
+                                                { label: 'Asian', value: 'asian' },
+                                                { label: 'Mexican', value: 'mexican' },
                                             ]}
                     />
+                    {/* type */}
                       <RNPickerSelect  placeholder={placeholder1}
                      style={pickerSelectStyles} 
-                                     onValueChange={(value) => console.log(value)}
-                                     items={[   { label: 'lunch', value: 'lunch' },
-                                                { label: 'brakfast', value: 'brakfast' },
-                                                { label: 'sweet', value: 'sweet' },
+                                     onValueChange={(value) =>this.setState({...this.state, type : value})}
+                                     value = {this.state.type}
+                                     items={[   { label: 'Main Dish', value: 'main' },
+                                                { label: 'Side Dish', value: 'side' },
+                                                { label: 'Desert', value: 'desert' },
+                                                { label: 'Soup', value: 'soup' },
+                                                { label: 'Drink', value: 'drink' },
                                             ]}
                     />
+                    {/* difficulty */}
                       <RNPickerSelect  placeholder={placeholder2}
                      style={pickerSelectStyles} 
-                                     onValueChange={(value) => console.log(value)}
-                                     items={[   { label: 'dificult', value: 'dificult' },
-                                                { label: 'mid', value: 'baseball' },
+                                     onValueChange={(value) =>this.setState({...this.state, difficulty : value})}
+                                     value = {this.state.difficulty}
+                                     items={[   { label: 'difficult', value: 'difficult' },
+                                                { label: 'mid', value: 'mid' },
                                                 { label: 'easy', value: 'easy' },
                                             ]}
                     />
@@ -505,8 +535,8 @@ export default class SearchScreen extends React.Component {
 
                     <View style={{flexDirection:'row',borderColor:'grey',marginTop:9}}>
                             <Switch
-                                  onValueChange={this._handleToggleSwitch}
-                                  value={this.state.switchValue}
+                                  onValueChange={this._handleUserPreference}
+                                  value={this.state.use_user_preferences}
                                   trackColor={'#00b5ec'}
                                   trackColor={'grey'}
                            />
@@ -515,21 +545,21 @@ export default class SearchScreen extends React.Component {
 
                     <View style={{flexDirection:'row',borderColor:'#E3F2FD',marginTop:9}}>
                       <Switch
-                                  onValueChange={this._handleToggleSwitch2}
-                                  value={this.state.switchValue2}
+                                  onValueChange={this._handleEditUserPreference}
+                                  value={this.state.update_user_preferences}
                                   trackColor={'#00b5ec'}
                                   trackColor={'grey'}
                                   
                            />
-                      <Text style={{fontSize:15,marginTop:6}}>Change my prerefrence prerefrence </Text>
+                      <Text style={{fontSize:15,marginTop:6}}>Change my preferences</Text>
                     </View >
                      
-                    <View hide={this.state.switchValue2}
-                          style={{borderWidth:2,borderColor:'#00b5ec',borderRadius:20,flexDirection:'column',marginTop:3}}>
+                    <View style = {this.state.update_user_preferences == false ? {display : 'none'} : 
+                    {borderWidth:2,borderColor:'#00b5ec',borderRadius:20,flexDirection:'column',marginTop:3}}>
                            <View style={{flexDirection:'row',justifyContent: 'space-around',}}>
                            <View style={{flexDirection:'row'}}  > 
                            <Switch
-                                  onValueChange={this._handleToggleSwitch12}
+                                  onValueChange={(value) => this.setState({ ...this.state,diet : value})}
                                   value={this.state.diet}
                                   trackColor={'#00b5ec'}
                                   trackColor={'grey'}
@@ -539,7 +569,7 @@ export default class SearchScreen extends React.Component {
 
                            <View style={{flexDirection:'row'}}  >              
                            <Switch
-                                  onValueChange={this._handleToggleSwitch13}
+                                  onValueChange={(value) => this.setState({ ...this.state,veg : value})}
                                   value={this.state.veg}
                                   trackColor={'#00b5ec'}
                                   trackColor={'grey'}
@@ -548,202 +578,85 @@ export default class SearchScreen extends React.Component {
                               </View> 
                         </View>
                         <Text style={{fontSize:18,marginTop:6,marginLeft:10}}>allergies</Text>
-                        <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
-                        <View style={{flexDirection:'row',marginLeft:-9}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch3}
-                                  value={this.state.dairy}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>dairy</Text> 
-                           </View>
-                           <View style={{flexDirection:'row',}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch4}
-                                  value={this.state.egg}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6,}}>egg</Text> 
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:15}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch5}
-                                  value={this.state.gluten}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>gluten </Text> 
-                           </View>
-                           </View>  
-                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
-                        <View style={{flexDirection:'row',marginLeft:-3}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch6}
-                                  value={this.state.peanut}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>peanut </Text> 
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:-4}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch7}
-                                  value={this.state.seafood}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>seafood </Text> 
-                           </View>
-                           <View style={{flexDirection:'row'}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch8}
-                                  value={this.state.sesame}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>sesame</Text> 
-                           </View>
-                           </View> 
-                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
-                        <View style={{flexDirection:'row',marginLeft:-10}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch9}
-                                  value={this.state.soy}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>soy</Text> 
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:7}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch10}
-                                  value={this.state.wheat}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>wheat </Text> 
-                           </View>
-                           <View style={{flexDirection:'row'}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch11}
-                                  value={this.state.sulfite}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>sulfite</Text> 
-                           </View>
-                           
-                           </View> 
+                        <TagInput style={{ minWidth: 300,
+                                   height: 40,
+                                  borderRadius: 20,
+                                  borderWidth:1,
+                                  borderColor:'#E3F2FD',
+                                }}
+                           updateState={this.updateTagState_allergies}
+                           placeholder="allergies..."  
+                           onFocus={() => this.setState({ ...this.state,tagsColor: '#fff', tagsText: mainColor})}
+                           onBlur={() => this.setState({ ...this.state,tagsColor: mainColor, tagsText: '#fff'})}
+                           tags={this.state.allergies_tags}
+                        />
 
-                           <View style={{flexDirection:'row',justifyContent: 'space-around',}}>
-                            
-                        </View>
-                        <Text style={{fontSize:18,marginTop:6,marginLeft:10}}>disliks</Text>
-                        <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
-                        <View style={{flexDirection:'row',marginLeft:-3}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch14}
-                                  value={this.state.alcohole}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>alcohole</Text> 
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:7}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch15}
-                                  value={this.state.avocado}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>avocado</Text> 
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:16}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch16}
-                                  value={this.state.beef}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>beef </Text> 
-                           </View>
-                           </View>  
-                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
-                        <View style={{flexDirection:'row'}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch17}
-                                  value={this.state.eggplant}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>eggplant </Text> 
-                           </View>
-                           <View style={{flexDirection:'row'}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch18}
-                                  value={this.state.mushrooms}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>mushrooms</Text> 
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:-10}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch19}
-                                  value={this.state.pork}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>pork</Text> 
-                           </View>
-                           </View> 
-                           <View style={{flexDirection:'row',justifyContent: 'space-around',borderRadius:25,width:320,marginLeft:6}}>
-                        <View style={{flexDirection:'row',marginLeft:-10}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch20}
-                                  value={this.state.onions}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>onions</Text> 
-                           </View>
-                           <View style={{flexDirection:'row'}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch21}
-                                  value={this.state.suger}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>suger</Text> 
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:8}}  > 
-                           <Switch
-                                  onValueChange={this._handleToggleSwitch22}
-                                  value={this.state.olives}
-                                  trackColor={'#00b5ec'}
-                                  trackColor={'grey'}
-                           />      
-                           <Text style={{fontSize:15,marginTop:6}}>olives</Text> 
-                           </View>
                            
-                           </View> 
+                        <Text style={{fontSize:18,marginTop:6,marginLeft:10}}>dislikes</Text>
+                        <TagInput style={{ minWidth: 300,
+                                   height: 40,
+                                  borderRadius: 20,
+                                  borderWidth:1,
+                                  borderColor:'#E3F2FD',
+                                }}
+                           updateState={this.updateTagState_dislikes}
+                           placeholder="dislikes..."  
+                           onFocus={() => this.setState({ ...this.state,tagsColor: '#fff', tagsText: mainColor})}
+                           onBlur={() => this.setState({ ...this.state,tagsColor: mainColor, tagsText: '#fff'})}
+                           tags={this.state.dislikes_tags}
+                        />
+                       
                     </View>
                     
                         <View style={{marginTop: 15,flexDirection:'row',marginBottom: 10,alignItems:'center',marginLeft:40}}>
                         <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 20,}}
                                 containerStyle={{width:100 }}
                                 onPress={() => {
-                                    alert('saved')
+                                    this.setState({visibleModal2: null})
+                                    this.filterSearch()
+                                    
                                 }}/>
                         <Button title="Reset" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{width:100 ,marginLeft:70 }}
-                                onPress={() => this.setState({visibleModal2: null})}/>
+                                onPress={() => {
+                                    //get everything back to initial state
+                                    this.setState({ ...this.state,ingredients_tags: {
+                                        tag: '',
+                                        tagsArray: []
+                                      },dislikes_tags: {
+                                        tag: '',
+                                        tagsArray: []
+                                      },allergies_tags: {
+                                        tag: '',
+                                        tagsArray: []
+                                      },tagsColor: mainColor,tagsText: '#fff',use_user_preferences: false,
+                                    update_user_preferences: false,cruisine: '',type : '',difficulty : '',diet:false, veg:false,
+                                   })
+                                }
+                                }/>
                                 </View>
 
                     </View>
                 </Modal>
+
+                 {/* display the results */}
+                 
+                 
+                 <FlatList
+                        data={this.state.filtered_recipe}
+                        renderItem={({item}) => (
+                            <ListItem onPress={() => {
+                                this.props.navigation.navigate('Recipe', {id: `${item.id}`})
+                            }}
+                                      roundAvatar
+                                      title={`${item.title} `}
+                                      disabled={this.state.isLoading}
+                                      ItemSeparatorComponent={this.renderSeparator}
+                                      leftAvatar={{source: require('../../assets/meal2.png')}}
+                                      rightAvatar={{source: require('../../assets/left.png')}}
+                            />
+                        )}
+                    /> 
                 </ScrollView>
             )
         }
@@ -758,7 +671,7 @@ export default class SearchScreen extends React.Component {
 
     render() {
         logout = () => {
-            firebase.auth().signOut()
+            Firebase.auth().signOut()
                 .then(function () {
                     const resetAction = StackActions.reset({
                         index: 0,
@@ -771,7 +684,6 @@ export default class SearchScreen extends React.Component {
                 });
         }
 
-        console.log(this.state.switchValue2)
         return (
             <ScrollView>
                 <HeaderUserView/>
@@ -826,7 +738,7 @@ export default class SearchScreen extends React.Component {
                 </View>
                 <View style={{position: 'absolute', top: 8, marginLeft: 4}}>
                     <TouchableHighlight onPress={this.openModal}>
-                        <Image source={require('../../assets/menu.png')}
+                        <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
                                style={{width: 28, height: 28}}/>
                     </TouchableHighlight>
                 </View>
@@ -838,10 +750,10 @@ export default class SearchScreen extends React.Component {
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
                         <View style={{flexDirection: 'row'}}>
-                            <Image
+                             <Image
                                 source={require('../../assets/logouser.png')}
                                 style={{width: 100, height: 100, borderRadius: 32 / 2}}
-                            />
+                            /> 
                             <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
                         </View>
                         <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
@@ -857,12 +769,12 @@ export default class SearchScreen extends React.Component {
                         <Button title="Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
-                                    this.props.navigation.navigate('Profile')
+                                    this.props.navigation.navigate('Profile',{user_id: firebase.auth().currentUser.uid})
                                 }}/>
                         <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
-                                    this.logout()
+                                    this.logout
                                 }}/>
                         <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
                         <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}

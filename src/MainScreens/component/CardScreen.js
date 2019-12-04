@@ -133,7 +133,7 @@ class CardScreen extends React.Component {
                     <HeaderImageView rate={this.props.cardItem.rate} />
                     <HeaderTextView  title={this.props.cardItem.title}
                                      type={this.props.cardItem.type} />
-                    <HeaderMore navigation={this.props.navigation} id={this.props.cardItem.id}/>                 
+                    <HeaderMore navigation={this.props.navigation} id={this.props.cardItem.id}userName={this.props.cardItem.userName}/>                 
                 </Card>
           </View>
         );

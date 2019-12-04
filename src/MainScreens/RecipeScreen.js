@@ -28,9 +28,7 @@ class HeaderImageView extends React.Component {
         var userData={recipeId}
         var id
         let recipes = []
-        let flag=false
-       // userData.push({"recipe_id": recipeId})
-        //userData['id'] = this.props.id        
+        let flag=false    
         try {
             firebase.database().ref().child('users/'+Userid+'/saved_recipe').on("value", function (snapshot) {
                 snapshot.forEach(function (item) {
@@ -113,7 +111,7 @@ class Following extends React.Component {
                 rate: snapshot.val().rate,
                 time: snapshot.val().time,
                 type: snapshot.val().type,
-                difficality: snapshot.val().difficality,
+                difficulty: snapshot.val().difficulty,
                 loading: false
             })
         }.bind(this));
@@ -122,7 +120,7 @@ class Following extends React.Component {
     render() {
         //const { navigation } = this.props; 
         let recipeId = this.props.id
-        console.log('this.props', this.state.difficality)
+        console.log('this.props', this.state.difficulty)
         return (
             <View style={styles.headerFollowing}>
                 <TouchableOpacity>
@@ -134,7 +132,7 @@ class Following extends React.Component {
                     <Image source={require('../../assets/level.png')}
                            style={{width: 25, height: 25}}/>
                     <Text
-                        style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.difficality}</Text>
+                        style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.difficulty}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
@@ -294,7 +292,6 @@ class Preview extends React.Component {
     }
 
     render() {
-
         const {navigation} = this.props;
         //let id= navigation.getParam('id', "")
         //.log('this.props.id',id)
@@ -370,13 +367,30 @@ export default class RecipeScreen extends React.Component {
             fat: '',
             protein: '',
             reviews: '',
-            rate: ''
+            rate: '',
+            username:''
         }
+    }
+
+    readusername()
+    {
+        console.log(this.props.id)
+        firebase.database().ref('/users/' + id).on('value', function (user) {
+            let userName = user.child('fullname').val();
+           console.log(userName)
+       });
     }
 
     componentDidMount() {
         const {navigation} = this.props;
         let id = String(navigation.getParam('id', ""))
+        console.log('id', id)
+        let userName = String(navigation.getParam('userName', ""))
+        console.log('userName', userName)
+        firebase.database().ref('/users/' + id).on('value', function (user) {
+            let userName = user.child('fullname').val();
+           console.log(userName)
+       });
     }
 
     render() {
