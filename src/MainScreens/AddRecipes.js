@@ -189,6 +189,7 @@ class AddRecipes extends React.Component {
                     user_id: firebase.auth().currentUser.uid,
                     createdAt: Date(),
                     avatarSource:avatarSource,
+                    reviews:''
                 },
                 function (error) {
                     if (error) {

@@ -39,7 +39,6 @@ class HeaderImageView extends React.Component {
     }
 
     componentDidMount = () => {
-       // this.addFollowing(this.props.user_id)
        let user_id=this.props.user_id
     }
 
@@ -68,9 +67,7 @@ class HeaderImageView extends React.Component {
                 firebase.database().ref().child('users/'+user_id+'/followers').push(Userid)
                 alert('you followed this user successfully')
             }
-
         }
-
         catch(error){
           console.log(error)
         }
@@ -159,32 +156,6 @@ class Following extends React.Component {
         super(props)
         this.state = {following: 77, followers: 240, posts: 45}
     }
-
-    
-    // addFollowing() {
-    //     let Userid = firebase.auth().currentUser.uid
-    //     let user_id=this.props.user_id
-    //     let flag
-    //     let id
-    //     ids=[]
-    //     try
-    //      {
-    //         firebase.database().ref().child('users/'+Userid+'/follwing').on("value", function (snapshot) {
-    //             snapshot.forEach(function (item) {
-    //                 id=item.val()
-    //                 ids.push({id:item.val()}) 
-    //                 let n=ids.length                   
-    //         })
-    //     }) 
-    //     this.setState({ ...this.state,
-    //         recipe: recipe
-    //     })
-    // }
-
-    //     catch(error){
-    //       console.log(error)
-    //     }
-    // };
 
     render() {
         return (
@@ -280,11 +251,9 @@ class Preview extends React.Component {
                     })
                 })
             })
-
             this.setState({
                 recipe: recipe
             })
-
         }.bind(this));
     }
 
@@ -293,24 +262,21 @@ class Preview extends React.Component {
         let Userid = firebase.auth().currentUser.uid
         let iddd=-'Ltp4EkGUQf0O4CO_St_'
         let ref =firebase.database().ref('/users/')
-        let name=[]
+        let userName=[]
         firebase.database().ref('/users/'+Userid+'/saved_recipe').on('value', function (snapshot) {
             snapshot.forEach(function (item) {
-               // console.log('key',firebase.database().ref('/recipes/' + item.val()))
                 firebase.database().ref('recipes/'+item.val()).on('value', function (user) {
-                //     firebase.database().ref('/users/'+user.val().user_id).child ('fullname').on('value', function (e) {
-                //         name.push(e.val()) })
-                //   console.log('userName',name)
+                    firebase.database().ref('/users/'+user.val().user_id).on('value', function (e) {
                     savedrecipe.push({
                         title: user.val().title,
                         type: user.val().type,
                         rate: user.val().rate,
                         id: user.key,
-                        name: name,
+                        userName:e.val().fullname,
                         user_id: user.val().user_id
-
                     })
                 })
+            })
             })
             this.setState({
                 savedrecipe: savedrecipe
@@ -343,8 +309,6 @@ class Preview extends React.Component {
     }
 
     render() {
-       // console.log('saved',this.state.savedrecipe)
-        //console.log('recope',this.state.recipe)
         return (
             <View style={styles.previewContainer}>
                 <View style={styles.Preview}>
