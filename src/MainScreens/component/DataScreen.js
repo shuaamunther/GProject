@@ -54,7 +54,7 @@ componentDidMount() {
 
   render(){
    return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView >
       <CardListScreen recipe={this.state.recipe}/>
     </SafeAreaView>
     

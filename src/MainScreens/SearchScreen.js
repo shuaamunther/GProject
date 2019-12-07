@@ -120,7 +120,7 @@ class HeaderUserView extends React.Component {
         }
         return (
             <View>
-                <View style={{position: 'absolute', top: 8, marginLeft: 5, direction: 'row'}}>
+                <View style={{position: 'absolute', top: 15, marginLeft: 5, direction: 'row'}}>
                     <TouchableOpacity onPress={() => this.openModal}>
                         <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
                                style={{width: 28, height: 28}}/>
@@ -144,6 +144,11 @@ class HeaderUserView extends React.Component {
                                 onPress={() => {
                                     this.props.navigation.navigate('Following')
                                 }}/>
+                        <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Main')
+                                }}/>       
                         <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
@@ -773,7 +778,7 @@ export default class SearchScreen extends React.Component {
                         <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
-                                    this.props.navigation.navigate('Main')
+                                    this.props.navigation.navigate('Following')
                                 }}/>
                         <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}

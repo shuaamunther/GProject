@@ -172,7 +172,7 @@ getUserData = async () => {
                                 containerStyle={{marginTop: 10, marginBottom: 10}}/>
                     </View>
                 </Modal>
-                <View style={{marginTop:70,marginBottom:20}}>
+                <View style={{marginTop:55,marginBottom:20}}>
       <DataScreenFollowing navigation={this.props.navigation}/>
       </View>
     </SafeAreaView>

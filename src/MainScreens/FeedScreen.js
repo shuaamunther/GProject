@@ -50,6 +50,10 @@ function wait(timeout) {
 
 export default class FeedScreen extends React.Component {
 
+    static navigationOptions = {
+        header: null
+    };
+
     constructor(props) {
         super(props)
         this.state = {
@@ -67,30 +71,7 @@ export default class FeedScreen extends React.Component {
         this.setState({visibleModal: 'bottom'});
         console.log('hoiiiiiiiiiiiii')
     };
-    static navigationOptions = ({navigation}) => {
-        return {
-            headerTitle: () => <LogoTitle/>,
-            headerRight: () => (
-                <TouchableHighlight style={{paddingRight: 16}}
-                                    onPress={() => navigation.navigate('Profile', {user_id: firebase.auth().currentUser.uid})}>
-                    <Image
-                        source={require('../../assets/deuser.png')}
-                        style={{width: 32, height: 32, borderRadius: 32 / 2}}
-                    />
-                </TouchableHighlight>
-            ),
-            headerLeft: () => (
-                <View>
-                    <TouchableOpacity onPress={() => this.openModal}>
-                        <Image source={require('../../assets/menu.png')}
-                               style={{width: 28, height: 28, marginLeft: 5}}/>
-                    </TouchableOpacity>
-                </View>
-
-            )
-        };
-    }
-
+   
     componentDidMount() {
         this.getUserData()
     }
@@ -126,8 +107,28 @@ export default class FeedScreen extends React.Component {
 
     render() {
         return (
-            <View style={{flex: 1, marginTop: 10, marginBottom: 20}}>
-                <DataScreen navigation={this.props.navigation}/>
+            <View >
+                  <View style={{position: 'absolute', top: 15, marginLeft: 10,marginBottom:40,flexDirection:'row',}}>
+                    <TouchableHighlight onPress={this.openModal}>
+                        <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
+                               style={{width: 28, height: 28}}/>
+                    </TouchableHighlight>
+                    <Image source={require('../../assets/NavBar.png')}
+                   style={{width: 170, height: 50,marginTop:-10,marginLeft:20 }}/>
+                   <TouchableHighlight style={{paddingRight: 16,marginLeft:80}}
+                                    onPress={() => {
+                                      this.props.navigation.navigate('Profile',{user_id: firebase.auth().currentUser.uid})}}>
+                    <Image
+                        source={require('../../assets/deuser.png')}
+                        style={{width: 32, height: 32, borderRadius: 32 / 2}}
+                    />
+                </TouchableHighlight>
+                </View>
+
+                <View style={{marginTop:55,marginBottom:20}}> 
+                   <DataScreen navigation={this.props.navigation}/>
+                </View>
+                
                 <TouchableHighlight style={styles.buttonAdd}
                                     onPress={() => {
                                         this.props.navigation.navigate('AddRe')
