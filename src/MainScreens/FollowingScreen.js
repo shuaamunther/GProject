@@ -133,6 +133,7 @@ getUserData = async () => {
                     />
                 </TouchableHighlight>
                 </View>
+
                 <Modal
                     isVisible={this.state.visibleModal === 'bottom'}
                     onSwipeComplete={() => this.setState({visibleModal: null})}
@@ -174,6 +175,14 @@ getUserData = async () => {
                 </Modal>
                 <View style={{marginTop:55,marginBottom:20}}>
       <DataScreenFollowing navigation={this.props.navigation}/>
+      <TouchableHighlight style={styles.buttonAdd}
+                                    onPress={() => {
+                                        this.props.navigation.navigate('AddRe')
+                                    }}>
+                    <Image source={require('../../assets/add.png')}
+                           style={{width: 32, height: 32}}/>
+
+                </TouchableHighlight>
       </View>
     </SafeAreaView>
     
@@ -194,6 +203,26 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  buttonAdd: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#00b5ec',
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+        width: 0,
+        height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+
+    elevation: 9,
   },
   bottomModal: {
     justifyContent: 'flex-end',

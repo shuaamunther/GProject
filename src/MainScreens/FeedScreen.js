@@ -128,7 +128,7 @@ export default class FeedScreen extends React.Component {
                 <View style={{marginTop:55,marginBottom:20}}> 
                    <DataScreen navigation={this.props.navigation}/>
                 </View>
-                
+
                 <TouchableHighlight style={styles.buttonAdd}
                                     onPress={() => {
                                         this.props.navigation.navigate('AddRe')
@@ -166,10 +166,10 @@ export default class FeedScreen extends React.Component {
                                 onPress={() => {
                                     this.props.navigation.navigate('Following')
                                 }}/>        
-                        <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                        <Button title="Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
-                                    this.props.navigation.navigate('Main')
+                                    this.props.navigation.navigate('Profile')
                                 }}/>
                         <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}

@@ -120,7 +120,7 @@ class HeaderUserView extends React.Component {
         }
         return (
             <View>
-                <View style={{position: 'absolute', top: 15, marginLeft: 5, direction: 'row'}}>
+                <View style={{position: 'absolute', top: 8, marginLeft: 5, direction: 'row'}}>
                     <TouchableOpacity onPress={() => this.openModal}>
                         <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
                                style={{width: 28, height: 28}}/>
