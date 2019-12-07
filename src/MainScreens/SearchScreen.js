@@ -142,7 +142,7 @@ class HeaderUserView extends React.Component {
                         <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
-                                    this.props.navigation.navigate('Main')
+                                    this.props.navigation.navigate('Following')
                                 }}/>
                         <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}

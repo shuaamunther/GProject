@@ -4,6 +4,8 @@ import { Card, Button } from 'react-native-elements';
 import * as firebase from 'firebase';
 import CardListScreen from './component/CardListScreen';
 import Modal from "react-native-modal";
+import DataScreenFollowing from './component/DataForFollowing';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class LogoTitle extends React.Component {
   render() {
@@ -12,6 +14,12 @@ class LogoTitle extends React.Component {
                  style={{width: 170, height: 50, marginLeft: 5, marginTop: 7}}/>
       );
   }
+}
+
+function wait(timeout) {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
 }
 
 export default class FollowingScreen extends React.Component {
@@ -23,60 +31,87 @@ export default class FollowingScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipe: [],
+      // recipe: [],
       visibleModal: null,
   }
  }
  openModal = () => {
   this.setState({visibleModal: 'bottom'});
-  console.log('hoiiiiiiiiiiiii')
+  // console.log('hoiiiiiiiiiiiii')
 };
 
+
 componentDidMount() {
-  this.showData()
+  this.getUserData()
 }
- showData() {
-  let index = 1
-  let Userid = firebase.auth().currentUser.uid
-  let idusers
-  let followingid
-  let recipe
-  let  userName 
-  firebase.database().ref('/users/'+Userid+'/follwing').on('value', function (snapshot) {
-      snapshot.forEach(function (item) {   
-       // console.log('user',item.val())
-          firebase.database().ref('/recipes/').on('value', function (user) {
-            user.forEach(function (recipes) {  
-                 idusers= recipes.val().user_id
-                 followingid=item.val()
-                 console.log('users',recipes.val().user_id)
-                if(idusers===followingid)  
-                {
-                   firebase.database().ref('/users/' + item.val()).on('value', function (name) {
-                     userName = name.child('fullname').val(); 
-                     console.log('recipe',userName)
-                      recipe = this.state.recipe
-                    recipe.push({
-                        title: recipes.val().title,
-                        type: recipes.val().type,
-                        rate: recipes.val().rate,
-                        id: recipes.key,
-                        userName:name.child('fullname').val(),
-                        user_id: recipes.val().user_id
-                    })
-                  }.bind(this))
+
+logout = () => {
+  firebase.auth().signOut()
+      .then(function () {
+          const resetAction = StackActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({routeName: 'Login'})],
+          });
+          this.props.navigation.dispatch(resetAction);
+      }.bind(this))
+      .catch(function (error) {
+          console.log("logout failed: ", error)
+      });
+}
+
+getUserData = async () => {
+  try {
+      const value = await AsyncStorage.getItem(Constants.USER_DATA)
+      if (value !== null) {
+          console.log(JSON.parse(value))
+      }
+  } catch (e) {
+      // error reading value
+  }
+}
+
+//  showData() {
+//   let index = 1
+//   let Userid = firebase.auth().currentUser.uid
+//   let idusers
+//   let followingidgit
+//   let recipe
+//   let  userName 
+//   firebase.database().ref('/users/'+Userid+'/follwing').on('value', function (snapshot) {
+//       snapshot.forEach(function (item) {   
+//        // console.log('user',item.val())
+//           firebase.database().ref('/recipes/').on('value', function (user) {
+//             user.forEach(function (recipes) {  
+//                  idusers= recipes.val().user_id
+//                  followingid=item.val()
+//                  console.log('users',recipes.val().user_id)
+//                 if(idusers===followingid)  
+//                 {
+//                    firebase.database().ref('/users/' + item.val()).on('value', function (name) {
+//                      userName = name.child('fullname').val(); 
+//                      console.log('recipe',userName)
+//                       recipe = this.state.recipe
+//                     recipe.push({
+//                         title: recipes.val().title,
+//                         type: recipes.val().type,
+//                         rate: recipes.val().rate,
+//                         id: recipes.key,
+//                         userName:name.child('fullname').val(),
+//                         user_id: recipes.val().user_id
+//                     })
+//                   }.bind(this))
                     
-                  console.log('arrays',recipe)
-                    this.setState({
-                        recipe: recipe
-                    }) 
-                }   
+//                   console.log('arrays',recipe)
+//                     this.setState({
+//                         recipe: recipe
+//                     }) 
+//                 }   
                  
-            }.bind(this));
-         }.bind(this)); 
-   }.bind(this));
- }.bind(this));
-}
+//             }.bind(this));
+//          }.bind(this)); 
+//    }.bind(this));
+//  }.bind(this));
+// }
   
   render(){
      // console.log(this.state.recipe)
@@ -111,7 +146,7 @@ componentDidMount() {
                             /> 
                             <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
                         </View>
-                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                        <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
                                     this.props.navigation.navigate('Main')
@@ -137,8 +172,8 @@ componentDidMount() {
                                 containerStyle={{marginTop: 10, marginBottom: 10}}/>
                     </View>
                 </Modal>
-                <View style={{marginTop:70}}>
-      <CardListScreen recipe={this.state.recipe}/>
+                <View style={{marginTop:70,marginBottom:20}}>
+      <DataScreenFollowing navigation={this.props.navigation}/>
       </View>
     </SafeAreaView>
     
@@ -160,4 +195,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  bottomModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+},
+modelContent: {
+    backgroundColor: 'white',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+},
 });

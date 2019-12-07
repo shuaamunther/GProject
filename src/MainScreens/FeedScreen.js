@@ -160,12 +160,12 @@ export default class FeedScreen extends React.Component {
                                 onPress={() => {
                                     this.props.navigation.navigate('Search')
                                 }}/>
-                        <Button title="Following" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
                                     this.props.navigation.navigate('Following')
                                 }}/>        
-                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                        <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
                                     this.props.navigation.navigate('Main')

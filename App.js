@@ -18,6 +18,7 @@ import CardScreen from './src/MainScreens/component/CardScreen';
 import UserCard from './src/MainScreens/component/UsersCard';
 import SearchScreen from './src/MainScreens/SearchScreen';
 import DataScreen from './src/MainScreens/component/DataScreen';
+import DataScreenFollowing  from './src/MainScreens/component/DataForFollowing'
 import Test from './src/MainScreens/Test';
 import AddRecipes from './src/MainScreens/AddRecipes';
 import RecipeScreen from './src/MainScreens/RecipeScreen';
@@ -101,6 +102,9 @@ const AppNavigator = createStackNavigator({
         Data: {
             screen: DataScreen
         },
+        Data2: {
+            screen: DataScreenFollowing
+        },
         Test: {
             screen: Test
         },
@@ -109,16 +113,15 @@ const AppNavigator = createStackNavigator({
         },
         Pic:
             {screen: PickingPicture},
-        First:
-            {screen: FirstScreen},
-        Users:
-            {screen: UserCard},
-        // LoginChat:
-        //     {screen: FlatListDemo},
-        // Chat:
-        //     {screen: ChatScreen},
-        Following:
-            {screen:FollowingScreen},
+        First:  {
+            screen: FirstScreen
+        },
+        Users: {
+            screen: UserCard
+        },
+        Following: {
+            screen:FollowingScreen
+        },
 
     },
     {

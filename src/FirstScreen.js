@@ -26,7 +26,7 @@ class FirstScreen extends React.Component {
                         this.storeUserData(userData).then(r => {
                             const resetAction = StackActions.reset({
                                 index: 0,
-                                actions: [NavigationActions.navigate({ routeName: 'Main' })],
+                                actions: [NavigationActions.navigate({ routeName: 'Following' })],
                             });
                             this.props.navigation.dispatch(resetAction);
                         })

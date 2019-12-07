@@ -97,7 +97,7 @@ export default class login extends React.Component {
         alert('login succsess');
         const resetAction = StackActions.reset({
             index: 0,
-              actions: [NavigationActions.navigate({ routeName: 'Main' })],
+              actions: [NavigationActions.navigate({ routeName: 'Following' })],
           });
            this.props.navigation.dispatch(resetAction);
     }
