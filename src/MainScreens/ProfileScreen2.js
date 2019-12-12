@@ -156,8 +156,8 @@ class Following extends React.Component {
     constructor(props) {
         super(props)
         this.state = {following: [],
-                       followingsnumber: 0,
-                       followersnumber: 0,
+                      followingsnumber: '',
+                       followersnumber: [],
                        followers:[], 
                        posts: '',
                        visibleModalfollowers: null,
@@ -252,7 +252,7 @@ class Following extends React.Component {
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{fontSize:20}}>following</Text>
+                        <Text style={{fontSize:20}}>Following</Text>
                         <TouchableOpacity onPress={() => this.setState({visibleModalfollowing: null})}>
                         <Image source={require('../../assets/close.png')}
                                style={{width: 25, height: 25 ,marginLeft:250}}/>
@@ -262,7 +262,7 @@ class Following extends React.Component {
                         data={this.state.followingname}
                         renderItem={({item}) => (
                             <ListItem onPress={() => {
-                                this.props.navigation.navigate('Profile2', {user_id: `${item.userd}`})
+                                this.props.navigation.navigate('Profile', {user_id: `${item.userd}`})
                             }}
                                       roundAvatar
                                       title={`${item.username} `}
@@ -286,19 +286,19 @@ class Following extends React.Component {
                     swipeDirection={['up', 'left', 'right', 'down']}
                     style={styles.bottomModal}>
                     <View style={styles.modelContent}>
-                      <View style={{flexDirection:'row'}}>
+                    <View style={{flexDirection:'row'}}>
                         <Text style={{fontSize:20}}>Followers</Text>
                         <TouchableOpacity onPress={() => this.setState({visibleModalfollowers: null})}>
                         <Image source={require('../../assets/close.png')}
                                style={{width: 25, height: 25 ,marginLeft:250}}/>
                         </TouchableOpacity>
-                      </View>
-                      <FlatList
+                    </View>
+                    <FlatList onPress={() => {
+                                this.props.navigation.navigate('Profile', {user_id: `${item.userd}`})
+                            }}
                         data={this.state.followersname}
                         renderItem={({item}) => (
-                            <ListItem onPress={() => {
-                                this.props.navigation.navigate('Profile2', {user_id: `${item.userd}`})
-                            }}
+                            <ListItem  
                                       roundAvatar
                                       title={`${item.username} `}
                                       disabled={this.state.isLoading}
@@ -309,7 +309,6 @@ class Following extends React.Component {
                         )}
                     /> 
                     </View>
-                    
                 </Modal>
 
                 <TouchableOpacity>
@@ -496,7 +495,7 @@ class Preview extends React.Component {
     }
 }
 
-export default class ProfileScreen extends React.Component {
+export default class ProfileScreen2 extends React.Component {
     static navigationOptions = {
         header: null
     };

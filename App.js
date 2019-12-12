@@ -6,6 +6,7 @@ import {StyleSheet, Text, View, Platform, YellowBox} from 'react-native';
 
 import Login from './src/SignScreens/Login';
 import ProfileScreen from './src/MainScreens/ProfileScreen';
+import ProfileScreen2 from './src/MainScreens/ProfileScreen2';
 import SignUpScreen from './src/SignScreens/SignUpScreen';
 import ForgotPasswordScreen from './src/SignScreens/ForgotPasswordScreen';
 import FeedScreen from './src/MainScreens/FeedScreen';
@@ -18,6 +19,7 @@ import CardScreen from './src/MainScreens/component/CardScreen';
 import UserCard from './src/MainScreens/component/UsersCard';
 import SearchScreen from './src/MainScreens/SearchScreen';
 import DataScreen from './src/MainScreens/component/DataScreen';
+import FollowersScreen from './src/MainScreens/component/Followers';
 import DataScreenFollowing  from './src/MainScreens/component/DataForFollowing'
 import Test from './src/MainScreens/Test';
 import AddRecipes from './src/MainScreens/AddRecipes';
@@ -78,6 +80,9 @@ const AppNavigator = createStackNavigator({
         Recipe: {
             screen: RecipeScreen
         },
+        Profile2: {
+            screen: ProfileScreen2
+        },
         Welcome: {
             screen: WelcomeScreen
         },
@@ -122,6 +127,9 @@ const AppNavigator = createStackNavigator({
         Following: {
             screen:FollowingScreen
         },
+        FollowersName: {
+            screen:FollowersScreen
+        }
 
     },
     {

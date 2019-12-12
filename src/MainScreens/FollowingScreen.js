@@ -69,49 +69,6 @@ getUserData = async () => {
       // error reading value
   }
 }
-
-//  showData() {
-//   let index = 1
-//   let Userid = firebase.auth().currentUser.uid
-//   let idusers
-//   let followingidgit
-//   let recipe
-//   let  userName 
-//   firebase.database().ref('/users/'+Userid+'/follwing').on('value', function (snapshot) {
-//       snapshot.forEach(function (item) {   
-//        // console.log('user',item.val())
-//           firebase.database().ref('/recipes/').on('value', function (user) {
-//             user.forEach(function (recipes) {  
-//                  idusers= recipes.val().user_id
-//                  followingid=item.val()
-//                  console.log('users',recipes.val().user_id)
-//                 if(idusers===followingid)  
-//                 {
-//                    firebase.database().ref('/users/' + item.val()).on('value', function (name) {
-//                      userName = name.child('fullname').val(); 
-//                      console.log('recipe',userName)
-//                       recipe = this.state.recipe
-//                     recipe.push({
-//                         title: recipes.val().title,
-//                         type: recipes.val().type,
-//                         rate: recipes.val().rate,
-//                         id: recipes.key,
-//                         userName:name.child('fullname').val(),
-//                         user_id: recipes.val().user_id
-//                     })
-//                   }.bind(this))
-                    
-//                   console.log('arrays',recipe)
-//                     this.setState({
-//                         recipe: recipe
-//                     }) 
-//                 }   
-                 
-//             }.bind(this));
-//          }.bind(this)); 
-//    }.bind(this));
-//  }.bind(this));
-// }
   
   render(){
      // console.log(this.state.recipe)

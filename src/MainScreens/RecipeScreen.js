@@ -35,11 +35,11 @@ class HeaderImageView extends React.Component {
                     id=item.val()
                     if(id == recipeId)
                     {flag=true}
-                   console.log('key',id)
-                   console.log('result',flag)
+                  // console.log('key',id)
+                   //console.log('result',flag)
             })
         })
-        console.log('resultout',flag)
+       // console.log('resultout',flag)
              if(flag==true)
              {
                 alert('This Recipe saved already!')
@@ -52,7 +52,7 @@ class HeaderImageView extends React.Component {
     catch(error){
         console.log(error)
     }
-      }
+ }
 
     render() {
         //    let recipeId = String(navigation.getParam('id', ""))
@@ -188,6 +188,38 @@ class Preview extends React.Component {
             })
         }.bind(this));
     }
+
+// addRev(){
+//         let Userid = firebase.auth().currentUser.uid
+//         let recipeId=this.props.id
+//         var userData={recipeId}
+//         var id
+//         let recipes = []
+//         let flag=false    
+//         try {
+//             firebase.database().ref().child('rec/'+Userid+'/saved_recipe').on("value", function (snapshot) {
+//                 snapshot.forEach(function (item) {
+//                     id=item.val()
+//                     if(id == recipeId)
+//                     {flag=true}
+//                    console.log('key',id)
+//                    console.log('result',flag)
+//             })
+//         })
+//         console.log('resultout',flag)
+//              if(flag==true)
+//              {
+//                 alert('This Recipe saved already!')
+//              }
+//              else{
+//                  firebase.database().ref('users/'+Userid).child('/saved_recipe').push(recipeId)
+//                  alert('saved successfully')
+//                }
+//             }
+//     catch(error){
+//         console.log(error)
+//     }
+//  }
 
     renderSection = () => {
         console.log(this.state.ingredients)
