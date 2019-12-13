@@ -117,7 +117,7 @@ class HeaderImageView extends React.Component {
                                 source={require('../../assets/logouser.png')}
                                 style={{width: 100, height: 100, borderRadius: 32 / 2}}
                             />
-                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}></Text>
                         </View>
                         <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
@@ -330,6 +330,7 @@ class Preview extends React.Component {
             myRecipe: [],
             savedrecipe:[],
             saved_recipe:[],
+            review_recipe:[]
         }
     }
 
@@ -359,6 +360,7 @@ class Preview extends React.Component {
                             rate: item.val().rate,
                             imagesource: item.val().imagesource,
                             id: item.key,
+                            avatarSource:item.child('avatarSource').val(),
                             userName: userName,
                             user_id: item.val().user_id
                         })
@@ -389,6 +391,7 @@ class Preview extends React.Component {
                         rate: item.val().rate,
                         id: item.key,
                         userName: userName,
+                        avatarSource:item.val().avatarSource,
                         user_id: item.val().user_id
                     })
                 })
@@ -398,6 +401,33 @@ class Preview extends React.Component {
             })
         }.bind(this));
     }
+
+    // reviewData() {
+    //     let recipe = []
+    //     let id
+    //     firebase.database().ref('recipes/'+recipeId).child('/reviews').on('value', function (snapshot) {
+    //         snapshot.forEach(function (item) {
+    //             id=item.val().user_id
+    //             firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
+    //                 let userName = user.child('fullname').val();
+    //                 //console.log('userName',userName)
+                    
+    //                 recipe.push({
+    //                     title: item.val().title,
+    //                     type: item.val().type,
+    //                     rate: item.val().rate,
+    //                     id: item.key,
+    //                     userName: userName,
+    //                     avatarSource:item.val().avatarSource,
+    //                     user_id: item.val().user_id
+    //                 })
+    //             })
+    //         })
+    //         this.setState({
+    //             recipe: recipe
+    //         })
+    //     }.bind(this));
+    // }
 
     savedData() {
         let savedrecipe = []
@@ -414,6 +444,7 @@ class Preview extends React.Component {
                         type: user.val().type,
                         rate: user.val().rate,
                         id: user.key,
+                        avatarSource:user.child('avatarSource').val(),
                         userName:e.val().fullname,
                         user_id: user.val().user_id
                     })

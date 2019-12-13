@@ -102,7 +102,7 @@ getUserData = async () => {
                                 source={require('../../assets/logouser.png')}
                                 style={{width: 100, height: 100, borderRadius: 32 / 2}}
                             /> 
-                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}></Text>
                         </View>
                         <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
+    //top:480,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: "#000",

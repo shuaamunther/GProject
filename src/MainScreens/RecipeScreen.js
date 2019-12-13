@@ -64,7 +64,7 @@ class HeaderImageView extends React.Component {
 }
  
     render() {
-        //    let recipeId = String(navigation.getParam('id', ""))
+        console.log('avatarsource',this.state.avatarSource)
         return (
             <View>
                 <View style={[styles.headerUserView, styles.row]}>
@@ -120,7 +120,7 @@ class Following extends React.Component {
                 rate: snapshot.val().rate,
                 time: snapshot.val().time,
                 type: snapshot.val().type,
-                difficulty: snapshot.val().difficulty,
+                difficality: snapshot.val().difficality,
                 loading: false
             })
         }.bind(this));
@@ -141,7 +141,7 @@ class Following extends React.Component {
                     <Image source={require('../../assets/level.png')}
                            style={{width: 25, height: 25}}/>
                     <Text
-                        style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.difficulty}</Text>
+                        style={[styles.followingTitle, styles.followingTitleForNumbers]}>{this.state.difficality}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
@@ -230,7 +230,8 @@ class Preview extends React.Component {
 addReview(){
         let Userid = firebase.auth().currentUser.uid
         let username
-        let  reviews=this.state.reviews
+        let  reviews=[]
+        reviews=this.state.reviews
         let recipeId=this.props.id
         var userData={recipeId}
         var id

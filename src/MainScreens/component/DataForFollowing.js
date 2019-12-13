@@ -48,10 +48,7 @@ showData = async () =>{
                           id: recipes.key,
                           userName:name.child('fullname').val(),
                           user_id: recipes.val().user_id
-                      })
-                    
-                      
-                    
+                      })            
                       this.setState({
                           recipe: recipe
                       }) 

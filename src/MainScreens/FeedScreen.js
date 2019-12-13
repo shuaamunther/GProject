@@ -154,7 +154,7 @@ export default class FeedScreen extends React.Component {
                                 source={require('../../assets/logouser.png')}
                                 style={{width: 100, height: 100, borderRadius: 32 / 2}}
                             />
-                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}></Text>
                         </View>
                         <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}

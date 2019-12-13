@@ -117,7 +117,7 @@ class HeaderImageView extends React.Component {
                                 source={require('../../assets/logouser.png')}
                                 style={{width: 100, height: 100, borderRadius: 32 / 2}}
                             />
-                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}></Text>
                         </View>
                         <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
@@ -388,6 +388,7 @@ class Preview extends React.Component {
                         rate: item.val().rate,
                         id: item.key,
                         userName: userName,
+                        avatarSource:item.val().avatarSource,
                         user_id: item.val().user_id
                     })
                 })
@@ -414,6 +415,7 @@ class Preview extends React.Component {
                         rate: user.val().rate,
                         id: user.key,
                         userName:e.val().fullname,
+                        avatarSource:user.child('avatarSource').val(),
                         user_id: user.val().user_id
                     })
                 })

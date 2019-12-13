@@ -71,7 +71,7 @@ class HeaderImageView extends React.Component {
     }*/
 
     render() {
-        console.log('shuaa',this.props.rate)
+       // console.log('shuaa',this.props.rate)
         return(
             <View>
             <Image
@@ -131,7 +131,7 @@ class CardScreen extends React.Component {
             <View style={styles.container}>
                 <Card containerStyle={{padding: 0, borderRadius: 10,borderColor:"#00b5ec"}}>
                     <HeaderUserView userName={this.props.cardItem.userName} navigation={this.props.navigation} user_id={this.props.cardItem.user_id}/>
-                    <HeaderImageView rate={this.props.cardItem.rate} />
+                    <HeaderImageView rate={this.props.cardItem.rate} avatarSource={this.props.cardItem.avatarSource} />
                     <HeaderTextView  title={this.props.cardItem.title}
                                      type={this.props.cardItem.type} />
                     <HeaderMore navigation={this.props.navigation} id={this.props.cardItem.id}userName={this.props.cardItem.userName}/>                 

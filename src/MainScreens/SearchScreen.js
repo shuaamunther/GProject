@@ -773,7 +773,7 @@ export default class SearchScreen extends React.Component {
                                 source={require('../../assets/logouser.png')}
                                 style={{width: 100, height: 100, borderRadius: 32 / 2}}
                             /> 
-                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}>Shuaa5</Text>
+                            <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}></Text>
                         </View>
                         <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
@@ -793,7 +793,7 @@ export default class SearchScreen extends React.Component {
                         <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
-                                    this.logout
+                                    this.logout()
                                 }}/>
                         <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
                         <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
