@@ -358,6 +358,7 @@ class Preview extends React.Component {
                             rate: item.val().rate,
                             imagesource: item.val().imagesource,
                             id: item.key,
+                            avatarSource:item.val().avatarSource,
                             userName: userName,
                             user_id: item.val().user_id
                         })
