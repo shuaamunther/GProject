@@ -32,24 +32,26 @@ showData = async () =>{
               user.forEach(function (recipes) {  
                    idusers= recipes.val().user_id
                    followingid=item.val()
-                   console.log('users',recipes.val().user_id)
+                  // console.log('users',recipes.val().user_id)
                   if(idusers===followingid)  
                   {
                      firebase.database().ref('/users/' + item.val()).on('value', function (name) {
                        userName = name.child('fullname').val(); 
-                       console.log('recipe',userName)
+                     //  console.log('recipe',userName)
                         recipe = this.state.recipe
                       recipe.push({
                           title: recipes.val().title,
                           type: recipes.val().type,
                           rate: recipes.val().rate,
+                          avatarSource:recipes.child('avatarSource').val(),
+                          difficality: recipes.val().difficality,
                           id: recipes.key,
                           userName:name.child('fullname').val(),
                           user_id: recipes.val().user_id
                       })
                     
                       
-                    console.log('arrays',recipe)
+                    
                       this.setState({
                           recipe: recipe
                       }) 
@@ -66,6 +68,7 @@ catch(error){
   }
 
   render(){
+    console.log('arrays',this.state.recipe)
    return (
     <SafeAreaView >
       <CardListScreen recipe={this.state.recipe}/>

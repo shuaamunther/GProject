@@ -38,7 +38,8 @@ componentDidMount() {
                   description:item.val().description, 
                   id: item.key,
                   userName: userName,
-                  user_id: item.val().user_id
+                  user_id: item.val().user_id,
+                  avatarSource:item.val().avatarSource
               })
               this.setState({
                   recipe: recipe
@@ -53,6 +54,7 @@ componentDidMount() {
 
 
   render(){
+console.log('shishi',this.state.recipe)
    return (
     <SafeAreaView >
       <CardListScreen recipe={this.state.recipe}/>

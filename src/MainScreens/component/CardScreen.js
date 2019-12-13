@@ -71,11 +71,12 @@ class HeaderImageView extends React.Component {
     }*/
 
     render() {
+        console.log('shuaa',this.props.rate)
         return(
             <View>
             <Image
                 style={styles.headerImage}
-                source={ {uri:'https://www.aljamila.com/sites/default/files/styles/ph2_1000_auto/public/4ddfe2b4cf545d29f15711e006083fe1dfe7383f.jpg?itok=dfdu4DNjhttp://wallpaperart.altervista.org/Immagini/sfondo-natura-1280x800.jpg'}}
+                source={this.props.avatarSource}
                 />
             <View style={styles.headerStarView}>
             <Image

@@ -189,7 +189,8 @@ class AddRecipes extends React.Component {
                     user_id: firebase.auth().currentUser.uid,
                     createdAt: Date(),
                     avatarSource:avatarSource,
-                    reviews:''
+                    reviews:'',
+                    rate:0,
                 },
                 function (error) {
                     if (error) {
@@ -242,7 +243,7 @@ class AddRecipes extends React.Component {
 
     render() {
       // console.log('tags',this.state.tags.tagsArray)
-       //console.log('type',this.state.steps)
+      console.log('type',this.state.avatarSource)
         return (
             <ScrollView style={styles.scrollView}>
                 <TouchableOpacity style={styles.touchable} onPress={this.selectPhotoTapped.bind(this)}>
