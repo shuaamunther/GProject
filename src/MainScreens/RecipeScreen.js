@@ -288,7 +288,7 @@ addReview(){
  }
 
     renderSection = () => {
-        console.log(this.state.reviews)
+     //   console.log(this.state.reviews)
         if (this.state.activeIndex == 0) {
             return (
                 <View>
