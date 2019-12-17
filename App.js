@@ -48,7 +48,7 @@ export default class App extends React.Component {
         //  if (!firebase.app.length) {
         firebase.initializeApp(firebaseConfig);
         // }
-      
+      console.disableYellowBox=true
     }
 
     constructor(props) {

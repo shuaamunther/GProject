@@ -136,7 +136,7 @@ getUserData = async () => {
                     </View>
                 </Modal>
                 <View style={{marginTop:55,marginBottom:20}}>
-      <DataScreenFollowing navigation={this.props.navigation}/>
+      <DataScreenFollowing navigation={this.props.navigation} style={{marginBottom:10}}/>
       <TouchableHighlight style={styles.buttonAdd}
                                     onPress={() => {
                                         this.props.navigation.navigate('AddRe')
@@ -172,9 +172,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#00b5ec',
     position: 'absolute',
-    bottom: 10,
+    bottom: -70,
     right: 10,
-    //top:480,
+    //top:10,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: "#000",
