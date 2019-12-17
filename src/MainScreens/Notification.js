@@ -17,7 +17,7 @@ import {Card, Button, List, ListItem} from 'react-native-elements';
 import Modal from "react-native-modal";
 import TagInput from 'react-native-tags-input';
 import RNPickerSelect from 'react-native-picker-select';
-
+import PushNotification from "react-native-push-notification";
 
 
 const pickerstyle ={
@@ -89,6 +89,13 @@ export default class NotificationScreen extends React.Component {
     componentWillMount() {
         this.showMyRecipe()
         this.props.openModal
+        PushNotification.localNotification({
+            
+            id: '123'
+        
+        });
+        PushNotification.cancelLocalNotifications({id: '123'});
+    
     }
      logout = () => {
             Firebase.auth().signOut()

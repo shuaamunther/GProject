@@ -137,6 +137,8 @@ getUserData = async () => {
                 </Modal>
                 <View style={{marginTop:55,marginBottom:20}}>
       <DataScreenFollowing navigation={this.props.navigation} style={{marginBottom:10}}/>
+      </View>
+      
       <TouchableHighlight style={styles.buttonAdd}
                                     onPress={() => {
                                         this.props.navigation.navigate('AddRe')
@@ -145,7 +147,12 @@ getUserData = async () => {
                            style={{width: 32, height: 32}}/>
 
                 </TouchableHighlight>
-      </View>
+                <View style={{position: 'absolute', top: -38, marginLeft: 4}}>
+                    <TouchableHighlight onPress={this.openModal}>
+                        <Image source={require('../../assets/edit.png')}
+                               style={{width: 28, height: 28}}/>
+                    </TouchableHighlight>
+                </View>
     </SafeAreaView>
     
   );
