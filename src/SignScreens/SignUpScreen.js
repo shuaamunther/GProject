@@ -66,8 +66,8 @@ export default class SignUpScreen extends React.Component {
                 .auth()
                 .createUserWithEmailAndPassword(email, password)
                 .then((res) => {
-                    let accessToken = res.user.uid;
-                    this.saveToken(accessToken);
+                  //  let accessToken = res.user.uid;
+                  //  this.saveToken(accessToken);
                     firebase.database().ref('users/' + res.user.uid).set({
                             fullname: fullname,
                             email: email,
@@ -84,6 +84,11 @@ export default class SignUpScreen extends React.Component {
                                 Alert.alert("Failed signup user: Message: " + error)
                             }
                         })
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                              actions: [NavigationActions.navigate({ routeName: 'Welcome' },{user_id: firebase.auth().currentUser.uid})],
+                          });
+                           this.props.navigation.dispatch(resetAction);
     
                 })
                 .catch((error) => {
@@ -119,23 +124,6 @@ export default class SignUpScreen extends React.Component {
         }
         this.setState({password})
         this.setState({passwordvalid: true})
-    }
-
-
-    saveToken = async (accessToken) => {
-        try {
-            await AsyncStorage.setItem(Constants.ACCESS_TOKEN, accessToken);
-         //   this.setState({accessToken:this.state.userId})
-            console.log('userid',this.state.userId)
-                const resetAction = StackActions.reset({
-                      index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'Welcome' },{user_id: firebase.auth().currentUser.uid})],
-                    });
-                     this.props.navigation.dispatch(resetAction);
-
-        } catch (error) {
-            console.log("Error saving data" + error);
-        }
     }
 
     render() {
