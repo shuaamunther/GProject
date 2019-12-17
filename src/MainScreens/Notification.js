@@ -27,82 +27,6 @@ const pickerstyle ={
   
 const mainColor = '#00b5ec';
 
-class HeaderUserView extends React.Component {
-    openModal = () => {
-        this.setState({visibleModal: 'bottom'});
-    };
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            visibleModal: null,
-        }
-    }
-    logout = () => {
-        Firebase.auth().signOut()
-            .then(function () {
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'Login'})],
-                });
-                this.props.navigation.dispatch(resetAction);
-            }.bind(this))
-            .catch(function (error) {
-                console.log("logout failed: ", error)
-            });
-  
-    render()
-     {
-         
-        }
-        return (
-            <View>
-                <View style={{position: 'absolute', top: 8, marginLeft: 5, direction: 'row'}}>
-                    <TouchableOpacity onPress={() => this.openModal}>
-                        <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
-                               style={{width: 28, height: 28}}/>
-                    </TouchableOpacity>
-                    <Text style={{marginLeft: 50, marginTop: -25, fontSize: 20}}>Search</Text>
-                </View>
-                <Modal
-                    animationType="slide"
-                    isVisible={this.state.visibleModal === 'bottom'}
-                    onSwipeComplete={() => this.setState({visibleModal: null})}
-                    swipeDirection={['up', 'left', 'right', 'down']}
-                    style={styles.bottomModal}>
-                    <View style={styles.modelContent}>
-                        <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {
-                                    this.props.navigation.navigate('Search')
-                                }}/>
-                        <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {
-                                    this.props.navigation.navigate('Following')
-                                }}/>
-                        <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {
-                                    this.props.navigation.navigate('Main')
-                                }}/>       
-                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
-                                containerStyle={{marginTop: 10, marginBottom: 10,}}
-                                onPress={() => {
-                                    this.logout
-                                }}/>
-                        <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
-                        <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
-                                onPress={() => this.setState({visibleModal: null})}
-                                containerStyle={{marginTop: 10, marginBottom: 10}}/>
-                    </View>
-                </Modal>
-            </View>
-
-        )
-    }
-}
-
 export default class NotificationScreen extends React.Component {
     static navigationOptions = {
         header: null
@@ -129,19 +53,25 @@ export default class NotificationScreen extends React.Component {
 
     showMyRecipe() {
         let myRecipe = []
-        let user_id = firebase.auth().currentUser.uid
+        let userd = firebase.auth().currentUser.uid
+        console.log('reviews',userd)
+        let reviews=[]
         try {
-            firebase.database().ref().child('recipes').orderByChild('user_id').equalTo(userId).on("value", function (snapshot) {
+            firebase.database().ref().child('recipes').orderByChild('user_id').equalTo(userd).on("value", function (snapshot) {
                 snapshot.forEach(function (item) {
-                    firebase.database().ref('/users/' + item.val().user_id).on('value', function (user) {
-                        let userName = user.child('fullname').val();
-                      //  console.log('userName',userName)
-                        myRecipe.push({
+                    let reid=item.child('reviews').val()
+                      //console.log('userName',reid)
+                      for(let i=0;i<reid.length;i++){
+                        {
+                            myRecipe.push({
+                            rate : reid[i].rate,
+                            comment :reid[i].comment,
+                            user_name : reid[i].user_name,
                             id: item.key,
-                            reviews: item.val().reviews
-
+                            title:item.val().title
                         })
-                    })
+                        }
+                    }
                 })
 
                 this.setState({
@@ -176,7 +106,7 @@ export default class NotificationScreen extends React.Component {
       console.log('reviews',this.state.myRecipe)
         return (
             <ScrollView>
-                <HeaderUserView/>
+               
                 <View style={{position: 'absolute', top: 8, marginLeft: 4}}>
                     <TouchableHighlight onPress={this.openModal}>
                         <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
@@ -184,6 +114,47 @@ export default class NotificationScreen extends React.Component {
                     </TouchableHighlight>
                 </View>
                 
+                <View>
+                <Text style={{marginTop:50,fontSize:20,marginLeft:5,marginBottom:10}}>Notifications</Text>
+                      <FlatList   style={styles.root}
+                            data={this.state.myRecipe}
+                            extraData={this.state}
+                            ItemSeparatorComponent={() => {
+                            return (
+                              <View style={styles.separator}/>
+                            )
+                            }}
+
+                keyExtractor={(item)=>{
+                  return item.id;
+                }}
+
+                renderItem={(item) => {
+                  const Notification = item.item;
+
+                  return(
+                      <View>
+                         <View style={{marginBottom:20}}>
+                            <View style={styles.container}>
+                               <TouchableOpacity onPress={() => {this.props.navigation.navigate('Recipe', {id: Notification.id})}}>
+                                  <Image style={styles.image} source={require('../../assets/bell.png')}/>
+                               </TouchableOpacity>
+
+                               <View style={styles.content}>
+                                   <View style={styles.contentHeader}>
+                                       <Text  style={styles.name}>{Notification.user_name}</Text>
+                                       <Text  kType='primary3 mediumLine'>  commented in your </Text>
+                                       <Text  style={styles.name}>{Notification.title}</Text>
+                                   </View>
+
+                                   <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
+                               </View>
+                            </View>
+                         </View> 
+                      </View>
+                  );
+                }}/>
+                </View>
                 <Modal
                     isVisible={this.state.visibleModal === 'bottom'}
                     onSwipeComplete={() => this.setState({visibleModal: null})}
@@ -202,6 +173,11 @@ export default class NotificationScreen extends React.Component {
                                 onPress={() => {
                                     this.props.navigation.navigate('Following')
                                 }}/>
+                        <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Main')
+                                }}/>           
                         <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
@@ -434,6 +410,44 @@ const styles = StyleSheet.create({
     loginText: {
         color: 'white',
     },
+    root: {
+        backgroundColor: "#ffffff",
+        marginTop:10,
+      },
+      container: {
+        //paddingLeft: 19,
+        paddingRight: 16,
+        paddingVertical: 12,
+        flexDirection: 'row',
+        alignItems: 'flex-start'
+      },
+      content: {
+        marginLeft: 16,
+        flex: 1,
+      },
+      contentHeader: {
+        flexDirection: 'row',
+        //justifyContent: 'space-between',
+        marginBottom: 6
+      },
+      separator: {
+        height: 1,
+        backgroundColor: "#CCCCCC"
+      },
+      image:{
+        width:30,
+        height:30,
+        borderRadius:20,
+        marginLeft:10
+      },
+      time:{
+        fontSize:11,
+        color:"#808080",
+      },
+      name:{
+        fontSize:16,
+        fontWeight:"bold",
+      },
     buttonFollow: {
         marginTop: 20,
         flexDirection: 'row',

@@ -54,7 +54,7 @@ componentDidMount() {
 
 
   render(){
-console.log('shishi',this.state.recipe)
+//console.log('shishi',this.state.recipe)
    return (
     <SafeAreaView >
       <CardListScreen recipe={this.state.recipe}/>

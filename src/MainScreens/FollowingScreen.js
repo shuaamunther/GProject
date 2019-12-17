@@ -114,6 +114,11 @@ getUserData = async () => {
                                 onPress={() => {
                                     this.props.navigation.navigate('Search')
                                 }}/>
+                        <Button title="Notification" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Notification')
+                                }}/>       
                         <Button title="Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {

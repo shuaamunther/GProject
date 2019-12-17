@@ -81,7 +81,7 @@ class HeaderImageView extends React.Component {
                     <ImageBackground source={require('../../assets/logo2.png')} style={{width: '100%', height: '100%'}}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                             <Image style={styles.avatar} source={require('../../assets/logo22.png')}/>
-                            <Text style={[styles.name, {color: 'black'}]}>{this.props.username}</Text>
+                            <Text style={ {color: 'black',fontSize:25}}>{this.props.username}</Text>
                             <TouchableHighlight
                                 style={this.props.isSameUser == true ? {display: 'none'} : {display: 'flex'}}
                                 onPress={() => {
@@ -136,6 +136,11 @@ class HeaderImageView extends React.Component {
                                 onPress={() => {
                                     this.props.navigation.navigate('Profile')
                                 }}/>
+                        <Button title="Notification" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Notification')
+                                }}/>          
                         <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
