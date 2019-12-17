@@ -3,7 +3,7 @@ import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import {StyleSheet, Text, View, Platform, YellowBox} from 'react-native';
-
+//import '@firebase/messaging';
 import Login from './src/SignScreens/Login';
 import ProfileScreen from './src/MainScreens/ProfileScreen';
 import ProfileScreen2 from './src/MainScreens/ProfileScreen2';
@@ -24,6 +24,7 @@ import DataScreenFollowing  from './src/MainScreens/component/DataForFollowing'
 import Test from './src/MainScreens/Test';
 import AddRecipes from './src/MainScreens/AddRecipes';
 import RecipeScreen from './src/MainScreens/RecipeScreen';
+import NotificationScreen from './src/MainScreens/Notification';
 import PickingPicture from './src/PickingPicture'
 import FirstScreen from './src/FirstScreen';
 import FollowingScreen from './src/MainScreens/FollowingScreen'
@@ -47,6 +48,7 @@ export default class App extends React.Component {
         //  if (!firebase.app.length) {
         firebase.initializeApp(firebaseConfig);
         // }
+      
     }
 
     constructor(props) {
@@ -103,6 +105,9 @@ const AppNavigator = createStackNavigator({
         },
         Search: {
             screen: SearchScreen
+        },
+        Notification: {
+            screen: NotificationScreen
         },
         Data: {
             screen: DataScreen

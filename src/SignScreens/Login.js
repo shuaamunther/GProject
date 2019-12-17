@@ -128,7 +128,7 @@ export default class login extends React.Component {
             await AsyncStorage.setItem(Constants.ACCESS_TOKEN, accessToken);
             //userId:accessToken
             console.log('acc',accessToken)
-            this.props.navigation.navigate('Main',accessToken);
+            this.props.navigation.navigate('Following',accessToken);
         } catch (error) {
             console.log("Error saving data" + error);
         }

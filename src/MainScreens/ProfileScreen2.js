@@ -4,7 +4,7 @@ import {
     ImageBackground, ScrollView, TouchableHighlight, error
 } from 'react-native'
 import {StackActions, NavigationActions} from 'react-navigation';
-import {Card, Button, List, ListItem} from 'react-native-elements';
+import {Card, Button, List, ListItem,Rating} from 'react-native-elements';
 import * as firebase from 'firebase';
 import Modal from "react-native-modal";
 import CardListScreen from "./component/CardListScreen";
@@ -293,12 +293,12 @@ class Following extends React.Component {
                                style={{width: 25, height: 25 ,marginLeft:250}}/>
                         </TouchableOpacity>
                     </View>
-                    <FlatList onPress={() => {
-                                this.props.navigation.navigate('Profile', {user_id: `${item.userd}`})
-                            }}
+                    <FlatList 
                         data={this.state.followersname}
                         renderItem={({item}) => (
-                            <ListItem  
+                            <ListItem   onPress={() => {
+                                this.props.navigation.navigate('Profile', {user_id: `${item.userd}`})
+                            }}
                                       roundAvatar
                                       title={`${item.username} `}
                                       disabled={this.state.isLoading}
@@ -329,6 +329,7 @@ class Preview extends React.Component {
             myRecipe: [],
             savedrecipe:[],
             saved_recipe:[],
+            review_recipe:[]
         }
     }
 
@@ -342,6 +343,44 @@ class Preview extends React.Component {
         this.showMyRecipe(this.props.user_id);
         this.showData()
         this.savedData()
+        this.reviewData()
+    }
+
+    
+
+    reviewData() {
+        let recipe = []
+        let ids
+        let userid
+        let Userid = this.props.user_id
+        try{
+        firebase.database().ref('/recipes').orderByChild('reviews').on('value', function (snapshot) {
+            snapshot.forEach(function (item) {
+                let reid=item.child('reviews').val()
+                for(let i=0;i<reid.length;i++){
+                    userid=reid[i].user_id
+                    if(userid==Userid)
+                    {
+                      recipe.push({
+                        rate : reid[i].rate,
+                        comment :reid[i].comment,
+                        user_name : reid[i].user_name,
+                        user_id: userid,
+                        id: item.key
+                    })
+                    }
+                }
+              
+        })
+        console.log('rev',recipe)
+            this.setState({
+                review_recipe: recipe
+            })
+        }.bind(this));
+    }
+    catch(error){
+        console.log(error)
+    }
     }
 
     showMyRecipe(userId) {
@@ -437,10 +476,52 @@ class Preview extends React.Component {
             )
         }
         if (this.state.activeIndex == 1) {
-            return (
+            return ( <View>
+                <FlatList   style={styles.root}
+                      data={this.state.review_recipe}
+                      extraData={this.state}
+                      ItemSeparatorComponent={() => {
+                      return (
+                        <View style={styles.separator}/>
+                      )
+                      }}
+
+          keyExtractor={(item)=>{
+            return item.id;
+          }}
+
+          renderItem={(item) => {
+            const Notification = item.item;
+
+            return(
                 <View>
-                    <Text>Reviews</Text>
+                   <View style={{marginBottom:20}}>
+                      <View style={styles.container}>
+                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('Recipe', {id: Notification.id})}}>
+                            <Image style={styles.image} source={require('../../assets/logo22.png')}/>
+                         </TouchableOpacity>
+
+                         <View style={styles.content}>
+                             <View style={styles.contentHeader}>
+                                 <Text  style={styles.name}>{Notification.user_name}</Text>
+                                 <Rating style={styles.time}
+                                    readonly
+                                    type="star"
+                                    fractions={1}
+                                    startingValue={Notification.rate}
+                                    imageSize={20}
+                                    style={{ paddingVertical: 10 }}
+                                 />
+                             </View>
+
+                             <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
+                         </View>
+                      </View>
+                   </View> 
                 </View>
+            );
+          }}/>
+          </View>
             )
         }
         if (this.state.activeIndex == 2) {
@@ -678,5 +759,39 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 8,
         borderRadius: 5
-    }
+    },
+    container: {
+        paddingLeft: 19,
+        paddingRight: 16,
+        paddingVertical: 12,
+        flexDirection: 'row',
+        alignItems: 'flex-start'
+      },
+      content: {
+        marginLeft: 16,
+        flex: 1,
+      },
+      contentHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 6
+      },
+      separator: {
+        height: 1,
+        backgroundColor: "#CCCCCC"
+      },
+      image:{
+        width:45,
+        height:45,
+        borderRadius:20,
+        marginLeft:20
+      },
+      time:{
+        fontSize:11,
+        color:"#808080",
+      },
+      name:{
+        fontSize:16,
+        fontWeight:"bold",
+      },
 });

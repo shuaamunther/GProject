@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1071288752672",
+    "firebase_url": "https://gradproject-408c0.firebaseio.com",
+    "project_id": "gradproject-408c0",
+    "storage_bucket": "gradproject-408c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071288752672:android:743fc6690af72db0e3fa45",
+        "android_client_info": {
+          "package_name": "com.invertase.rnfirebasestarter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071288752672-ngkqufit6sumg55421obm5deptk6i4sk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVX1rLZtLN7wk0381ZU0jpqPEHVz11218"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071288752672-ngkqufit6sumg55421obm5deptk6i4sk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

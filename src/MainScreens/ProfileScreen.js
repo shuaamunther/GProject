@@ -393,7 +393,7 @@ class Preview extends React.Component {
                         id: item.key,
                         userName: userName,
                         avatarSource:item.val().avatarSource,
-                        user_id: item.val().user_id
+                        user_id: item.val().user_id,
                     })
                 })
             })
@@ -435,7 +435,7 @@ class Preview extends React.Component {
     }
     catch(error){
         console.log(error)
-      }
+    }
     }
 
     savedData() {

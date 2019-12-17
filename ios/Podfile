@@ -40,6 +40,8 @@ target 'AwesomeProject' do
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+
   target 'AwesomeProjectTests' do
     inherit! :search_paths
     # Pods for testing
