@@ -136,12 +136,12 @@ class HeaderImageView extends React.Component {
                                 onPress={() => {
                                     this.props.navigation.navigate('Profile')
                                 }}/>
-                        <Button title="Notification" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                        <Button title="Notification" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
                                     this.props.navigation.navigate('Notification')
                                 }}/>          
-                        <Button title="Logout" buttonStyle={{backgroundColor: '#d9534f', borderRadius: 30,}}
+                        <Button title="Logout" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
                                     this.logout()
