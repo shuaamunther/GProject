@@ -68,7 +68,8 @@ export default class NotificationScreen extends React.Component {
                             comment :reid[i].comment,
                             user_name : reid[i].user_name,
                             id: item.key,
-                            title:item.val().title
+                            title:item.val().title,
+                            rate : reid[i].rate
                         })
                         }
                     }
@@ -143,7 +144,7 @@ export default class NotificationScreen extends React.Component {
                                <View style={styles.content}>
                                    <View style={styles.contentHeader}>
                                        <Text  style={styles.name}>{Notification.user_name}</Text>
-                                       <Text  kType='primary3 mediumLine'>  commented in your </Text>
+                                       <Text  kType='primary3 mediumLine'> commented in your </Text>
                                        <Text  style={styles.name}>{Notification.title}</Text>
                                    </View>
 
