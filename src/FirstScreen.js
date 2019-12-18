@@ -6,7 +6,7 @@ import {StackActions, NavigationActions, createAppContainer} from 'react-navigat
 import {createStackNavigator} from 'react-navigation-stack';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Constants from './utils/Constants'
-
+uy
 
 class FirstScreen extends React.Component {
    static navigationOptions ={
