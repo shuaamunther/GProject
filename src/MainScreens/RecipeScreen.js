@@ -282,8 +282,9 @@ addReview(){
                       );
                       this.setState({showAddReview:false})
                     //  reviews=this.state.reviews
-                   
+                    firebase.database().ref('users/'+Userid).child('/reviewd').push(recipeid)
                       firebase.database().ref('recipes/'+recipeId+'/reviews').once("value").then(function(snapshot) {
+                          
                           let sumOfRates = 0.0
                           snapshot.forEach(function(item) {
                             sumOfRates = sumOfRates + item.val().rate ;
@@ -292,7 +293,6 @@ addReview(){
                            newRate = newRate.toFixed(2);
                            firebase.database().ref('recipes/'+recipeId+'/rate').set(newRate)
                            this.setState({rate:newRate})
-                           firebase.database().ref('users/'+Userid).child('/reviewd').push(recipeid)
                            
                          }.bind(this));
                         //  firebase.database().ref('users/'+ Userid +'/reviewd').once("value").then(function(snapshot) {

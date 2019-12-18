@@ -122,8 +122,14 @@ class HeaderImageView extends React.Component {
                         <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
+                                    this.props.navigation.navigate('Following')
+                                }}/>
+                        <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
                                     this.props.navigation.navigate('Main')
                                 }}/>
+                                
                         <Button title="Edit Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10}}/>
                         <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
