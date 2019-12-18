@@ -92,7 +92,8 @@ class AddRecipes extends React.Component {
               },
             tagsColor: mainColor,
             tagsText: '#fff',
-            activeindex:0,                     
+            activeindex:0, 
+            cruisine:'',                    
         };  
     }
 
@@ -155,6 +156,7 @@ class AddRecipes extends React.Component {
         let protein = this.state.protein
         let carbs = this.state.carbs
         let avatarSource = this.state.avatarSource
+        let cruisine= this.state.cruisine
         let type
         if(this.state.activeIndex==0){
              type='sweet';
@@ -191,6 +193,7 @@ class AddRecipes extends React.Component {
                     avatarSource:avatarSource,
                     reviews:'',
                     rate:0,
+                    cruisine:cruisine,
                 },
                 function (error) {
                     if (error) {
@@ -364,6 +367,15 @@ class AddRecipes extends React.Component {
                                onChangeText={(difficality) => this.setState({difficality})}
                     />
                 </View>
+
+                <View style={styles.inputContainer}>
+                    <TextInput style={styles.inputs}
+                               placeholder="Cruisine"
+                               underlineColorAndroid='transparent'
+                               onChangeText={(cruisine) => this.setState({cruisine})}
+                    />
+                </View>
+               
 
                 <View style={{
                     flexDirection: 'row',

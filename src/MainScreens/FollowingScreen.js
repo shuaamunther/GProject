@@ -123,7 +123,12 @@ getUserData = async () => {
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {
                                     this.props.navigation.navigate('Notification')
-                                }}/>       
+                                }}/>   
+                         <Button title="Recommendation" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                onPress={() => {
+                                    this.props.navigation.navigate('Recommendation')
+                                }}/>             
                         <Button title="Logout" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
                                 containerStyle={{marginTop: 10, marginBottom: 10,}}
                                 onPress={() => {

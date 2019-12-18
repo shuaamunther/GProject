@@ -25,6 +25,7 @@ import Test from './src/MainScreens/Test';
 import AddRecipes from './src/MainScreens/AddRecipes';
 import RecipeScreen from './src/MainScreens/RecipeScreen';
 import NotificationScreen from './src/MainScreens/Notification';
+import RecommendationScreen from './src/MainScreens/Recommendation';
 import PickingPicture from './src/PickingPicture'
 import FirstScreen from './src/FirstScreen';
 import FollowingScreen from './src/MainScreens/FollowingScreen'
@@ -171,6 +172,9 @@ const AppNavigator = createStackNavigator({
         },
         FollowersName: {
             screen:FollowersScreen
+        },
+        Recommendation: {
+            screen:RecommendationScreen
         }
 
     },

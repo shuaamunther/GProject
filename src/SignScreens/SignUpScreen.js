@@ -78,6 +78,7 @@ export default class SignUpScreen extends React.Component {
                             veg:'false',
                             allergies:{dairy:'false',egg:'false',gluten:'false',peanut:'false',seafood:'false',sesame:'false',soy:'false',treenut:'false',wheat:'false',sulfite:'false'},
                             dislikes:{alcohole:'false',avocado:'false',beef:'false',eggplant:'false',mushrooms:'false',pork:'false',onions:'false',suger:'false',olives:'false'},
+                            retes:{ar:0,as:0,fa:0,eu:0},
                         },
                         function (error) {
                             if (error) {

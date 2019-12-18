@@ -47,8 +47,6 @@ componentDidMount() {
           }.bind(this))
       }.bind(this))
   }.bind(this));
-
-
 }
 
 

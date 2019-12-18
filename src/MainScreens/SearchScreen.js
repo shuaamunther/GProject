@@ -525,7 +525,6 @@ export default class SearchScreen extends React.Component {
                                                 { label: 'Arabian', value: 'arabian' },
                                                 { label: 'Europe', value: 'europe' },
                                                 { label: 'Asian', value: 'asian' },
-                                                { label: 'Mexican', value: 'mexican' },
                                             ]}
                     />
                     {/* type */}

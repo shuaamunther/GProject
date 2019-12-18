@@ -234,8 +234,18 @@ addReview(){
         reviews=this.state.reviews
         let recipeId=this.props.id
         var userData={recipeId}
+        let recipe=[]
+        let cruisine
+        let title
         var id
         //read name
+
+        firebase.database().ref('recipes/'+recipeId).on("value", function (name){
+           cruisine=name.child('cruisine').val()
+        }.bind(this))
+        firebase.database().ref('recipes/'+recipeId).on("value", function (name){
+            title=name.child('title').val()
+        }.bind(this))
         firebase.database().ref('users/').child(Userid).on("value", function (name){
             username=name.child('fullname').val()
         }.bind(this))
@@ -245,9 +255,15 @@ addReview(){
             rate : this.state.addRate,
             comment : this.state.addReviewText,
             user_name : username,
+            title:title
           } 
         reviews.push(new_review)  
-        
+        let recipeid={
+            recipeId:recipeId,
+            rate:this.state.addRate,
+            cruisine:cruisine
+        }
+
         try {
             firebase.database().ref('recipes/'+recipeId).child('/reviews').set(
                 reviews,
@@ -266,6 +282,7 @@ addReview(){
                       );
                       this.setState({showAddReview:false})
                     //  reviews=this.state.reviews
+                   
                       firebase.database().ref('recipes/'+recipeId+'/reviews').once("value").then(function(snapshot) {
                           let sumOfRates = 0.0
                           snapshot.forEach(function(item) {
@@ -275,7 +292,47 @@ addReview(){
                            newRate = newRate.toFixed(2);
                            firebase.database().ref('recipes/'+recipeId+'/rate').set(newRate)
                            this.setState({rate:newRate})
+                           firebase.database().ref('users/'+Userid).child('/reviewd').push(recipeid)
+                           
                          }.bind(this));
+                        //  firebase.database().ref('users/'+ Userid +'/reviewd').once("value").then(function(snapshot) {
+                        //     snapshot.forEach(function(re) {
+                        //         let arsum=0
+                        //         let ersum=0
+                        //         let fasum=0
+                        //         let assum=0
+                                
+                        //         if(re.val().cruisine==='arabian')
+                        //         {
+                        //            let rate = this.state.addRate 
+                        //            arsum=arsum+re.val().rate
+                        //            arsum=arsum/re.length
+                        //            arsum=arsum.toFixed(2)
+                        //            firebase.database().ref('users/'+ Userid ).once("value").then(function(snapshot)
+                        //            {
+                                       
+                        //            }.bind(this))
+
+                        //         }
+                        //         else if (re.val().cruisine=='europe')
+                        //         {
+                        //             ersum=ersum+re.val().rate
+
+                        //         }
+                        //         else if (re.val().cruisine=='fast')
+                        //         {
+                        //             fasum=fasum+re.val().rate
+                                    
+                        //         }
+                        //         else if (re.val().cruisine=='asian')
+                        //         {
+                        //             assum=assum+re.val().rate
+                                    
+                        //         }
+
+
+                        //     }.bind(this))
+                        //  }.bind(this))
                   }
                }.bind(this)     
             )  
@@ -288,6 +345,7 @@ addReview(){
  }
 
     renderSection = () => {
+        const {navigation} = this.props;
      //   console.log(this.state.reviews)
         if (this.state.activeIndex == 0) {
             return (
@@ -403,7 +461,7 @@ addReview(){
                       <View>
                          <View style={{marginBottom:20}}>
                             <View style={styles.container}>
-                               <TouchableOpacity onPress={() => {}}>
+                               <TouchableOpacity onPress={() => {this.props.navigation.navigate('Profile', {user_id: Notification.user_id})}}>
                                   <Image style={styles.image} source={require('../../assets/logo22.png')}/>
                                </TouchableOpacity>
 
@@ -579,7 +637,7 @@ export default class RecipeScreen extends React.Component {
                 <View style={{marginBottom: 20}}>
                     <HeaderImageView id={id}/>
                     <Following id={id}/>
-                    <Preview id={id}/>
+                    <Preview id={id} navigation={this.props.navigation}/>
                 </View>
             </ScrollView>
         );

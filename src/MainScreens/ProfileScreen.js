@@ -426,7 +426,8 @@ class Preview extends React.Component {
                         comment :reid[i].comment,
                         user_name : reid[i].user_name,
                         user_id: userid,
-                        id: item.key
+                        id: item.key,
+                        title: reid[i].title
                     })
                     }
                 }
@@ -504,12 +505,12 @@ class Preview extends React.Component {
                          <View style={{marginBottom:20}}>
                             <View style={styles.container}>
                                <TouchableOpacity onPress={() => {this.props.navigation.navigate('Recipe', {id: Notification.id})}}>
-                                  <Image style={styles.image} source={require('../../assets/logo22.png')}/>
+                                  <Image style={styles.image} source={require('../../assets/comment.png')}/>
                                </TouchableOpacity>
 
                                <View style={styles.content}>
                                    <View style={styles.contentHeader}>
-                                       <Text  style={styles.name}>{Notification.user_name}</Text>
+                                       <Text  >{Notification.user_name} rated {Notification.title} </Text>
                                        <Rating style={styles.time}
                                           readonly
                                           type="star"
@@ -520,7 +521,7 @@ class Preview extends React.Component {
                                        />
                                    </View>
 
-                                   <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
+                                   <Text rkType='primary3 mediumLine'>and commented {Notification.comment}</Text>
                                </View>
                             </View>
                          </View> 
@@ -772,7 +773,7 @@ const styles = StyleSheet.create({
         marginTop:10,
       },
       container: {
-        paddingLeft: 19,
+        //paddingLeft: 19,
         paddingRight: 16,
         paddingVertical: 12,
         flexDirection: 'row',
@@ -795,7 +796,7 @@ const styles = StyleSheet.create({
         width:45,
         height:45,
         borderRadius:20,
-        marginLeft:20
+        marginLeft:10
       },
       time:{
         fontSize:11,

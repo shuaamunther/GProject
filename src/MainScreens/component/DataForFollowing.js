@@ -65,7 +65,7 @@ catch(error){
   }
 
   render(){
-    console.log('arrays',this.state.recipe)
+    //console.log('arrays',this.state.recipe)
    return (
     <SafeAreaView >
       <CardListScreen recipe={this.state.recipe}/>
