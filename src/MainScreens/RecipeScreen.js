@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {
     StyleSheet, Platform, Image, Text, View, TouchableOpacity,
-    ImageBackground, ScrollView, TouchableHighlight, error, FlatList,KeyboardAvoidingView,TextInput,Alert
+    ImageBackground, ScrollView, TouchableHighlight, error, FlatList,KeyboardAvoidingView,TextInput,Alert,ActivityIndicator
 } from 'react-native'
 import {StackActions, NavigationActions} from 'react-navigation';
 import { Rating, Card, Button,ListItem  } from 'react-native-elements';
@@ -170,7 +170,10 @@ class Preview extends React.Component {
             ingredients: '',
             title: '',
             description: '',
-            reviews : [],
+            reviews : {user_id : '',
+                       rate : '',
+                       comment : '',
+                       user_name : ''},
             title: '',
             description: '',
             ingrediants: '',
@@ -228,26 +231,36 @@ class Preview extends React.Component {
     }
 
 addReview(){
+    try{
+        this.setState({isLoading: true})
+    }
+    catch(error){
+
+    }
         let Userid = firebase.auth().currentUser.uid
         let username
         let  reviews=[]
-        reviews=this.state.reviews
+        
+        //reviews=this.state.reviews
+       // reviews=this.state.reviews
         let recipeId=this.props.id
         var userData={recipeId}
-        let recipe=[]
+        var id
         let cruisine
         let title
         var id
         //read name
-
+        
         firebase.database().ref('recipes/'+recipeId).on("value", function (name){
            cruisine=name.child('cruisine').val()
         }.bind(this))
         firebase.database().ref('recipes/'+recipeId).on("value", function (name){
             title=name.child('title').val()
         }.bind(this))
+        //read name
         firebase.database().ref('users/').child(Userid).on("value", function (name){
             username=name.child('fullname').val()
+            
         }.bind(this))
         
         let new_review = {
@@ -255,16 +268,22 @@ addReview(){
             rate : this.state.addRate,
             comment : this.state.addReviewText,
             user_name : username,
+            cruisine:cruisine,
             title:title
           } 
-        reviews.push(new_review)  
-        let recipeid={
+          
+          let recipeid={
             recipeId:recipeId,
             rate:this.state.addRate,
             cruisine:cruisine
         }
-
+        
         try {
+            
+            
+            reviews.push(new_review) 
+            this.setState({reviews:reviews})
+            
             firebase.database().ref('recipes/'+recipeId).child('/reviews').set(
                 reviews,
                 function (error) {
@@ -272,6 +291,7 @@ addReview(){
                         Alert.alert("Failed adding: Message: " + error)
                     }
                     else {
+                        
                       Alert.alert(
                         'Review Added',
                         'Review Added Successfully!',
@@ -282,9 +302,7 @@ addReview(){
                       );
                       this.setState({showAddReview:false})
                     //  reviews=this.state.reviews
-                    firebase.database().ref('users/'+Userid).child('/reviewd').push(recipeid)
                       firebase.database().ref('recipes/'+recipeId+'/reviews').once("value").then(function(snapshot) {
-                          
                           let sumOfRates = 0.0
                           snapshot.forEach(function(item) {
                             sumOfRates = sumOfRates + item.val().rate ;
@@ -293,46 +311,8 @@ addReview(){
                            newRate = newRate.toFixed(2);
                            firebase.database().ref('recipes/'+recipeId+'/rate').set(newRate)
                            this.setState({rate:newRate})
-                           
+                           firebase.database().ref('users/'+Userid).child('/reviewd').push(recipeid)
                          }.bind(this));
-                        //  firebase.database().ref('users/'+ Userid +'/reviewd').once("value").then(function(snapshot) {
-                        //     snapshot.forEach(function(re) {
-                        //         let arsum=0
-                        //         let ersum=0
-                        //         let fasum=0
-                        //         let assum=0
-                                
-                        //         if(re.val().cruisine==='arabian')
-                        //         {
-                        //            let rate = this.state.addRate 
-                        //            arsum=arsum+re.val().rate
-                        //            arsum=arsum/re.length
-                        //            arsum=arsum.toFixed(2)
-                        //            firebase.database().ref('users/'+ Userid ).once("value").then(function(snapshot)
-                        //            {
-                                       
-                        //            }.bind(this))
-
-                        //         }
-                        //         else if (re.val().cruisine=='europe')
-                        //         {
-                        //             ersum=ersum+re.val().rate
-
-                        //         }
-                        //         else if (re.val().cruisine=='fast')
-                        //         {
-                        //             fasum=fasum+re.val().rate
-                                    
-                        //         }
-                        //         else if (re.val().cruisine=='asian')
-                        //         {
-                        //             assum=assum+re.val().rate
-                                    
-                        //         }
-
-
-                        //     }.bind(this))
-                        //  }.bind(this))
                   }
                }.bind(this)     
             )  
@@ -345,7 +325,6 @@ addReview(){
  }
 
     renderSection = () => {
-        const {navigation} = this.props;
      //   console.log(this.state.reviews)
         if (this.state.activeIndex == 0) {
             return (
@@ -441,6 +420,8 @@ addReview(){
         if (this.state.activeIndex == 2) {
             return (
              <View>
+               
+                   
                 <FlatList   style={styles.root}
                             data={this.state.reviews}
                             extraData={this.state}
@@ -461,7 +442,7 @@ addReview(){
                       <View>
                          <View style={{marginBottom:20}}>
                             <View style={styles.container}>
-                               <TouchableOpacity onPress={() => {this.props.navigation.navigate('Profile', {user_id: Notification.user_id})}}>
+                               <TouchableOpacity  onPress={() => {this.props.navigation.navigate('Profile', {user_id: Notification.user_id})}}>
                                   <Image style={styles.image} source={require('../../assets/logo22.png')}/>
                                </TouchableOpacity>
 
@@ -485,7 +466,9 @@ addReview(){
                       </View>
                   );
                 }}/>
+                
                 <View style = {this.state.showAddReview == true ? {} : {display : 'none'}}>
+                
                   <View>
                     
             <View style={{borderRadius:20,borderWidth:1,marginLeft:4,marginRight:4}}>
@@ -495,7 +478,7 @@ addReview(){
                     fractions={0}
                     startingValue={1}
                     imageSize={30}
-                    onFinishRating={(rating) => {this.setState({...this.state, addRate : rating})}}
+                    onFinishRating={(rating) => {this.setState({ addRate : rating})}}
                     style={{ paddingVertical: 10 }}
                 />
                   <KeyboardAvoidingView>
@@ -505,23 +488,26 @@ addReview(){
                             numberOfLines = {3}
                             autoCorrect={true}
                             placeholder="add your review..."
-                            onChangeText={(text) =>{this.setState({...this.state, addReviewText : text})}}
+                            onChangeText={(text) =>{this.setState({ addReviewText : text})}}
                             style={{borderColor: 'gray', borderWidth: 1,width:270,height:40 ,borderRadius:10,marginLeft:10}}
                       />
-
+                
                 <TouchableHighlight
                     style={[styles.buttonContainer, styles.SignUpButton, this.state.isLoading ? styles.SaveButtonColorLoading : styles.SaveButtonColor]}
                     disabled={this.state.isLoading}
                     onPress={() => this.addReview()}>
                     <Text style={{color:'white'}}>Add</Text>
                 </TouchableHighlight>
+                
                     </View>
                   </KeyboardAvoidingView>
                 </View>
-                   
+              <ActivityIndicator size="large" color="#00b5ec" style={{display: this.state.isLoading ? 'flex' : 'none'}}/>
                  
                 </View>
+
               </View>
+              
                 </View>
                 
             )
