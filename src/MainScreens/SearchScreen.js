@@ -521,7 +521,7 @@ export default class SearchScreen extends React.Component {
                                      onValueChange={(value) =>this.setState( {...this.state, cruisine : value})}
                                      value = {this.state.cruisine}
                                      items={[
-                                                { label: 'Fast Food', value: 'fast_food' },
+                                                { label: 'Fast Food', value: 'fast food' },
                                                 { label: 'Arabian', value: 'arabian' },
                                                 { label: 'Europe', value: 'europe' },
                                                 { label: 'Asian', value: 'asian' },
