@@ -103,21 +103,21 @@ class HeaderUserView extends React.Component {
             visibleModal: null,
         }
     }
-  
-    render() {
-         logout = () => {
-            Firebase.auth().signOut()
-                .then(function () {
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({routeName: 'Login'})],
-                    });
-                    this.props.navigation.dispatch(resetAction);
-                }.bind(this))
-                .catch(function (error) {
-                    console.log("logout failed: ", error)
+    logout = () => {
+        firebase.auth().signOut()
+            .then(function () {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({routeName: 'Login'})],
                 });
-        }
+                this.props.navigation.dispatch(resetAction);
+            }.bind(this))
+            .catch(function (error) {
+                console.log("logout failed: ", error)
+            });
+    }
+    render() {
+         
         return (
             <View>
                 <View style={{position: 'absolute', top: 8, marginLeft: 5, direction: 'row'}}>
@@ -299,7 +299,7 @@ export default class SearchScreen extends React.Component {
         if(this.state.cruisine != '' && this.state.cruisine != null){
             filters ={...filters, cruisine : this.state.cruisine}
         }
-        if(this.state.type != '' && this.state.cruisine != null){
+        if(this.state.type != '' && this.state.type != null){
             filters ={...filters, type : this.state.type}
         }
         if(this.state.difficulty != '' && this.state.difficulty != null){
@@ -368,7 +368,7 @@ export default class SearchScreen extends React.Component {
                  }
             }
             if(filters.hasOwnProperty('difficulty')){
-                if(item.val().difficulty!=filters.difficulty){
+                if(item.val().difficalty!=filters.difficulty){
                     return
                  }
             }
@@ -391,7 +391,6 @@ export default class SearchScreen extends React.Component {
                 id : item.key,
                 title : item.val().title,
                 calories : item.val().calories,
-                difficulty:item.val().difficulty
             })
         })
         
@@ -521,33 +520,33 @@ export default class SearchScreen extends React.Component {
                                      onValueChange={(value) =>this.setState( {...this.state, cruisine : value})}
                                      value = {this.state.cruisine}
                                      items={[
-                                                { label: 'Fast Food', value: 'fast food' },
-                                                { label: 'Arabian', value: 'arabian' },
-                                                { label: 'Europe', value: 'europe' },
-                                                { label: 'Asian', value: 'asian' },
-                                            ]}
+                                        { label: 'Fast Food', value: 'fa' },
+                                        { label: 'Arabian', value: 'ar' },
+                                        { label: 'Europe', value: 'eu' },
+                                        { label: 'Asian', value: 'as' },
+                                    ]}
                     />
                     {/* type */}
                       <RNPickerSelect  placeholder={placeholder1}
                      style={pickerSelectStyles} 
                                      onValueChange={(value) =>this.setState({...this.state, type : value})}
                                      value = {this.state.type}
-                                     items={[   { label: 'Main Dish', value: 'main' },
-                                                { label: 'Side Dish', value: 'side' },
+                                     items={[   { label: 'Lunch', value: 'lunch' },
+                                                { label: 'Breakfast', value: 'breakfast' },
                                                 { label: 'Desert', value: 'desert' },
-                                                { label: 'Soup', value: 'soup' },
+                                                { label: 'Salad', value: 'salad' },
                                                 { label: 'Drink', value: 'drink' },
-                                            ]}
+                                     ]}
                     />
                     {/* difficulty */}
                       <RNPickerSelect  placeholder={placeholder2}
                      style={pickerSelectStyles} 
                                      onValueChange={(value) =>this.setState({...this.state, difficulty : value})}
                                      value = {this.state.difficulty}
-                                     items={[   { label: 'difficult', value: 'difficult' },
+                                     items={[   { label: 'difficult', value: 'diff' },
                                                 { label: 'mid', value: 'mid' },
                                                 { label: 'easy', value: 'easy' },
-                                            ]}
+                                     ]}
                     />
                     </View>  
 
@@ -686,21 +685,21 @@ export default class SearchScreen extends React.Component {
     openModal2 = () => {
         this.setState({visibleModal2: 'bottom'});
     };
-
-    render() {
-        logout = () => {
-            Firebase.auth().signOut()
-                .then(function () {
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({routeName: 'Login'})],
-                    });
-                    this.props.navigation.dispatch(resetAction);
-                }.bind(this))
-                .catch(function (error) {
-                    console.log("logout failed: ", error)
+    logout = () => {
+        firebase.auth().signOut()
+            .then(function () {
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({routeName: 'Login'})],
                 });
-        }
+                this.props.navigation.dispatch(resetAction);
+            }.bind(this))
+            .catch(function (error) {
+                console.log("logout failed: ", error)
+            });
+    }
+    render() {
+       
 
         return (
             <ScrollView>

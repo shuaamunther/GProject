@@ -9,15 +9,11 @@ import {
     CheckBox,
     Switch, KeyboardAvoidingView,
 } from 'react-native'
-import CardListScreen from './component/CardListScreen';
 //import Firebase from 'C:/Project/AwesomeProject/firebase.js'
 import * as firebase from 'firebase';
 import {StackActions, NavigationActions, createAppContainer} from 'react-navigation';
 import {Card, Button, List, ListItem} from 'react-native-elements';
 import Modal from "react-native-modal";
-import TagInput from 'react-native-tags-input';
-import RNPickerSelect from 'react-native-picker-select';
-import PushNotification from "react-native-push-notification";
 
 export default class RecommendationScreen extends React.Component {
     static navigationOptions = {
@@ -28,18 +24,22 @@ export default class RecommendationScreen extends React.Component {
         super(props)
 
         this.state = {
-            Search: '',
-            UserSearch: '',
-            recipe: [],
-            users: [],
-            source: '',
             visibleModal: null,
             visibleModal2: null,
-            myRecipe:[]
-        }
+            myRecipe:[],
+            loading : true
+        };
+
     }
-    fuzzy_test(){
-        let user_id = 'zuUj1R8dWgaYygy3oA1bRlKXxVL2'
+
+    openModal = () => {
+        this.setState({visibleModal: 'bottom'});
+    
+    };
+    
+    fuzzy_test=  () =>{
+        //user_id = firebase.auth().currentUser.uid
+        let user_id = firebase.auth().currentUser.uid
         let user_rates = [];
         let followingrates=[];
         try {
@@ -49,13 +49,16 @@ export default class RecommendationScreen extends React.Component {
                     snapshot.forEach(function (item) {
                        firebase.database().ref().child('users/'+item.val()+'/rates').on("value", function (snapshot) { 
                           followingrates.push(snapshot.val())
-                       }.bind(this))
+                       }.bind(this));
                        
-                   }.bind(this))
-                }.bind(this))
+                   }.bind(this));
+                }.bind(this));
             
-        }).bind(this)
-            //fuzzification for input
+        }.bind(this));
+        console.log(followingrates)
+
+
+//fuzzification for input
 function UR_L(x){
     if(x>=1 && x<=2){
         return 1;
@@ -153,6 +156,7 @@ function P_VH(x){
         return 0;
     }
 }
+if(followingrates.length !==0){
             for(let i=0;i<followingrates.length;i++)
             {
                  let score=0
@@ -212,7 +216,6 @@ function P_VH(x){
            fuzzy_input['eu'] = (max_1.eu + max_2.eu)/2
            fuzzy_input['fa'] = (max_1.fa + max_2.fa)/2
 
-           console.log(fuzzy_input)
            var arabian =fuzzy_input.ar;
             var asian =fuzzy_input.as;
             var european =fuzzy_input.eu;
@@ -352,8 +355,7 @@ function P_VH(x){
     
     }
     let output_arabian = n/d;
-    console.log(output_arabian) 
-    
+
     //get results for asian
     
     n=0;
@@ -366,7 +368,6 @@ function P_VH(x){
     
     }
     let output_asian = n/d;
-    console.log(output_asian) 
     
     //get results for european
     
@@ -379,8 +380,7 @@ function P_VH(x){
         d += degree
     
     }
-    let output_european = n/d;
-    console.log(output_european) 
+    let output_european = n/d; 
     
     //get results for fast
     
@@ -394,15 +394,71 @@ function P_VH(x){
     
     }
     let output_fast = n/d;
-    console.log(output_fast) 
+    let results = [{result : output_arabian, type : 'ar'},
+                   {result : output_asian, type : 'as'},
+                   {result : output_european, type : 'eu'},
+                   {result : output_fast, type : 'fa'}]
+    results = results.sort(function(a,b){
+        return b.result - a.result
+    })
+    
+    let recipes = []
 
-    //get recipes for arabian //firebase get as much as the number from output
-     
-    //get recipes for asian
-
-    //get recipes for european
-
-    //get recipes for fast
+    for(var i = 0; i < 4 ; i++){
+        if(results[i].type == 'ar'){
+            firebase.database().ref('/recipes/').orderByChild('cruisine').equalTo('ar').limitToFirst(Math.ceil(output_arabian)).on("value", function (snapshot) {
+                for (var key in snapshot.val()) {
+                    if (snapshot.val().hasOwnProperty(key)) {
+                         recipes.push({
+                             id : key,
+                             title :  snapshot.val()[key].title,
+                         })
+                    }
+                }
+            }.bind(this));
+        }
+        else if(results[i].type == 'as'){
+            firebase.database().ref('/recipes/').orderByChild('cruisine').equalTo('as').limitToFirst(Math.ceil(output_asian)).on("value", function (snapshot) {
+                for (var key in snapshot.val()) {
+                    if (snapshot.val().hasOwnProperty(key)) {
+                         recipes.push({
+                             id : key,
+                             title :  snapshot.val()[key].title,
+                         })
+                    }
+                }
+            }.bind(this));
+        }
+        else if(results[i].type == 'eu'){
+            firebase.database().ref('/recipes/').orderByChild('cruisine').equalTo('eu').limitToFirst(Math.ceil(output_european)).on("value", function (snapshot) {
+                for (var key in snapshot.val()) {
+                    if (snapshot.val().hasOwnProperty(key)) {
+                         recipes.push({
+                             id : key,
+                             title :  snapshot.val()[key].title,
+                         })
+                    }
+                }
+                
+            }.bind(this));
+        }
+        else if(results[i].type == 'fa'){
+            firebase.database().ref('/recipes/').orderByChild('cruisine').equalTo('fa').limitToFirst(Math.ceil(output_fast)).on("value", function (snapshot) {
+                for (var key in snapshot.val()) {
+                    if (snapshot.val().hasOwnProperty(key)) {
+                         recipes.push({
+                             id : key,
+                             title :  snapshot.val()[key].title,
+                         })
+                         this.setState({myRecipe : recipes})
+                    }
+                }
+            }.bind(this));
+        }
+    }
+    console.log(recipes)
+   
+    }
             
         } 
         catch (error) {
@@ -410,20 +466,394 @@ function P_VH(x){
 
         }
     }
-
-
-    componentWillMount(){
+    componentDidMount(){
         this.fuzzy_test()
     }
 
 
 
-    render(){
-        return(
-        <Text>test</Text>
-        );
-    }
+    render() {
+       
+          return (
+              <ScrollView>
+                 
+                  <View style={{position: 'absolute', top: 8, marginLeft: 4}}>
+                      <TouchableHighlight onPress={this.openModal}>
+                          <Image source={require('C:/Project/AwesomeProject/assets/menu.png')}
+                                 style={{width: 28, height: 28}}/>
+                      </TouchableHighlight>
+                  </View>
+                  
+                  <View>
+                  <Text style={{marginTop:50,fontSize:20,marginLeft:5,marginBottom:10}}>Recommendation</Text>
+                      <FlatList   style={styles.root}
+                            data={this.state.myRecipe}
+                            extraData={this.state}
+                            ItemSeparatorComponent={() => {
+                            return (
+                              <View style={styles.separator}/>
+                            )
+                            }}
 
+                keyExtractor={(item)=>{
+                  return item.id;
+                }}
 
+                renderItem={(item) => {
+                  const Notification = item.item;
 
-}
+                  return(
+                      <View>
+                         <View style={{marginBottom:20}}>
+                            <View style={styles.container}>
+                               <TouchableOpacity onPress={() => {this.props.navigation.navigate('Recipe', {id: Notification.id})}}>
+                                  <Image style={styles.image} source={require('../../assets/meal.png')}/>
+                               </TouchableOpacity>
+
+                               <View style={styles.content}>
+                                   <View style={styles.contentHeader}>
+                                       <Text  style={styles.name}>{Notification.user_name}</Text>
+                                       <Text  kType='primary3 mediumLine'></Text>
+                                       <Text  style={styles.name}>{Notification.title}</Text>
+                                   </View>
+                               </View>
+                            </View>
+                         </View> 
+                      </View>
+                  );
+                }}/>
+                  </View>
+                  <Modal
+                      isVisible={this.state.visibleModal === 'bottom'}
+                      onSwipeComplete={() => this.setState({visibleModal: null})}
+                      swipeDirection={['up', 'left', 'right', 'down']}
+                      style={styles.bottomModal}>
+                      <View style={styles.modelContent}>
+                          <View style={{flexDirection: 'row'}}>
+                                <Image
+                                  source={require('../../assets/logo2.png')}
+                                  style={{width: 100, height: 100, borderRadius: 32 / 2}}
+                              />  
+                              <Text style={{fontSize: 20, marginLeft: 12, marginTop: 45}}></Text>
+                          </View>
+                          <Button title="Home" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                  containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                  onPress={() => {
+                                      this.props.navigation.navigate('Following')
+                                  }}/>
+                          <Button title="Explore" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                  containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                  onPress={() => {
+                                      this.props.navigation.navigate('Main')
+                                  }}/>           
+                          <Button title="Search" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                  containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                  onPress={() => {
+                                      this.props.navigation.navigate('Search')
+                                  }}/>
+                          <Button title="Profile" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                  containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                  onPress={() => {
+                                      this.props.navigation.navigate('Profile',{user_id: firebase.auth().currentUser.uid})
+                                  }}/>
+                           <Button title="Notification" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                  containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                  onPress={() => {
+                                      this.props.navigation.navigate('Notification')
+                                  }}/>        
+                          <Button title="Logout" buttonStyle={{backgroundColor: '#00b5ec', borderRadius: 30,}}
+                                  containerStyle={{marginTop: 10, marginBottom: 10,}}
+                                  onPress={() => {
+                                      this.logout()
+                                  }}/>
+                          <View style={{height: 1, backgroundColor: '#ccc', marginTop: 20, marginBottom: 2}}></View>
+                          <Button title="Close" buttonStyle={{backgroundColor: '#8a8a8a', borderRadius: 30,}}
+                                  onPress={() => this.setState({visibleModal: null})}
+                                  containerStyle={{marginTop: 10, marginBottom: 10}}/>
+                      </View>
+                  </Modal>
+              </ScrollView>
+          );
+      }
+  }
+  
+  const styles = StyleSheet.create({
+      container: {
+          paddingTop: 7,
+      },
+      row: {
+          flexDirection: 'column',
+          marginLeft: 11,
+          marginRight: 11,
+          marginTop: 7,
+          marginBottom: 5,
+      },
+      inputContainer: {
+          borderBottomColor: '#F5FCFF',
+          backgroundColor: '#E3F2FD',
+          borderRadius: 25,
+          borderBottomWidth: 1,
+          borderTopWidth: 0,
+          height: 45,
+          flexDirection: 'row',
+          alignItems: 'center'
+      },
+      inputs: {
+          height: 45,
+          marginLeft: 11,
+          borderBottomColor: '#FFDE03',
+          flex: 1,
+      },
+      inputIcon: {
+          width: 25,
+          height: 25,
+          marginLeft: 15,
+          justifyContent: 'center'
+      },
+      buttonContainer: {
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 5,
+          width: 250,
+          borderRadius: 30,
+      },
+      SearchButton: {
+          backgroundColor: 'white',
+          marginBottom: 5,
+          width: 120,
+          borderRadius: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+          height: 20,
+          alignItems: 'center',
+      },
+      SearchButton2: {
+          backgroundColor: 'white',
+          marginBottom: 20,
+          width: 120,
+          borderRadius: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+          height: 20,
+          alignItems: 'center',
+      },
+      SearchButton3: {
+          backgroundColor: 'white',
+          marginBottom: 20,
+          width: 120,
+          borderRadius: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+          height: 20,
+          alignItems: 'center',
+      },
+      loginText: {
+          color: "#00b5ec",
+      },
+      FilterButton: {
+          flexDirection: 'row',
+          marginTop: 0,
+          justifyContent: 'space-between',
+          borderTopWidth: 1,
+          borderTopColor: "#00b5ec",
+      },
+  
+      headerUserView: {
+          height: 320,
+          backgroundColor: 'red'
+      },
+      headerUser: {
+          flex: 1,
+          flexDirection: 'column'
+      },
+      headerEdit: {
+          flex: 1,
+          alignItems: 'flex-end',
+          marginRight: 10,
+      },
+      headerFollowing: {
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          borderRadius: 30,
+          borderColor: "#00b5ec",
+          flexDirection: 'row',
+          backgroundColor: '#fff',
+          padding: 16,
+          marginLeft: 20,
+          marginRight: 20,
+          top: -30,
+          shadowColor: "#000",
+          shadowOffset: {
+              width: 0,
+              height: 2,
+          },
+          shadowOpacity: 0.23,
+          shadowRadius: 2.62,
+          elevation: 4
+      },
+      followingTitle: {
+          fontSize: 16,
+          color: "#7c8191",
+          fontWeight: '600',
+          textAlign: 'center'
+      },
+      followingTitleForNumbers: {
+          fontWeight: 'bold',
+      },
+      previewContainer: {
+          paddingTop: 50,
+          borderTopWidth: 2
+      },
+      Preview: {
+          justifyContent: 'space-around',
+          flexDirection: 'row',
+          borderTopColor: '#eae5e5',
+          borderBottomWidth: 1,
+          borderBottomColor: '#eae5e5',
+          paddingBottom: 10,
+      },
+      PreviewIcon: {
+          width: 25,
+          height: 25,
+          marginLeft: 15,
+          marginRight: 15,
+          justifyContent: 'center',
+          fontWeight: 'bold',
+          fontSize: 22
+      },
+      avatar: {
+          width: 100,
+          height: 100,
+          borderRadius: 63,
+          borderWidth: 4,
+          borderColor: "#00b5ec",
+          marginBottom: 10
+      },
+      editButton: {
+          width: 30,
+          height: 32,
+          marginLeft: 200,
+      },
+      name: {
+          fontSize: 22,
+          color: 'black',
+          fontWeight: '800',
+          textTransform: 'capitalize',
+      },
+      body: {
+          backgroundColor: "white",
+          height: 500,
+          alignItems: 'center',
+          flexDirection: 'row'
+      },
+      item: {
+          flexDirection: 'row'
+      },
+      bottomModal: {
+          justifyContent: 'flex-end',
+          margin: 0,
+      },
+      modelContent: {
+          backgroundColor: 'white',
+          padding: 10,
+          justifyContent: 'center',
+          alignItems: 'stretch',
+          borderRadius: 4,
+          borderColor: 'rgba(0, 0, 0, 0.1)',
+      },
+      buttonContainer: {
+          height: 45,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: 250,
+          borderRadius: 30,
+          backgroundColor: '#00BFFF',
+          marginTop: 10,
+          marginBottom: 10,
+      },
+      NextButton: {
+          backgroundColor: "#00b5ec",
+          width: 100,
+          borderRadius: 30,
+          marginTop: 50,
+          marginBottom: 10,
+      },
+      loginText: {
+          color: 'white',
+      },
+      root: {
+          backgroundColor: "#ffffff",
+          marginTop:10,
+        },
+        container: {
+          //paddingLeft: 19,
+          paddingRight: 16,
+          paddingVertical: 12,
+          flexDirection: 'row',
+          alignItems: 'flex-start'
+        },
+        content: {
+          marginLeft: 16,
+          flex: 1,
+        },
+        contentHeader: {
+          flexDirection: 'row',
+          //justifyContent: 'space-between',
+          marginBottom: 6
+        },
+        separator: {
+          height: 1,
+          backgroundColor: "#CCCCCC"
+        },
+        image:{
+          width:30,
+          height:30,
+          borderRadius:20,
+          marginLeft:10
+        },
+        time:{
+          fontSize:11,
+          color:"#808080",
+        },
+        name:{
+          fontSize:16,
+          fontWeight:"bold",
+        },
+      buttonFollow: {
+          marginTop: 20,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderColor: '#fff',
+          borderWidth: 1,
+          padding: 8,
+          borderRadius: 5
+      }
+  });
+  
+  const pickerSelectStyles = StyleSheet.create({
+      inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+      },
+      inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+      },
+    });
+  
+

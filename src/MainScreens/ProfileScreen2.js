@@ -516,15 +516,16 @@ class Preview extends React.Component {
                          <View style={styles.content}>
                              <View style={styles.contentHeader}>
                                  <Text  > {Notification.user_name} rated {Notification.title} </Text>
-                                 <Rating style={styles.time}
-                                    readonly
-                                    type="star"
-                                    fractions={1}
-                                    startingValue={Notification.rate}
-                                    imageSize={20}
-                                    style={{ paddingVertical: 10 }}
-                                 />
+                               
                              </View>
+                             <Rating style={{marginLeft:-180,marginBottom:7,marginTop:2}}
+                                          readonly
+                                          type="star"
+                                          fractions={1}
+                                          startingValue={Notification.rate}
+                                          imageSize={20}
+                                          //style={{ paddingVertical: 10 }}
+                                       />
 
                              <Text rkType='primary3 mediumLine'>and commented {Notification.comment}</Text>
                          </View>
