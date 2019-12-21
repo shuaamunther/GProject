@@ -170,10 +170,7 @@ class Preview extends React.Component {
             ingredients: '',
             title: '',
             description: '',
-            reviews : {user_id : '',
-                       rate : '',
-                       comment : '',
-                       user_name : ''},
+            reviews : '',
             title: '',
             description: '',
             ingrediants: '',
@@ -197,7 +194,9 @@ class Preview extends React.Component {
 
     componentDidMount() {
         const {navigation} = this.props;
+        
         let Userid = firebase.auth().currentUser.uid
+        console.log('')
         let recipeId = this.props.id
         let flag
         let reviews=[]
@@ -231,18 +230,16 @@ class Preview extends React.Component {
     }
 
 addReview(){
-    try{
-        this.setState({isLoading: true})
-    }
-    catch(error){
+    
 
-    }
+    
         let Userid = firebase.auth().currentUser.uid
         let username
-        let  reviews=[]
-        
+        let reviews=[]
+       //=this.state.reviews
+        //var reviews = new Object();
         //reviews=this.state.reviews
-       // reviews=this.state.reviews
+       //
         let recipeId=this.props.id
         var userData={recipeId}
         var id
@@ -278,11 +275,13 @@ addReview(){
             cruisine:cruisine
         }
         
-        try {
-            
-            
-            reviews.push(new_review) 
-            this.setState({reviews:reviews})
+      reviews.push(new_review) 
+            //this.state.reviews.push({reviews:reviews})
+            this.setState(prevState => ({
+             reviews: [...prevState.reviews, reviews]
+           }))
+           
+        try {     
             
             firebase.database().ref('recipes/'+recipeId).child('/reviews').set(
                 reviews,
@@ -420,8 +419,6 @@ addReview(){
         if (this.state.activeIndex == 2) {
             return (
              <View>
-               
-                   
                 <FlatList   style={styles.root}
                             data={this.state.reviews}
                             extraData={this.state}

@@ -55,8 +55,8 @@ class HeaderImageView extends React.Component {
                     id=item.val()
                     if(id == user_id)
                     {flag=true}
-                   console.log('key',id)
-                   console.log('result',flag)
+                  // console.log('key',id)
+                  // console.log('result',flag)
             })
         }) 
             if(flag==true)
@@ -242,7 +242,7 @@ class Following extends React.Component {
 
 
     render() {
-        console.log('result',this.state.followingname)
+       // console.log('result',this.state.followingname)
         return (
             <View style={styles.headerFollowing}>
                 <TouchableOpacity onPress={this.openModal2}>
@@ -414,10 +414,14 @@ class Preview extends React.Component {
         let userid
         let Userid = this.props.user_id
         try{
+          //  console.log(Userid)
         firebase.database().ref('/recipes').orderByChild('reviews').on('value', function (snapshot) {
             snapshot.forEach(function (item) {
                 let reid=item.child('reviews').val()
+             //   console.log('userid',item.key)
+           //  if(reid.length>1){
                 for(let i=0;i<reid.length;i++){
+                  console.log('userid',reid[i].user_name)
                     userid=reid[i].user_id
                     if(userid==Userid)
                     {
@@ -431,9 +435,10 @@ class Preview extends React.Component {
                     })
                     }
                 }
+          //  }
               
-        })
-        console.log('rev',recipe)
+        }.bind(this))
+       // console.log('rev',recipe)
             this.setState({
                 review_recipe: recipe
             })
