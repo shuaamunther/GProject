@@ -105,7 +105,7 @@ class Following extends React.Component {
         super(props)
         this.state = {
             time: '',
-            difficulty: '',
+            difficality: '',
             type: '',
             rate: '',
             loading: true,
@@ -129,7 +129,7 @@ class Following extends React.Component {
     render() {
         //const { navigation } = this.props; 
         let recipeId = this.props.id
-        console.log('this.props', this.state.difficulty)
+       // console.log('this.props', this.state.difficulty)
         return (
             <View style={styles.headerFollowing}>
                 <TouchableOpacity>
@@ -236,6 +236,10 @@ addReview(){
         let Userid = firebase.auth().currentUser.uid
         let username
         let reviews=[]
+        if(this.state.reviews)
+        {
+            reviews=this.state.reviews
+        }
        //=this.state.reviews
         //var reviews = new Object();
         //reviews=this.state.reviews
@@ -276,10 +280,13 @@ addReview(){
         }
         
       reviews.push(new_review) 
+      if(!this.state.reviews){
+        this.setState({reviews:reviews})
+      }
             //this.state.reviews.push({reviews:reviews})
-            this.setState(prevState => ({
-             reviews: [...prevState.reviews, reviews]
-           }))
+        //     this.setState(prevState => ({
+        //      reviews: [...prevState.reviews, reviews]
+        //    }))
            
         try {     
             

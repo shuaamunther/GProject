@@ -200,7 +200,7 @@ export default class SearchScreen extends React.Component {
             update_user_preferences: false,
             cruisine : '',
             type : '',
-            difficulty : '',
+            difficality : '',
             veg : false,
             diet : false,
             filtered_recipe : []
@@ -302,8 +302,8 @@ export default class SearchScreen extends React.Component {
         if(this.state.type != '' && this.state.type != null){
             filters ={...filters, type : this.state.type}
         }
-        if(this.state.difficulty != '' && this.state.difficulty != null){
-            filters ={...filters, difficulty : this.state.difficulty}
+        if(this.state.difficality != '' && this.state.difficality != null){
+            filters ={...filters, difficality : this.state.difficality}
         }
         if(this.state.ingredients_tags.tagsArray.length != 0){
             filters ={...filters, ingredients : this.state.ingredients_tags.tagsArray}
@@ -367,8 +367,8 @@ export default class SearchScreen extends React.Component {
                     return
                  }
             }
-            if(filters.hasOwnProperty('difficulty')){
-                if(item.val().difficalty!=filters.difficulty){
+            if(filters.hasOwnProperty('difficality')){
+                if(item.val().difficalty!=filters.difficality){
                     return
                  }
             }
@@ -541,7 +541,7 @@ export default class SearchScreen extends React.Component {
                     {/* difficulty */}
                       <RNPickerSelect  placeholder={placeholder2}
                      style={pickerSelectStyles} 
-                                     onValueChange={(value) =>this.setState({...this.state, difficulty : value})}
+                                     onValueChange={(value) =>this.setState({...this.state, difficality : value})}
                                      value = {this.state.difficulty}
                                      items={[   { label: 'difficult', value: 'diff' },
                                                 { label: 'mid', value: 'mid' },
@@ -647,7 +647,7 @@ export default class SearchScreen extends React.Component {
                                         tag: '',
                                         tagsArray: []
                                       },tagsColor: mainColor,tagsText: '#fff',use_user_preferences: false,
-                                    update_user_preferences: false,cruisine: '',type : '',difficulty : '',diet:false, veg:false,
+                                    update_user_preferences: false,cruisine: '',type : '',difficality : '',diet:false, veg:false,
                                    })
                                 }
                                 }/>
